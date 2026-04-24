@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stokmate — Your Group's Trusted Companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:#0A3D2B;--green-mid:#145C40;--green-light:#1F7A55;--green-pale:#E6F4EE;
+  --gold:#D4A017;--gold-pale:#FDF6E3;--gold-accent:#FFD700;
+  --navy:#0F1C3F;--navy-mid:#1A2F5E;--navy-pale:#EEF1F8;
+  --cream:#FAFAF7;--white:#FFFFFF;--dark:#0D0D0D;
+  --gray:#6B7280;--gray-light:#F4F4F2;--border:#E8E8E4;
+  --success:#0A6B3D;--danger:#B91C1C;--warning:#92400E;
+  --r:16px;--rsm:10px;--rlg:24px;
+  --sh:0 4px 20px rgba(0,0,0,0.10);--shsm:0 2px 8px rgba(0,0,0,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden;}
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* LANDING */
+#landing{background:var(--green);min-height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;}
+#landing::before{content:'';position:absolute;top:-120px;right:-120px;width:400px;height:400px;border-radius:50%;border:60px solid rgba(255,255,255,0.03);}
+.land-top{width:100%;padding:52px 28px 36px;position:relative;z-index:1;flex:1;display:flex;flex-direction:column;}
+.proof-bar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:24px;padding:8px 14px;margin-bottom:32px;width:fit-content;}
+.proof-dots{display:flex;}
+.proof-dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--green);margin-left:-6px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.proof-dot:first-child{margin-left:0;}
+.pd1{background:#F59E0B;}.pd2{background:#3B82F6;}.pd3{background:#EC4899;}.pd4{background:#10B981;}
+.proof-text{font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);}
+.proof-text span{color:var(--gold-accent);}
+.logo-wrap{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.logo-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--gold),var(--gold-accent));border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--green);box-shadow:0 4px 16px rgba(212,160,23,0.4);}
+.logo-text{font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:white;}
+.land-headline{font-family:'Fraunces',serif;font-size:42px;font-weight:900;line-height:1.05;color:white;margin-bottom:14px;}
+.land-headline em{font-style:italic;color:var(--gold-accent);}
+.land-sub{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.6;margin-bottom:32px;font-weight:300;}
+.stats-row{display:flex;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.10);border-radius:var(--r);overflow:hidden;margin-bottom:32px;}
+.stat-item{flex:1;padding:14px 8px;text-align:center;border-right:1px solid rgba(255,255,255,0.08);}
+.stat-item:last-child{border-right:none;}
+.stat-val{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--gold-accent);display:block;}
+.stat-label{font-size:10px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;}
+.land-bottom{width:100%;background:var(--white);border-radius:28px 28px 0 0;padding:28px 24px 40px;position:relative;z-index:1;}
+.urgency-row{display:flex;align-items:center;gap:6px;margin-bottom:18px;}
+.urgency-dot{width:8px;height:8px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.6;transform:scale(1.3);}}
+.urgency-text{font-size:12px;font-weight:600;color:var(--success);}
+.cta-headline{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--dark);margin-bottom:6px;}
+.cta-sub{font-size:13px;color:var(--gray);margin-bottom:20px;line-height:1.5;}
+.btn-navy{width:100%;padding:18px;background:var(--navy);color:white;border:none;border-radius:var(--r);font-size:16px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:10px;transition:all 0.2s;}
+.btn-navy:active{transform:scale(0.98);}
+.btn-outline{width:100%;padding:16px;background:transparent;color:var(--green);border:1.5px solid var(--green);border-radius:var(--r);font-size:15px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all 0.2s;}
+.btn-outline:active{background:var(--green-pale);}
+.trust-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:18px;flex-wrap:wrap;}
+.trust-item{font-size:11px;color:var(--gray);font-weight:500;}
+
+/* ONBOARDING */
+#onboarding{background:var(--cream);}
+.onboard-hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-mid) 100%);padding:48px 24px 40px;text-align:center;}
+.onboard-step{font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;}
+.onboard-title{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:white;margin-bottom:8px;}
+.onboard-sub{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.5;}
+.step-dots{display:flex;gap:6px;justify-content:center;margin-top:20px;}
+.step-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.25);}
+.step-dot.active{background:var(--gold-accent);width:20px;border-radius:4px;}
+.onboard-body{padding:24px;}
+
+/* CURRENCY SELECTOR */
+.currency-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.currency-opt{background:var(--white);border:2px solid var(--border);border-radius:var(--rsm);padding:14px 8px;text-align:center;cursor:pointer;transition:all 0.2s;}
+.currency-opt.selected{border-color:var(--green);background:var(--green-pale);}
+.currency-symbol{font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--dark);}
+.currency-name{font-size:11px;color:var(--gray);margin-top:3px;font-weight:500;}
+.currency-opt.selected .currency-symbol{color:var(--green);}
+.currency-opt.selected .currency-name{color:var(--green);}
+
+/* STOKVEL TYPE */
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.type-opt{background:var(--white);border:2px solid var(--border);border-radius:var(--r);padding:16px 12px;cursor:pointer;transition:all 0.2s;display:flex;align-items:flex-start;gap:10px;}
+.type-opt.selected{border-color:var(--green);background:var(--green-pale);}
+.type-icon{font-size:24px;flex-shrink:0;}
+.type-info{}
+.type-name{font-size:13px;font-weight:700;color:var(--dark);}
+.type-desc{font-size:11px;color:var(--gray);margin-top:2px;line-height:1.4;}
+.type-opt.selected .type-name{color:var(--green);}
+
+/* TOP BAR */
+.topbar{background:var(--white);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.topbar-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:8px;}
+.topbar-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--gold),var(--gold-accent));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;font-family:'Fraunces',serif;color:var(--green);}
+.notif-btn{position:relative;background:var(--gray-light);border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.notif-badge{position:absolute;top:2px;right:2px;width:10px;height:10px;border-radius:50%;background:var(--danger);border:2px solid white;}
+
+/* HOME */
+#home{background:var(--cream);}
+.home-hero{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:20px 20px 36px;}
+.greeting-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.greeting-text{font-size:13px;color:rgba(255,255,255,0.6);}
+.greeting-name{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:white;}
+.avatar-circle{width:40px;height:40px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--green);font-family:'Fraunces',serif;}
+.hero-card{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.15);border-radius:var(--rlg);padding:20px;}
+.hero-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.5);margin-bottom:8px;}
+.hero-amount{font-family:'Fraunces',serif;font-size:38px;font-weight:900;color:white;margin-bottom:4px;letter-spacing:-1px;}
+.hero-sub{font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:16px;}
+.hero-mini-row{display:flex;gap:10px;}
+.hero-mini{flex:1;background:rgba(255,255,255,0.08);border-radius:var(--rsm);padding:10px;}
+.hero-mini-label{font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:3px;}
+.hero-mini-val{font-size:15px;font-weight:700;color:white;}
+.hero-mini-sub{font-size:10px;color:var(--gold-accent);margin-top:2px;font-weight:600;}
+
+/* HEALTH SCORE BANNER */
+.health-banner{margin:16px 20px 0;background:var(--white);border-radius:var(--r);padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shsm);border:1px solid var(--border);}
+.health-ring{width:56px;height:56px;flex-shrink:0;position:relative;}
+.health-ring svg{transform:rotate(-90deg);}
+.health-ring-bg{fill:none;stroke:var(--gray-light);stroke-width:5;}
+.health-ring-fill{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset 1s ease;}
+.health-score-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:14px;font-weight:700;}
+.health-info{flex:1;}
+.health-title{font-size:14px;font-weight:700;color:var(--dark);}
+.health-sub{font-size:12px;color:var(--gray);margin-top:2px;}
+.health-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;}
+
+/* DECEMBER COUNTDOWN */
+.dec-banner{margin:12px 20px 0;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--r);padding:16px 18px;cursor:pointer;}
+.dec-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.dec-label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:6px;}
+.dec-amount{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--gold-accent);}
+.dec-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.dec-stat{text-align:center;}
+.dec-stat-val{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:white;}
+.dec-stat-label{font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;}
+
+/* UPGRADE BANNER */
+.upgrade-banner{margin:12px 20px 0;background:linear-gradient(135deg,var(--green) 0%,var(--green-mid) 100%);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--sh);}
+.upgrade-icon{width:34px;height:34px;background:rgba(255,215,0,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.upgrade-text{flex:1;}
+.upgrade-title{font-size:13px;font-weight:700;color:white;}
+.upgrade-sub{font-size:11px;color:rgba(255,255,255,0.6);margin-top:1px;}
+.upgrade-arrow{font-size:20px;color:var(--gold-accent);}
+
+/* REFERRAL BANNER */
+.referral-banner{margin:12px 20px 0;background:var(--gold-pale);border:1px solid rgba(212,160,23,0.3);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.ref-icon{font-size:24px;flex-shrink:0;}
+.ref-text{flex:1;}
+.ref-title{font-size:13px;font-weight:700;color:var(--warning);}
+.ref-sub{font-size:11px;color:var(--gold);margin-top:1px;}
+
+.section{padding:20px 20px 0;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section-title{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--dark);}
+.see-all{font-size:13px;font-weight:600;color:var(--green-light);cursor:pointer;}
+
+/* QUICK GRID */
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+.q-btn{background:var(--white);border-radius:var(--rsm);padding:12px 6px;text-align:center;cursor:pointer;border:1px solid var(--border);box-shadow:var(--shsm);transition:transform 0.15s;}
+.q-btn:active{transform:scale(0.92);}
+.q-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;margin:0 auto 6px;}
+.q-label{font-size:10px;font-weight:600;color:var(--dark);}
+.qg{background:var(--green-pale);}.qgo{background:var(--gold-pale);}.qn{background:var(--navy-pale);}.qr{background:#FEE2E2;}.qp{background:#F3E8FF;}
+
+/* ALERT */
+.alert-card{background:var(--white);border-left:4px solid var(--warning);border-radius:var(--rsm);padding:12px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start;box-shadow:var(--shsm);}
+.alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.alert-text{font-size:13px;color:var(--dark);line-height:1.5;}
+.alert-text strong{color:var(--warning);font-weight:700;}
+.alert-action{font-size:12px;font-weight:700;color:var(--green);margin-top:5px;cursor:pointer;}
+
+/* GROUP CARDS */
+.group-card{background:var(--white);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--shsm);border:1px solid var(--border);cursor:pointer;transition:all 0.15s;}
+.group-card:active{transform:scale(0.99);}
+.gc-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.gc-avatar{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:18px;font-weight:700;flex-shrink:0;}
+.gc-info{flex:1;}
+.gc-name{font-size:15px;font-weight:700;color:var(--dark);}
+.gc-meta{font-size:11px;color:var(--gray);margin-top:2px;}
+.gc-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:16px;text-transform:uppercase;letter-spacing:0.3px;}
+.badge-active{background:var(--green-pale);color:var(--success);}
+.badge-warn{background:#FEF3C7;color:var(--warning);}
+.badge-gold{background:var(--gold-pale);color:var(--gold);}
+.badge-burial{background:#F3E8FF;color:#6B21A8;}
+.progress-wrap{margin-bottom:8px;}
+.progress-header{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;}
+.progress-left{color:var(--gray);font-weight:500;}
+.progress-right{color:var(--dark);font-weight:700;}
+.progress-track{height:6px;background:var(--gray-light);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green-light),var(--gold));transition:width 0.8s ease;}
+.gc-bottom{display:flex;justify-content:space-between;font-size:11px;padding-top:8px;border-top:1px solid var(--gray-light);}
+.gc-bottom-item{color:var(--gray);}
+.gc-bottom-item strong{color:var(--dark);font-weight:700;}
+
+/* GROUP DETAIL */
+#group-detail{background:var(--cream);}
+.detail-header{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:16px 20px 24px;}
+.back-pill{background:rgba(255,255,255,0.12);border:none;border-radius:24px;padding:7px 14px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:14px;display:inline-block;}
+.detail-name{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:white;margin-bottom:2px;}
+.detail-type{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:4px;}
+.detail-sub{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:18px;}
+.detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.ds-card{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.12);border-radius:var(--rsm);padding:10px;text-align:center;}
+.ds-val{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:white;}
+.ds-label{font-size:10px;color:rgba(255,255,255,0.55);margin-top:2px;}
+
+/* DISPUTE VAULT */
+.vault-card{background:var(--navy-pale);border:1px solid rgba(15,28,63,0.15);border-radius:var(--r);padding:16px;margin-bottom:10px;}
+.vault-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.vault-icon{width:36px;height:36px;background:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.vault-title{font-size:14px;font-weight:700;color:var(--navy);}
+.vault-sub{font-size:11px;color:var(--gray);margin-top:2px;}
+.vault-entry{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid rgba(15,28,63,0.10);}
+.vault-entry:last-child{border-bottom:none;}
+.vault-dot{width:6px;height:6px;border-radius:50%;background:var(--navy);flex-shrink:0;margin-top:5px;}
+.vault-text{font-size:12px;color:var(--dark);line-height:1.4;}
+.vault-time{font-size:10px;color:var(--gray);margin-top:2px;}
+
+/* MEMBER ROWS */
+.member-item{background:var(--white);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:1px solid var(--border);box-shadow:var(--shsm);}
+.m-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:14px;font-weight:700;flex-shrink:0;}
+.m-info{flex:1;}
+.m-name{font-size:14px;font-weight:700;color:var(--dark);}
+.m-detail{font-size:11px;color:var(--gray);margin-top:2px;}
+.reliability{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.rel-score{font-size:13px;font-weight:800;font-family:'Fraunces',serif;}
+.rel-label{font-size:9px;color:var(--gray);font-weight:600;text-transform:uppercase;}
+.action-row{padding:14px 20px;display:flex;gap:10px;}
+.btn-action{flex:1;padding:14px;border-radius:var(--rsm);font-size:14px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;transition:all 0.15s;}
+.btn-action:active{transform:scale(0.97);}
+.btn-action.primary{background:var(--green);color:white;}
+.btn-action.secondary{background:var(--navy);color:white;}
+.btn-action.gold{background:var(--gold);color:white;}
+
+/* CERTIFICATE */
+#certificate{background:var(--cream);}
+.cert-wrap{margin:20px;background:var(--white);border-radius:var(--r);border:3px solid var(--gold);padding:28px 24px;text-align:center;box-shadow:var(--sh);}
+.cert-header{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;}
+.cert-logo{width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--gold-accent));border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--green);}
+.cert-app-name{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--green);}
+.cert-title{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold);font-weight:700;margin-bottom:16px;}
+.cert-name{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--dark);margin-bottom:6px;}
+.cert-sub{font-size:13px;color:var(--gray);line-height:1.5;margin-bottom:20px;}
+.cert-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.cert-stat{background:var(--green-pale);border-radius:var(--rsm);padding:12px 8px;}
+.cert-stat-val{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--green);}
+.cert-stat-label{font-size:10px;color:var(--green-light);margin-top:2px;}
+.cert-score-wrap{background:linear-gradient(135deg,var(--green) 0%,var(--green-mid) 100%);border-radius:var(--r);padding:16px;margin-bottom:20px;}
+.cert-score-label{font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:4px;}
+.cert-score{font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:var(--gold-accent);}
+.cert-score-sub{font-size:12px;color:rgba(255,255,255,0.65);}
+.cert-seal{width:70px;height:70px;background:var(--gold-pale);border:3px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;}
+.cert-footer{font-size:11px;color:var(--gray);line-height:1.5;}
+.cert-id{font-size:10px;color:var(--border);margin-top:8px;font-family:monospace;}
+
+/* REFERRAL */
+#referral{background:var(--cream);}
+.ref-hero{background:linear-gradient(135deg,var(--gold) 0%,#B8860B 100%);padding:32px 24px;text-align:center;}
+.ref-hero-title{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:white;margin-bottom:8px;}
+.ref-hero-sub{font-size:14px;color:rgba(255,255,255,0.8);}
+.ref-how{padding:20px;}
+.ref-step{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;}
+.ref-step-num{width:32px;height:32px;border-radius:50%;background:var(--gold-pale);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.ref-step-body{}
+.ref-step-title{font-size:14px;font-weight:700;color:var(--dark);}
+.ref-step-desc{font-size:12px;color:var(--gray);margin-top:2px;line-height:1.4;}
+.ref-link-card{background:var(--white);border:2px dashed var(--gold);border-radius:var(--r);padding:18px;margin:0 20px 16px;text-align:center;}
+.ref-link-label{font-size:11px;color:var(--gray);margin-bottom:6px;}
+.ref-link{font-size:14px;font-weight:700;color:var(--navy);word-break:break-all;}
+.ref-earnings{background:var(--green-pale);border-radius:var(--r);padding:16px 20px;margin:0 20px 16px;display:flex;align-items:center;justify-content:space-between;}
+.ref-earn-label{font-size:13px;color:var(--green);font-weight:500;}
+.ref-earn-val{font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--green);}
+
+/* ADD GROUP */
+#add-group{background:var(--cream);}
+.form-body{padding:20px;flex:1;}
+.form-label{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;display:block;}
+.form-input{width:100%;padding:14px 16px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--rsm);font-size:15px;color:var(--dark);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:18px;outline:none;transition:border-color 0.2s;}
+.form-input:focus{border-color:var(--green);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.opt-chip{padding:9px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:24px;font-size:13px;font-weight:600;cursor:pointer;color:var(--gray);transition:all 0.2s;}
+.opt-chip.active{background:var(--green-pale);border-color:var(--green);color:var(--green);}
+.option-grid{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.value-preview{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--r);padding:18px;margin:4px 0 18px;}
+.vp-title{font-size:11px;color:rgba(255,255,255,0.55);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+.vp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.vp-label{font-size:13px;color:rgba(255,255,255,0.7);}
+.vp-val{font-size:15px;font-weight:700;color:white;font-family:'Fraunces',serif;}
+.vp-val.gold{color:var(--gold-accent);}
+
+/* AI SCREEN */
+#ai-screen{background:var(--cream);flex-direction:column;}
+.ai-header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);padding:14px 20px 18px;}
+.ai-header-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.ai-icon-wrap{width:42px;height:42px;background:rgba(255,215,0,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.ai-header-name{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:white;}
+.ai-header-status{font-size:11px;color:rgba(255,255,255,0.55);margin-top:1px;}
+.ai-chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;}
+.ai-chips::-webkit-scrollbar{display:none;}
+.ai-chip{padding:7px 12px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.15);border-radius:18px;font-size:11px;font-weight:600;color:white;cursor:pointer;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;flex-shrink:0;}
+.chat-area{flex:1;padding:14px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;min-height:200px;}
+.bubble{max-width:86%;padding:12px 15px;font-size:13px;line-height:1.6;border-radius:18px;}
+.bubble.bot{background:var(--white);color:var(--dark);border-bottom-left-radius:4px;align-self:flex-start;box-shadow:var(--shsm);border:1px solid var(--border);}
+.bubble.user{background:var(--navy);color:white;border-bottom-right-radius:4px;align-self:flex-end;}
+.typing-bubble{background:var(--white);border-radius:18px;border-bottom-left-radius:4px;padding:12px 16px;align-self:flex-start;border:1px solid var(--border);display:flex;gap:4px;align-items:center;}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--gray);animation:typing 1.2s infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typing{0%,80%,100%{transform:translateY(0);opacity:0.5;}40%{transform:translateY(-5px);opacity:1;}}
+.chat-bar{padding:10px 20px 24px;background:var(--white);border-top:1px solid var(--border);display:flex;gap:10px;}
+.chat-input{flex:1;padding:11px 15px;background:var(--gray-light);border:1.5px solid transparent;border-radius:24px;font-size:14px;color:var(--dark);font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color 0.2s;}
+.chat-input:focus{border-color:var(--navy);background:var(--white);}
+.send-btn{width:44px;height:44px;border-radius:50%;background:var(--navy);border:none;color:white;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* PRICING */
+#pricing{background:var(--cream);}
+.pricing-hero{background:var(--green);padding:28px 24px;text-align:center;}
+.pricing-title{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:white;margin-bottom:8px;}
+.pricing-sub{font-size:13px;color:rgba(255,255,255,0.65);}
+.plan-card{background:var(--white);border-radius:var(--r);padding:20px;margin-bottom:12px;border:2px solid var(--border);position:relative;}
+.plan-card.featured{border-color:var(--navy);box-shadow:0 0 0 4px rgba(15,28,63,0.06);}
+.plan-card.annual{border-color:var(--gold);background:var(--gold-pale);}
+.popular-tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--navy);color:white;font-size:11px;font-weight:800;padding:4px 16px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;}
+.plan-name{font-size:12px;font-weight:700;color:var(--gray);margin-bottom:7px;text-transform:uppercase;letter-spacing:0.8px;}
+.plan-price{display:flex;align-items:baseline;gap:4px;margin-bottom:5px;}
+.plan-amount{font-family:'Fraunces',serif;font-size:38px;font-weight:900;color:var(--dark);}
+.plan-period{font-size:13px;color:var(--gray);}
+.plan-desc{font-size:13px;color:var(--gray);margin-bottom:16px;}
+.plan-features{margin-bottom:18px;}
+.plan-feature{display:flex;align-items:center;gap:9px;font-size:13px;padding:6px 0;border-bottom:1px solid var(--gray-light);}
+.plan-feature:last-child{border-bottom:none;}
+.feat-check{width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;}
+.feat-check.yes{background:var(--green-pale);color:var(--success);}
+.feat-check.no{background:var(--gray-light);color:var(--gray);}
+.plan-btn{width:100%;padding:16px;border-radius:var(--rsm);font-size:15px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;transition:all 0.2s;}
+.plan-btn:active{transform:scale(0.98);}
+.plan-btn.navy{background:var(--navy);color:white;}
+.plan-btn.outline{background:transparent;color:var(--green);border:1.5px solid var(--green);}
+.plan-btn.gold{background:var(--gold);color:white;}
+.guarantee{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:12px;color:var(--gray);font-weight:500;}
+
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border);display:flex;padding:6px 0 20px;z-index:200;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 0;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;}
+.nav-icon-wrap{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;transition:all 0.2s;}
+.nav-btn.active .nav-icon-wrap{background:var(--green-pale);}
+.nav-label{font-size:10px;font-weight:600;color:var(--gray);}
+.nav-btn.active .nav-label{color:var(--green);}
+.nav-spacer{height:88px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--dark);color:white;padding:11px 20px;border-radius:28px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.25s;white-space:nowrap;pointer-events:none;}
+.toast.show{opacity:1;}
+
+/* MODAL OVERLAY */
+.modal-overlay{display:none;min-height:500px;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;padding:20px;position:relative;z-index:300;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--white);border-radius:var(--rlg);padding:24px;width:100%;max-width:380px;}
+.modal-title{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--dark);margin-bottom:8px;}
+.modal-sub{font-size:13px;color:var(--gray);margin-bottom:20px;line-height:1.5;}
+.modal-close{width:100%;padding:14px;background:var(--gray-light);border:none;border-radius:var(--rsm);font-size:14px;font-weight:600;color:var(--dark);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- STATE -->
+<script>
+const STATE = {
+  currency: {symbol:'R', code:'ZAR', name:'Rand'},
+  groupType: 'rotating',
+  userName: 'Thandi',
+  referralCode: 'THANDI2025',
+  referralEarnings: 3
+};
+const CURRENCIES = [
+  {symbol:'R',code:'ZAR',name:'South African Rand'},
+  {symbol:'£',code:'GBP',name:'British Pound'},
+  {symbol:'$',code:'USD',name:'US Dollar'},
+  {symbol:'€',code:'EUR',name:'Euro'},
+  {symbol:'K',code:'ZMW',name:'Zambian Kwacha'},
+  {symbol:'₦',code:'NGN',name:'Nigerian Naira'},
+  {symbol:'P',code:'BWP',name:'Botswana Pula'},
+  {symbol:'KSh',code:'KES',name:'Kenyan Shilling'},
+  {symbol:'$',code:'ZWL',name:'Zimbabwean Dollar'}
+];
+const GROUP_TYPES = [
+  {id:'rotating',icon:'🔄',name:'Rotating stokvel',desc:'Each member gets the full pot in turn'},
+  {id:'grocery',icon:'🛒',name:'Grocery stokvel',desc:'Bulk shopping in December'},
+  {id:'burial',icon:'🕊️',name:'Burial society',desc:'Funeral cover and support'},
+  {id:'investment',icon:'📈',name:'Investment stokvel',desc:'Grow money together'},
+  {id:'savings',icon:'💰',name:'Savings club',desc:'Pardner, sou-sou, tontine'},
+  {id:'festive',icon:'🎄',name:'Festive stokvel',desc:'December payout for all'}
+];
+function fmt(amount){return STATE.currency.symbol + amount.toLocaleString();}
+</script>
+
+<!-- LANDING -->
+<div class="screen active" id="landing">
+  <div class="land-top">
+    <div class="proof-bar">
+      <div class="proof-dots">
+        <div class="proof-dot pd1">N</div>
+        <div class="proof-dot pd2">T</div>
+        <div class="proof-dot pd3">L</div>
+        <div class="proof-dot pd4">S</div>
+      </div>
+      <div class="proof-text"><span>2,400+</span> groups worldwide</div>
+    </div>
+    <div class="logo-wrap">
+      <div class="logo-icon">S</div>
+      <div class="logo-text">Stokmate</div>
+    </div>
+    <div class="land-headline">Run your savings group <em>the smart way</em></div>
+    <div class="land-sub">Track contributions, send automatic reminders, resolve disputes with AI — without ever touching your group's money. Works for stokvels, pardner, sou-sou, tontines and savings clubs worldwide.</div>
+    <div class="stats-row">
+      <div class="stat-item"><span class="stat-val">800k+</span><span class="stat-label">SA Stokvels</span></div>
+      <div class="stat-item"><span class="stat-val">R50B</span><span class="stat-label">Saved yearly</span></div>
+      <div class="stat-item"><span class="stat-val">Global</span><span class="stat-label">9 currencies</span></div>
+    </div>
+  </div>
+  <div class="land-bottom">
+    <div class="urgency-row">
+      <div class="urgency-dot"></div>
+      <div class="urgency-text">Free for 30 days — no card needed</div>
+    </div>
+    <div class="cta-headline">Start your free trial</div>
+    <div class="cta-sub">Join groups across South Africa, the UK, US and beyond.</div>
+    <button class="btn-navy" onclick="goTo('onboarding')">Get started — it's free ✓</button>
+    <button class="btn-outline" onclick="goTo('home')">I already have a group</button>
+    <div class="trust-row">
+      <div class="trust-item">🔒 We never hold your money</div>
+      <div class="trust-item">✓ POPIA compliant</div>
+      <div class="trust-item">🌍 Works worldwide</div>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="screen" id="onboarding">
+  <div class="onboard-hero">
+    <div class="onboard-step">Step 1 of 3</div>
+    <div class="onboard-title" id="onboard-title">Where are you based?</div>
+    <div class="onboard-sub" id="onboard-sub">Select your currency — you can change this anytime.</div>
+    <div class="step-dots">
+      <div class="step-dot active" id="dot1"></div>
+      <div class="step-dot" id="dot2"></div>
+      <div class="step-dot" id="dot3"></div>
+    </div>
+  </div>
+  <div class="onboard-body">
+    <div id="step1">
+      <div class="currency-grid" id="currencyGrid"></div>
+      <button class="btn-navy" onclick="nextStep(2)">Continue →</button>
+    </div>
+    <div id="step2" style="display:none">
+      <div class="type-grid" id="typeGrid"></div>
+      <button class="btn-navy" onclick="nextStep(3)">Continue →</button>
+    </div>
+    <div id="step3" style="display:none">
+      <div class="form-label">Your name</div>
+      <input class="form-input" type="text" placeholder="e.g. Thandi" id="nameInput" value="Thandi">
+      <div class="form-label">Your email</div>
+      <input class="form-input" type="email" placeholder="thandi@gmail.com">
+      <div class="form-label">Cellphone / WhatsApp number</div>
+      <input class="form-input" type="tel" placeholder="+27 82 000 0000">
+      <button class="btn-navy" onclick="completeOnboarding()">Create my account →</button>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="home">
+  <div class="topbar">
+    <div class="topbar-logo"><div class="topbar-icon">S</div>Stokmate</div>
+    <button class="notif-btn">🔔<div class="notif-badge"></div></button>
+  </div>
+  <div class="home-hero">
+    <div class="greeting-row">
+      <div><div class="greeting-text">Good morning</div><div class="greeting-name" id="heroName">Thandi 👋</div></div>
+      <div class="avatar-circle" id="heroAvatar">T</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-label">Total tracked across all groups</div>
+      <div class="hero-amount" id="heroAmount">R 14,500</div>
+      <div class="hero-sub">Updated just now · 2 active groups</div>
+      <div class="hero-mini-row">
+        <div class="hero-mini">
+          <div class="hero-mini-label">Collected this month</div>
+          <div class="hero-mini-val" id="heroCollected">R 8,200</div>
+          <div class="hero-mini-sub">▲ 3 members still owed</div>
+        </div>
+        <div class="hero-mini">
+          <div class="hero-mini-label">Next payout</div>
+          <div class="hero-mini-val" id="heroNext">R 6,000</div>
+          <div class="hero-mini-sub">⏳ Month 3 of 12</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEALTH SCORE -->
+  <div class="health-banner">
+    <div class="health-ring">
+      <svg width="56" height="56" viewBox="0 0 56 56">
+        <circle class="health-ring-bg" cx="28" cy="28" r="22"/>
+        <circle class="health-ring-fill" cx="28" cy="28" r="22"
+          stroke="#1F7A55"
+          stroke-dasharray="138.2"
+          stroke-dashoffset="27.6"
+          id="healthRing"/>
+      </svg>
+      <div class="health-score-text" style="color:#0A3D2B">87</div>
+    </div>
+    <div class="health-info">
+      <div class="health-title">Group health score</div>
+      <div class="health-sub">Your groups are performing well · 3 unpaid this month</div>
+    </div>
+    <div class="health-badge" style="background:var(--green-pale);color:var(--success)">Good</div>
+  </div>
+
+  <!-- DECEMBER COUNTDOWN -->
+  <div class="dec-banner" onclick="showToast('December countdown — 249 days to go! 🎄')">
+    <div class="dec-top">
+      <div class="dec-label">🎄 December payout countdown</div>
+      <div class="dec-amount" id="decAmount">R 6,000</div>
+    </div>
+    <div class="dec-stats">
+      <div class="dec-stat"><div class="dec-stat-val" id="decDays">249</div><div class="dec-stat-label">Days left</div></div>
+      <div class="dec-stat"><div class="dec-stat-val" id="decCollected">72%</div><div class="dec-stat-label">Collected</div></div>
+      <div class="dec-stat"><div class="dec-stat-val" id="decMonths">4</div><div class="dec-stat-label">Months left</div></div>
+    </div>
+  </div>
+
+  <!-- REFERRAL -->
+  <div class="referral-banner" onclick="goTo('referral')">
+    <div class="ref-icon">🎁</div>
+    <div class="ref-text">
+      <div class="ref-title">You have earned 3 free months!</div>
+      <div class="ref-sub">3 friends joined using your link · Share more to earn more</div>
+    </div>
+    <div style="font-size:18px;color:var(--gold)">›</div>
+  </div>
+
+  <!-- UPGRADE -->
+  <div class="upgrade-banner" onclick="goTo('pricing')">
+    <div class="upgrade-icon">⚡</div>
+    <div class="upgrade-text">
+      <div class="upgrade-title">Upgrade to Pro — <span id="upgradePrice">R49</span>/month</div>
+      <div class="upgrade-sub">WhatsApp reminders · AI disputes · Certificate of good standing</div>
+    </div>
+    <div class="upgrade-arrow">›</div>
+  </div>
+
+  <div class="section" style="margin-top:16px">
+    <div class="quick-grid">
+      <div class="q-btn" onclick="goTo('add-group')"><div class="q-icon qg">➕</div><div class="q-label">New Group</div></div>
+      <div class="q-btn" onclick="showToast('Payment recorded ✓')"><div class="q-icon qgo">💰</div><div class="q-label">Mark Paid</div></div>
+      <div class="q-btn" onclick="goTo('ai-screen')"><div class="q-icon qn">🤖</div><div class="q-label">AI Help</div></div>
+      <div class="q-btn" onclick="goTo('certificate')"><div class="q-icon qp">🏅</div><div class="q-label">Certificate</div></div>
+    </div>
+    <div class="alert-card">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-text">
+        <strong>Thabo Khumalo</strong> has not paid this month in Church Stokvel. The group is short <span id="alertAmount">R500</span>.
+        <div class="alert-action" onclick="showToast('WhatsApp reminder sent to Thabo 📲')">Send WhatsApp reminder →</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">My Groups</div>
+      <div class="see-all" onclick="goTo('add-group')">+ New</div>
+    </div>
+    <div class="group-card" onclick="goTo('group-detail')">
+      <div class="gc-top">
+        <div class="gc-avatar" style="background:#E6F4EE;color:#0A3D2B">C</div>
+        <div class="gc-info">
+          <div class="gc-name">Church Stokvel</div>
+          <div class="gc-meta">🔄 Rotating · 12 members · <span id="gcContrib1">R500</span>/month</div>
+        </div>
+        <div class="gc-badge badge-warn">3 unpaid</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-header"><span class="progress-left">9 of 12 paid</span><span class="progress-right">75%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:75%"></div></div>
+      </div>
+      <div class="gc-bottom">
+        <div class="gc-bottom-item">Collected: <strong><span id="gcTotal1">R4,500</span></strong></div>
+        <div class="gc-bottom-item">Payout: <strong>Nomsa</strong></div>
+      </div>
+    </div>
+    <div class="group-card" onclick="goTo('group-detail')">
+      <div class="gc-top">
+        <div class="gc-avatar" style="background:#F3E8FF;color:#6B21A8">B</div>
+        <div class="gc-info">
+          <div class="gc-name">Motsepe Burial Society</div>
+          <div class="gc-meta">🕊️ Burial society · 8 members · <span id="gcContrib2">R200</span>/month</div>
+        </div>
+        <div class="gc-badge badge-burial">Active</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-header"><span class="progress-left">8 of 8 paid</span><span class="progress-right">100% ✓</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+      </div>
+      <div class="gc-bottom">
+        <div class="gc-bottom-item">Fund total: <strong><span id="gcTotal2">R18,400</span></strong></div>
+        <div class="gc-bottom-item">Cover: <strong><span id="gcCover">R5,000</span></strong>/member</div>
+      </div>
+    </div>
+    <div class="group-card" onclick="goTo('group-detail')">
+      <div class="gc-top">
+        <div class="gc-avatar" style="background:#FDF6E3;color:#B8860B">F</div>
+        <div class="gc-info">
+          <div class="gc-name">Family Savings Circle</div>
+          <div class="gc-meta">💰 Savings club · 6 members · <span id="gcContrib3">R1,000</span>/month</div>
+        </div>
+        <div class="gc-badge badge-gold">Your payout! 🎉</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-header"><span class="progress-left">6 of 6 paid</span><span class="progress-right">100% ✓</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+      </div>
+      <div class="gc-bottom">
+        <div class="gc-bottom-item">Collected: <strong><span id="gcTotal3">R6,000</span></strong></div>
+        <div class="gc-bottom-item">Payout: <strong>You</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-spacer"></div>
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="setNav(this);goTo('home')"><div class="nav-icon-wrap">🏠</div><span class="nav-label">Home</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('group-detail')"><div class="nav-icon-wrap">👥</div><span class="nav-label">Groups</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('add-group')"><div class="nav-icon-wrap">➕</div><span class="nav-label">New</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('pricing')"><div class="nav-icon-wrap">⚡</div><span class="nav-label">Upgrade</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('ai-screen')"><div class="nav-icon-wrap">🤖</div><span class="nav-label">AI Help</span></button>
+  </div>
+</div>
+
+<!-- GROUP DETAIL -->
+<div class="screen" id="group-detail">
+  <div class="detail-header">
+    <button class="back-pill" onclick="goTo('home')">← Back</button>
+    <div class="detail-name">Church Stokvel</div>
+    <div class="detail-type">🔄 Rotating stokvel</div>
+    <div class="detail-sub">12 members · <span id="detailContrib">R500</span>/month · Month 7 of 12</div>
+    <div class="detail-stats">
+      <div class="ds-card"><div class="ds-val" id="detailTarget">R6,000</div><div class="ds-label">Target</div></div>
+      <div class="ds-card"><div class="ds-val">9/12</div><div class="ds-label">Paid</div></div>
+      <div class="ds-card"><div class="ds-val">87</div><div class="ds-label">Health score</div></div>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:16px">
+    <!-- DISPUTE VAULT -->
+    <div class="vault-card">
+      <div class="vault-header">
+        <div class="vault-icon">🔐</div>
+        <div>
+          <div class="vault-title">Dispute vault</div>
+          <div class="vault-sub">Tamper-proof record of all group activity</div>
+        </div>
+      </div>
+      <div class="vault-entry">
+        <div class="vault-dot"></div>
+        <div>
+          <div class="vault-text">Nomsa Dlamini marked payment of <span id="v1">R500</span> as received</div>
+          <div class="vault-time">Today 09:14 · Admin confirmed</div>
+        </div>
+      </div>
+      <div class="vault-entry">
+        <div class="vault-dot"></div>
+        <div>
+          <div class="vault-text">WhatsApp reminder sent to Thabo Khumalo, Sipho Ndlovu, Bongani Mokoena</div>
+          <div class="vault-time">Today 08:00 · Automated</div>
+        </div>
+      </div>
+      <div class="vault-entry">
+        <div class="vault-dot"></div>
+        <div>
+          <div class="vault-text">Lerato Mokoena marked payment of <span id="v2">R500</span> as received</div>
+          <div class="vault-time">Yesterday 18:32 · Admin confirmed</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-bottom:12px">Member reliability</div>
+    <div class="member-item">
+      <div class="m-avatar" style="background:#E6F4EE;color:#0A3D2B">N</div>
+      <div class="m-info"><div class="m-name">Nomsa Dlamini</div><div class="m-detail"><span id="mp1">R500</span> · Paid 1 May · 7/7 months · 🏆 Payout this month</div></div>
+      <div class="reliability"><div class="rel-score" style="color:#0A6B3D">100%</div><div class="rel-label">Reliable</div></div>
+    </div>
+    <div class="member-item">
+      <div class="m-avatar" style="background:#EEF1F8;color:#0F1C3F">T</div>
+      <div class="m-info"><div class="m-name">Thabo Khumalo</div><div class="m-detail"><span id="mp2">R500</span> · NOT PAID · 5/7 months</div></div>
+      <div class="reliability"><div class="rel-score" style="color:#B91C1C">71%</div><div class="rel-label">At risk</div></div>
+    </div>
+    <div class="member-item">
+      <div class="m-avatar" style="background:#FDF6E3;color:#B8860B">L</div>
+      <div class="m-info"><div class="m-name">Lerato Mokoena</div><div class="m-detail"><span id="mp3">R500</span> · Paid 2 May · 7/7 months</div></div>
+      <div class="reliability"><div class="rel-score" style="color:#0A6B3D">100%</div><div class="rel-label">Reliable</div></div>
+    </div>
+    <div class="member-item">
+      <div class="m-avatar" style="background:#E6F4EE;color:#0A3D2B">P</div>
+      <div class="m-info"><div class="m-name">Priya Naidoo</div><div class="m-detail"><span id="mp4">R500</span> · Paid 3 May · 6/7 months</div></div>
+      <div class="reliability"><div class="rel-score" style="color:#92400E">86%</div><div class="rel-label">Good</div></div>
+    </div>
+    <div class="member-item">
+      <div class="m-avatar" style="background:#FEE2E2;color:#991B1B">S</div>
+      <div class="m-info"><div class="m-name">Sipho Ndlovu</div><div class="m-detail"><span id="mp5">R500</span> · NOT PAID · 4/7 months</div></div>
+      <div class="reliability"><div class="rel-score" style="color:#B91C1C">57%</div><div class="rel-label">Warning</div></div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="btn-action primary" onclick="showToast('WhatsApp reminders sent 📲')">Remind unpaid</button>
+    <button class="btn-action secondary" onclick="showToast('PDF statement ready 📄')">Statement</button>
+    <button class="btn-action gold" onclick="goTo('certificate')">Certificate</button>
+  </div>
+  <div class="nav-spacer"></div>
+  <div class="bottom-nav">
+    <button class="nav-btn" onclick="setNav(this);goTo('home')"><div class="nav-icon-wrap">🏠</div><span class="nav-label">Home</span></button>
+    <button class="nav-btn active"><div class="nav-icon-wrap">👥</div><span class="nav-label">Groups</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('add-group')"><div class="nav-icon-wrap">➕</div><span class="nav-label">New</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('pricing')"><div class="nav-icon-wrap">⚡</div><span class="nav-label">Upgrade</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('ai-screen')"><div class="nav-icon-wrap">🤖</div><span class="nav-label">AI Help</span></button>
+  </div>
+</div>
+
+<!-- CERTIFICATE -->
+<div class="screen" id="certificate">
+  <div class="topbar">
+    <button style="background:var(--green-pale);color:var(--green);border:none;border-radius:24px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;" onclick="goTo('home')">← Back</button>
+    <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--green)">Certificate</div>
+    <div style="width:64px"></div>
+  </div>
+  <div style="padding:16px 0 20px;overflow-y:auto;">
+    <div class="cert-wrap">
+      <div class="cert-header">
+        <div class="cert-logo">S</div>
+        <div class="cert-app-name">Stokmate</div>
+      </div>
+      <div class="cert-title">Certificate of Good Standing</div>
+      <div class="cert-name" id="certName">Thandi Dlamini</div>
+      <div class="cert-sub">has demonstrated consistent financial reliability as a member of the <strong>Church Stokvel</strong> and is hereby recognised as a trusted savings group participant.</div>
+      <div class="cert-stats">
+        <div class="cert-stat">
+          <div class="cert-stat-val">7</div>
+          <div class="cert-stat-label">Months perfect</div>
+        </div>
+        <div class="cert-stat">
+          <div class="cert-stat-val" id="certTotal">R3,500</div>
+          <div class="cert-stat-label">Total contributed</div>
+        </div>
+        <div class="cert-stat">
+          <div class="cert-stat-val">0</div>
+          <div class="cert-stat-label">Late payments</div>
+        </div>
+      </div>
+      <div class="cert-score-wrap">
+        <div class="cert-score-label">Reliability score</div>
+        <div class="cert-score">100%</div>
+        <div class="cert-score-sub">Top 5% of all Stokmate members globally</div>
+      </div>
+      <div class="cert-seal">🏅</div>
+      <div class="cert-footer">This certificate is verified by Stokmate and backed by tamper-proof transaction records. Valid for credit applications, rental agreements, and financial assessments.</div>
+      <div class="cert-id">CERT-STK-2025-TH-0042 · Issued <span id="certDate"></span></div>
+    </div>
+    <div style="padding:0 20px">
+      <button class="btn-navy" onclick="showToast('Certificate downloaded as PDF 🏅')">Download PDF certificate</button>
+      <button class="btn-outline" style="margin-top:10px" onclick="showToast('Certificate shared via WhatsApp 📲')">Share via WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- REFERRAL -->
+<div class="screen" id="referral">
+  <div class="ref-hero">
+    <button style="background:rgba(255,255,255,0.2);border:none;border-radius:24px;padding:7px 14px;font-size:13px;font-weight:700;color:white;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:16px;display:inline-block;" onclick="goTo('home')">← Back</button>
+    <div class="ref-hero-title">Earn free months 🎁</div>
+    <div class="ref-hero-sub">Share Stokmate with friends. Every group that joins gives you 1 free month.</div>
+  </div>
+  <div class="ref-how">
+    <div class="ref-step">
+      <div class="ref-step-num">1</div>
+      <div class="ref-step-body">
+        <div class="ref-step-title">Share your personal link</div>
+        <div class="ref-step-desc">Send it on WhatsApp to anyone who runs a stokvel, pardner, or savings club.</div>
+      </div>
+    </div>
+    <div class="ref-step">
+      <div class="ref-step-num">2</div>
+      <div class="ref-step-body">
+        <div class="ref-step-title">They sign up and subscribe</div>
+        <div class="ref-step-desc">When they start their 30-day free trial using your link, it is tracked automatically.</div>
+      </div>
+    </div>
+    <div class="ref-step">
+      <div class="ref-step-num">3</div>
+      <div class="ref-step-body">
+        <div class="ref-step-title">You get 1 free month</div>
+        <div class="ref-step-desc">When they convert to a paid subscriber, one month is added to your account. No limit on how many you can earn.</div>
+      </div>
+    </div>
+  </div>
+  <div class="ref-link-card">
+    <div class="ref-link-label">Your personal referral link</div>
+    <div class="ref-link" id="refLink">stokmate.co.za/join/THANDI2025</div>
+  </div>
+  <div class="ref-earnings">
+    <div class="ref-earn-label">Free months earned so far</div>
+    <div class="ref-earn-val" id="refEarnings">3 months</div>
+  </div>
+  <div style="padding:0 20px">
+    <button class="btn-navy" onclick="showToast('Link copied! Share it on WhatsApp 📲')">Copy link & share on WhatsApp</button>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ADD GROUP -->
+<div class="screen" id="add-group">
+  <div class="topbar">
+    <button style="background:var(--green-pale);color:var(--green);border:none;border-radius:24px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;" onclick="goTo('home')">← Back</button>
+    <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--green)">New Group</div>
+    <div style="width:64px"></div>
+  </div>
+  <div class="form-body">
+    <div class="form-label">Group type</div>
+    <div class="option-grid" id="typeChips"></div>
+    <div class="form-label">Group name</div>
+    <input class="form-input" type="text" placeholder="e.g. Church Stokvel 2025">
+    <div class="form-row">
+      <div><div class="form-label">Members</div><input class="form-input" type="number" placeholder="10" id="grpMembers" oninput="updatePreview()" min="2"></div>
+      <div><div class="form-label">Contribution</div><input class="form-input" type="number" placeholder="500" id="grpAmount" oninput="updatePreview()" min="0"></div>
+    </div>
+    <div class="form-label">Payment cycle</div>
+    <div class="option-grid">
+      <div class="opt-chip active" onclick="selectOpt(this)">Monthly</div>
+      <div class="opt-chip" onclick="selectOpt(this)">Weekly</div>
+      <div class="opt-chip" onclick="selectOpt(this)">December</div>
+    </div>
+    <div class="form-label">Currency</div>
+    <div class="option-grid" id="currencyChips"></div>
+    <div class="value-preview">
+      <div class="vp-title">Group value at a glance</div>
+      <div class="vp-row"><span class="vp-label">Monthly pool</span><span class="vp-val gold" id="previewPool">R 5,000</span></div>
+      <div class="vp-row"><span class="vp-label">Annual total</span><span class="vp-val gold" id="previewAnnual">R 60,000</span></div>
+      <div class="vp-row"><span class="vp-label">Each member receives</span><span class="vp-val" id="previewEach">R 5,000</span></div>
+    </div>
+    <button class="btn-navy" onclick="showToast('Group created! Invite link ready 🎉');goTo('home')">Create group & invite members →</button>
+    <div class="nav-spacer"></div>
+  </div>
+</div>
+
+<!-- AI -->
+<div class="screen" id="ai-screen">
+  <div class="ai-header">
+    <div class="ai-header-top">
+      <button style="background:rgba(255,255,255,0.12);border:none;border-radius:24px;padding:6px 13px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;" onclick="goTo('home')">← Back</button>
+      <div style="flex:1">
+        <div class="ai-header-name">Stokmate AI</div>
+        <div class="ai-header-status">● Online · Answers in seconds</div>
+      </div>
+      <div class="ai-icon-wrap">🤖</div>
+    </div>
+    <div class="ai-chips">
+      <div class="ai-chip" onclick="sendChip(this)">Member not paying 😤</div>
+      <div class="ai-chip" onclick="sendChip(this)">Generate constitution</div>
+      <div class="ai-chip" onclick="sendChip(this)">Someone wants to leave</div>
+      <div class="ai-chip" onclick="sendChip(this)">Burial society rules</div>
+      <div class="ai-chip" onclick="sendChip(this)">UK pardner advice</div>
+    </div>
+  </div>
+  <div class="chat-area" id="chatArea">
+    <div class="bubble bot">Sawubona! 👋 I am your Stokmate AI — here to help your group run smoothly anywhere in the world. Whether you run a stokvel in Soweto, a pardner in London, or a sou-sou in New York — I understand your savings group and can help with disputes, constitutions, missed payments and more. What is happening in your group today?</div>
+  </div>
+  <div class="chat-bar">
+    <input class="chat-input" id="chatInput" placeholder="Ask me anything about your group..." onkeydown="if(event.key==='Enter')sendMsg()">
+    <button class="send-btn" onclick="sendMsg()">↑</button>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-btn" onclick="setNav(this);goTo('home')"><div class="nav-icon-wrap">🏠</div><span class="nav-label">Home</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('group-detail')"><div class="nav-icon-wrap">👥</div><span class="nav-label">Groups</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('add-group')"><div class="nav-icon-wrap">➕</div><span class="nav-label">New</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('pricing')"><div class="nav-icon-wrap">⚡</div><span class="nav-label">Upgrade</span></button>
+    <button class="nav-btn active"><div class="nav-icon-wrap">🤖</div><span class="nav-label">AI Help</span></button>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="screen" id="pricing">
+  <div class="pricing-hero">
+    <button style="background:rgba(255,255,255,0.12);border:none;border-radius:24px;padding:7px 14px;font-size:13px;font-weight:700;color:rgba(255,255,255,0.85);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:18px;display:block;" onclick="goTo('home')">← Back</button>
+    <div class="pricing-title">Simple pricing</div>
+    <div class="pricing-sub">Start free. Upgrade when ready. Cancel anytime.</div>
+  </div>
+  <div style="padding:20px">
+    <div class="plan-card" style="margin-top:6px">
+      <div class="plan-name">Free forever</div>
+      <div class="plan-price"><span class="plan-amount" id="freePrice">R0</span><span class="plan-period">/month</span></div>
+      <div class="plan-desc">Try Stokmate with a small group. No commitment.</div>
+      <div class="plan-features">
+        <div class="plan-feature"><div class="feat-check yes">✓</div>1 group, up to 8 members</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>Basic payment tracking</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>Contribution history</div>
+        <div class="plan-feature"><div class="feat-check no">✕</div>WhatsApp reminders</div>
+        <div class="plan-feature"><div class="feat-check no">✕</div>AI dispute assistant</div>
+        <div class="plan-feature"><div class="feat-check no">✕</div>Certificate of good standing</div>
+        <div class="plan-feature"><div class="feat-check no">✕</div>Dispute vault</div>
+        <div class="plan-feature"><div class="feat-check no">✕</div>Health score & analytics</div>
+        <div class="plan-feature"><div class="feat-check no">✕</div>Referral rewards</div>
+      </div>
+      <button class="plan-btn outline" onclick="showToast('You are on the Free plan ✓')">Current plan</button>
+    </div>
+    <div class="plan-card featured">
+      <div class="popular-tag">⚡ Most popular</div>
+      <div class="plan-name" style="margin-top:8px">Pro monthly</div>
+      <div class="plan-price"><span class="plan-amount" id="proPrice">R49</span><span class="plan-period">/month per group</span></div>
+      <div class="plan-desc">Everything your group needs. Trusted by groups in SA, UK, US and beyond.</div>
+      <div class="plan-features">
+        <div class="plan-feature"><div class="feat-check yes">✓</div>Unlimited members per group</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>Unlimited groups</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>WhatsApp payment reminders</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>AI dispute assistant</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>Certificate of good standing</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>Tamper-proof dispute vault</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>Group health score</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>December countdown dashboard</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>Referral reward programme</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>PDF statements</div>
+        <div class="plan-feature"><div class="feat-check yes">✓</div>All currencies · Works worldwide</div>
+      </div>
+      <button class="plan-btn navy" onclick="showToast('Starting your 30-day free trial 🎉')">Start 30-day free trial →</button>
+      <div class="guarantee">🔒 No card needed · Cancel anytime</div>
+    </div>
+    <div class="plan-card annual">
+      <div class="plan-name" style="color:var(--gold)">Pro annual — best value</div>
+      <div class="plan-price"><span class="plan-amount" id="annualPrice" style="color:var(--gold)">R490</span><span class="plan-period">/year per group</span></div>
+      <div class="plan-desc" style="color:#92400E"><strong>Save <span id="annualSave">R98</span></strong> — 2 months completely free. Pay once, forget about it.</div>
+      <button class="plan-btn gold" onclick="showToast('Annual plan — best value! 🌟')">Get annual — save <span id="btnSave">R98</span> 🌟</button>
+      <div class="guarantee">🔒 Cancel anytime · Secure via PayFast</div>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+</div>
+
+<script>
+// Core navigation
+function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function setNav(el){el.closest('.bottom-nav').querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+function selectOpt(el){el.closest('.option-grid').querySelectorAll('.opt-chip').forEach(o=>o.classList.remove('active'));el.classList.add('active');}
+
+// ONBOARDING — Currency grid
+function buildCurrencyGrid(){
+  const grid=document.getElementById('currencyGrid');
+  CURRENCIES.forEach((c,i)=>{
+    const d=document.createElement('div');
+    d.className='currency-opt'+(i===0?' selected':'');
+    d.innerHTML=`<div class="currency-symbol">${c.symbol}</div><div class="currency-name">${c.code}</div>`;
+    d.onclick=()=>{
+      document.querySelectorAll('#currencyGrid .currency-opt').forEach(x=>x.classList.remove('selected'));
+      d.classList.add('selected');
+      STATE.currency=c;
+      updateCurrencyDisplay();
+    };
+    grid.appendChild(d);
+  });
+}
+
+// ONBOARDING — Type grid
+function buildTypeGrid(){
+  const grid=document.getElementById('typeGrid');
+  GROUP_TYPES.forEach((t,i)=>{
+    const d=document.createElement('div');
+    d.className='type-opt'+(i===0?' selected':'');
+    d.innerHTML=`<div class="type-icon">${t.icon}</div><div class="type-info"><div class="type-name">${t.name}</div><div class="type-desc">${t.desc}</div></div>`;
+    d.onclick=()=>{
+      document.querySelectorAll('#typeGrid .type-opt').forEach(x=>x.classList.remove('selected'));
+      d.classList.add('selected');
+      STATE.groupType=t.id;
+    };
+    grid.appendChild(d);
+  });
+}
+
+// ADD GROUP — type chips
+function buildTypeChips(){
+  const grid=document.getElementById('typeChips');
+  GROUP_TYPES.forEach((t,i)=>{
+    const d=document.createElement('div');
+    d.className='opt-chip'+(i===0?' active':'');
+    d.textContent=t.icon+' '+t.name;
+    d.onclick=()=>{selectOpt(d);};
+    grid.appendChild(d);
+  });
+}
+
+// ADD GROUP — currency chips
+function buildCurrencyChips(){
+  const grid=document.getElementById('currencyChips');
+  CURRENCIES.slice(0,6).forEach((c,i)=>{
+    const d=document.createElement('div');
+    d.className='opt-chip'+(i===0?' active':'');
+    d.textContent=c.symbol+' '+c.code;
+    d.onclick=()=>{
+      selectOpt(d);
+      STATE.currency=c;
+      updatePreview();
+    };
+    grid.appendChild(d);
+  });
+}
+
+// ONBOARDING steps
+function nextStep(step){
+  document.getElementById('step'+(step-1)).style.display='none';
+  document.getElementById('step'+step).style.display='block';
+  document.querySelectorAll('.step-dot').forEach((d,i)=>{
+    d.classList.toggle('active',i<step);
+  });
+  if(step===2){document.getElementById('onboard-title').textContent='What type of group?';document.getElementById('onboard-sub').textContent='Select the type that best describes your savings group.';}
+  if(step===3){document.getElementById('onboard-title').textContent='Create your account';document.getElementById('onboard-sub').textContent='Your details are kept private and secure.';}
+}
+
+function completeOnboarding(){
+  const name=document.getElementById('nameInput').value||'Thandi';
+  STATE.userName=name;
+  updateCurrencyDisplay();
+  goTo('home');
+}
+
+// Update all currency displays
+function updateCurrencyDisplay(){
+  const s=STATE.currency.symbol;
+  document.getElementById('heroName').textContent=STATE.userName+' 👋';
+  document.getElementById('heroAvatar').textContent=STATE.userName[0].toUpperCase();
+  document.getElementById('heroAmount').textContent=s+' 14,500';
+  document.getElementById('heroCollected').textContent=s+' 8,200';
+  document.getElementById('heroNext').textContent=s+' 6,000';
+  document.getElementById('alertAmount').textContent=s+'500';
+  document.getElementById('gcContrib1').textContent=s+'500';
+  document.getElementById('gcTotal1').textContent=s+'4,500';
+  document.getElementById('gcContrib2').textContent=s+'200';
+  document.getElementById('gcTotal2').textContent=s+'18,400';
+  document.getElementById('gcCover').textContent=s+'5,000';
+  document.getElementById('gcContrib3').textContent=s+'1,000';
+  document.getElementById('gcTotal3').textContent=s+'6,000';
+  document.getElementById('detailContrib').textContent=s+'500';
+  document.getElementById('detailTarget').textContent=s+'6,000';
+  document.getElementById('v1').textContent=s+'500';
+  document.getElementById('v2').textContent=s+'500';
+  document.getElementById('mp1').textContent=s+'500';
+  document.getElementById('mp2').textContent=s+'500';
+  document.getElementById('mp3').textContent=s+'500';
+  document.getElementById('mp4').textContent=s+'500';
+  document.getElementById('mp5').textContent=s+'500';
+  document.getElementById('decAmount').textContent=s+' 6,000';
+  document.getElementById('certTotal').textContent=s+'3,500';
+  document.getElementById('certName').textContent=STATE.userName+' Dlamini';
+  document.getElementById('refLink').textContent='stokmate.co.za/join/'+STATE.userName.toUpperCase()+'2025';
+  // Pricing
+  const prices={ZAR:{pro:'R49',annual:'R490',save:'R98'},GBP:{pro:'£3.99',annual:'£39.90',save:'£7.98'},USD:{pro:'$2.99',annual:'$29.90',save:'$5.98'},EUR:{pro:'€2.99',annual:'€29.90',save:'€5.98'}};
+  const p=prices[STATE.currency.code]||{pro:s+'49',annual:s+'490',save:s+'98'};
+  document.getElementById('proPrice').textContent=p.pro;
+  document.getElementById('annualPrice').textContent=p.annual;
+  document.getElementById('annualSave').textContent=p.save;
+  document.getElementById('btnSave').textContent=p.save;
+  document.getElementById('upgradePrice').textContent=p.pro;
+  updatePreview();
+}
+
+// December countdown
+function calcDecember(){
+  const now=new Date();
+  const dec=new Date(now.getFullYear(),11,1);
+  if(now>dec)dec.setFullYear(dec.getFullYear()+1);
+  const days=Math.ceil((dec-now)/(1000*60*60*24));
+  document.getElementById('decDays').textContent=days;
+  const monthsLeft=Math.ceil(days/30);
+  document.getElementById('decMonths').textContent=monthsLeft;
+}
+
+// Value preview
+function updatePreview(){
+  const m=parseInt(document.getElementById('grpMembers').value)||10;
+  const a=parseInt(document.getElementById('grpAmount').value)||500;
+  const s=STATE.currency.symbol;
+  const pool=m*a;
+  document.getElementById('previewPool').textContent=s+' '+pool.toLocaleString();
+  document.getElementById('previewAnnual').textContent=s+' '+(pool*12).toLocaleString();
+  document.getElementById('previewEach').textContent=s+' '+pool.toLocaleString();
+}
+
+// AI Chat
+const aiResponses={
+  'Member not paying 😤':'This is the most common group problem — exactly why Stokmate\'s dispute vault exists.\n\n1️⃣ The vault shows a timestamped record of every reminder sent — share this with the group so everyone sees the facts.\n\n2️⃣ Check their reliability score. Below 70% means this is a pattern, not a one-off.\n\n3️⃣ Month 2 missed = suspend their payout turn until caught up.\n\n4️⃣ Month 3 missed = group vote on removal. The vault gives you uneditable evidence for any dispute.\n\nWould you like me to generate a formal notice to send this member?',
+  'Generate constitution':'📋 STOKMATE GROUP CONSTITUTION\n\n1. All contributions due by the 5th of each month.\n2. R50 late fee after 7 days (adjust for your currency).\n3. Two consecutive missed payments = payout turn suspended.\n4. Three missed = removal. Outstanding balance pursued.\n5. All payments via EFT or digital transfer — no cash.\n6. Payouts processed within 3 business days of full collection.\n7. Members may only exit after their payout turn or with 75% group approval.\n8. Disputes resolved by majority vote — Stokmate dispute vault records are final evidence.\n9. Constitution changes require 100% group agreement.\n\nWould you like me to customise this for your specific group type?',
+  'Someone wants to leave':'Here is the fair process depending on timing:\n\n✅ Before their payout turn:\nForfeits contributions, OR group votes to refund minus one month penalty.\n\n✅ After their payout turn:\nMust stay until cycle ends. Leaving early = owes remaining months. Stokmate tracks this automatically.\n\n✅ Genuine emergency (death, retrenchment):\nGroup votes with compassion — most groups refund in full.\n\nThe dispute vault documents everything so there is no disagreement about what was agreed. Want me to add an exit clause to your constitution?',
+  'Burial society rules':'Burial societies have specific rules that differ from rotating stokvels:\n\n🕊️ Waiting period: New members typically cannot claim for 3 months after joining.\n\n💰 Payout trigger: Death of member or immediate family (define which family members qualify upfront).\n\n📋 Claims process: Death certificate + ID required within 30 days of death.\n\n🔒 Fund management: The fund grows monthly — Stokmate tracks the running total so everyone knows the current cover amount.\n\n📊 Key rule: No member should receive more than they have contributed without group approval — this prevents the scheme from being abused.\n\nShall I generate a full burial society constitution for your group?',
+  'UK pardner advice':'Great news — Stokmate works exactly the same for UK pardner groups!\n\n🇬🇧 Just select £ GBP as your currency when setting up the group.\n\nFor UK groups specifically:\n\n✅ The dispute vault is especially valuable because pardner groups in the UK often don\'t have written agreements — this gives you a legal-standard record.\n\n✅ The certificate of good standing can be used with UK landlords and credit applications.\n\n✅ WhatsApp reminders work identically — most UK pardner groups already use WhatsApp.\n\n⚠️ UK tax note: Pardner windfalls may be considered income by HMRC above certain thresholds — I\'d recommend members keep their Stokmate PDF statements for tax purposes.\n\nAnything else you need for your UK group?'
+};
+
+function sendChip(el){
+  const text=el.textContent;
+  el.style.opacity='0.5';el.style.pointerEvents='none';
+  addUser(text);showTyping();
+  setTimeout(()=>{removeTyping();addBot(aiResponses[text]||'Great question. The key is having clear rules agreed upfront. Would you like me to help generate a constitution for your group?');},1700);
+}
+
+function sendMsg(){
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  addUser(text);showTyping();
+  setTimeout(()=>{removeTyping();addBot('Good question. Whatever savings group you run — stokvel, pardner, sou-sou or tontine — the answer always comes down to clear agreed rules and a transparent record. Stokmate handles both. Would you like me to help set up proper rules for your group?');},1800);
+}
+
+function addUser(text){const area=document.getElementById('chatArea');const b=document.createElement('div');b.className='bubble user';b.textContent=text;area.appendChild(b);area.scrollTop=area.scrollHeight;}
+function addBot(text){const area=document.getElementById('chatArea');const b=document.createElement('div');b.className='bubble bot';b.style.whiteSpace='pre-line';b.textContent=text;area.appendChild(b);area.scrollTop=area.scrollHeight;}
+let typingEl=null;
+function showTyping(){const area=document.getElementById('chatArea');typingEl=document.createElement('div');typingEl.className='typing-bubble';typingEl.innerHTML='<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';area.appendChild(typingEl);area.scrollTop=area.scrollHeight;}
+function removeTyping(){if(typingEl){typingEl.remove();typingEl=null;}}
+
+// Certificate date
+document.getElementById('certDate').textContent=new Date().toLocaleDateString('en-ZA',{day:'numeric',month:'long',year:'numeric'});
+
+// Init
+buildCurrencyGrid();
+buildTypeGrid();
+buildTypeChips();
+buildCurrencyChips();
+calcDecember();
+updateCurrencyDisplay();
+</script>
+</body>
+</html>
