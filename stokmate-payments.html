@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stokmate — PayFast Payment Integration</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #0A3D2B; --green-mid: #145C40; --green-pale: #E6F4EE;
+  --gold: #D4A017; --gold-pale: #FDF6E3; --gold-accent: #FFD700;
+  --navy: #0F1C3F; --navy-mid: #1A2F5E; --navy-pale: #EEF1F8;
+  --cream: #FAFAF7; --white: #FFFFFF; --dark: #0D0D0D;
+  --gray: #6B7280; --gray-light: #F4F4F2; --border: #E8E8E4;
+  --success: #0A6B3D; --danger: #B91C1C;
+  --radius: 16px; --radius-sm: 10px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.10);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--cream); color:var(--dark); min-height:100vh; max-width:430px; margin:0 auto; }
+.screen { display:none; min-height:100vh; flex-direction:column; }
+.screen.active { display:flex; }
+
+/* TOP BAR */
+.topbar { background:var(--white); padding:14px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+.topbar-logo { font-family:'Fraunces',serif; font-size:20px; font-weight:700; color:var(--green); display:flex; align-items:center; gap:8px; }
+.topbar-icon { width:30px; height:30px; background:linear-gradient(135deg,var(--gold),var(--gold-accent)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:900; font-family:'Fraunces',serif; color:var(--green); }
+
+/* PRICING SCREEN */
+#pricing { background:var(--cream); }
+.pricing-hero { background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%); padding:28px 24px 32px; text-align:center; }
+.back-pill { background:rgba(255,255,255,0.12); border:none; border-radius:24px; padding:7px 14px; color:rgba(255,255,255,0.85); font-size:13px; font-weight:600; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; margin-bottom:20px; display:inline-block; }
+.pricing-title { font-family:'Fraunces',serif; font-size:30px; font-weight:900; color:white; margin-bottom:8px; }
+.pricing-sub { font-size:14px; color:rgba(255,255,255,0.65); }
+
+.plans-wrap { padding:20px; }
+
+/* FREE PLAN */
+.plan-card { background:var(--white); border-radius:var(--radius); padding:22px; margin-bottom:14px; border:2px solid var(--border); position:relative; }
+.plan-card.featured { border-color:var(--navy); box-shadow:0 0 0 4px rgba(15,28,63,0.06); }
+.plan-card.annual { border-color:var(--gold); background:var(--gold-pale); }
+.popular-tag { position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:var(--navy); color:white; font-size:11px; font-weight:800; padding:5px 18px; border-radius:20px; text-transform:uppercase; letter-spacing:1px; white-space:nowrap; }
+.plan-name { font-size:12px; font-weight:700; color:var(--gray); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.8px; }
+.plan-price { display:flex; align-items:baseline; gap:4px; margin-bottom:6px; }
+.plan-amount { font-family:'Fraunces',serif; font-size:42px; font-weight:900; color:var(--dark); }
+.plan-period { font-size:14px; color:var(--gray); }
+.plan-desc { font-size:13px; color:var(--gray); margin-bottom:18px; line-height:1.5; }
+.features { margin-bottom:20px; }
+.feat { display:flex; align-items:center; gap:10px; font-size:13px; padding:7px 0; border-bottom:1px solid var(--gray-light); }
+.feat:last-child { border-bottom:none; }
+.feat-icon { width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+.feat-icon.yes { background:var(--green-pale); color:var(--success); }
+.feat-icon.no { background:var(--gray-light); color:var(--gray); }
+
+/* BUTTONS */
+.btn-navy { width:100%; padding:17px; background:var(--navy); color:white; border:none; border-radius:var(--radius-sm); font-size:15px; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; transition:all 0.2s; }
+.btn-navy:active { transform:scale(0.98); }
+.btn-outline { width:100%; padding:16px; background:transparent; color:var(--green); border:1.5px solid var(--green); border-radius:var(--radius-sm); font-size:14px; font-weight:600; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; transition:all 0.2s; }
+.btn-gold { width:100%; padding:17px; background:var(--gold); color:white; border:none; border-radius:var(--radius-sm); font-size:15px; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; transition:all 0.2s; }
+.guarantee { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:12px; font-size:12px; color:var(--gray); font-weight:500; }
+
+/* CHECKOUT SCREEN */
+#checkout { background:var(--cream); }
+.checkout-hero { background:linear-gradient(160deg,var(--navy) 0%,var(--navy-mid) 100%); padding:24px 20px 32px; }
+.checkout-title { font-family:'Fraunces',serif; font-size:26px; font-weight:900; color:white; margin-bottom:4px; }
+.checkout-sub { font-size:13px; color:rgba(255,255,255,0.6); }
+.order-summary { background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.15); border-radius:var(--radius-sm); padding:16px; margin-top:20px; }
+.order-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.10); }
+.order-row:last-child { border-bottom:none; }
+.order-label { font-size:13px; color:rgba(255,255,255,0.65); }
+.order-val { font-size:14px; font-weight:700; color:white; }
+.order-val.gold { color:var(--gold-accent); font-family:'Fraunces',serif; font-size:18px; }
+.order-val.green { color:#4ADE80; }
+
+.checkout-body { padding:20px; }
+.section-label { font-size:12px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* Payment method tabs */
+.pay-tabs { display:flex; gap:8px; margin-bottom:20px; }
+.pay-tab { flex:1; padding:12px 8px; background:var(--white); border:2px solid var(--border); border-radius:var(--radius-sm); text-align:center; cursor:pointer; font-size:12px; font-weight:600; color:var(--gray); transition:all 0.2s; }
+.pay-tab.active { border-color:var(--navy); background:var(--navy-pale); color:var(--navy); }
+.pay-tab-icon { font-size:20px; display:block; margin-bottom:4px; }
+
+/* Card form */
+.form-group { margin-bottom:16px; }
+.form-label { font-size:12px; font-weight:600; color:var(--gray); margin-bottom:6px; display:block; }
+.form-input { width:100%; padding:14px 16px; background:var(--white); border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:15px; color:var(--dark); font-family:'Plus Jakarta Sans',sans-serif; outline:none; transition:border-color 0.2s; }
+.form-input:focus { border-color:var(--navy); }
+.form-row-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+/* Security badges */
+.security-row { display:flex; align-items:center; justify-content:center; gap:16px; padding:16px 0; flex-wrap:wrap; }
+.sec-badge { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--gray); font-weight:500; }
+
+/* PayFast redirect notice */
+.payfast-notice { background:var(--navy-pale); border:1px solid rgba(15,28,63,0.15); border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:20px; display:flex; gap:10px; align-items:flex-start; }
+.pf-notice-text { font-size:12px; color:var(--navy); line-height:1.5; }
+.pf-notice-text strong { font-weight:700; }
+
+/* SUCCESS SCREEN */
+#success { background:var(--green); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 24px; min-height:100vh; }
+.success-circle { width:100px; height:100px; background:rgba(255,255,255,0.15); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:48px; margin:0 auto 24px; }
+.success-title { font-family:'Fraunces',serif; font-size:36px; font-weight:900; color:white; margin-bottom:12px; }
+.success-sub { font-size:16px; color:rgba(255,255,255,0.75); line-height:1.6; margin-bottom:32px; max-width:300px; }
+.success-card { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:var(--radius); padding:20px; width:100%; margin-bottom:32px; }
+.success-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.10); }
+.success-row:last-child { border-bottom:none; }
+.s-label { font-size:13px; color:rgba(255,255,255,0.6); }
+.s-val { font-size:13px; font-weight:700; color:white; }
+
+/* SANDBOX BANNER */
+.sandbox-banner { background:#FEF3C7; border:1px solid #F59E0B; border-radius:var(--radius-sm); padding:12px 16px; margin:16px 20px 0; display:flex; gap:8px; align-items:center; }
+.sandbox-text { font-size:12px; color:#92400E; line-height:1.4; font-weight:500; }
+
+/* PAYFAST REDIRECT SCREEN */
+#pf-redirect { background:var(--cream); display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; text-align:center; padding:40px 24px; }
+.redirect-spinner { width:64px; height:64px; border:4px solid var(--green-pale); border-top:4px solid var(--green); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 24px; }
+@keyframes spin { 100%{ transform:rotate(360deg); } }
+.redirect-title { font-family:'Fraunces',serif; font-size:22px; font-weight:700; color:var(--dark); margin-bottom:8px; }
+.redirect-sub { font-size:14px; color:var(--gray); line-height:1.5; }
+.pf-logo { font-size:32px; margin-bottom:12px; }
+
+/* NAV SPACER */
+.nav-spacer { height:20px; }
+
+/* TOAST */
+.toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%); background:var(--dark); color:white; padding:12px 22px; border-radius:28px; font-size:13px; font-weight:600; z-index:999; opacity:0; transition:opacity 0.25s; white-space:nowrap; pointer-events:none; }
+.toast.show { opacity:1; }
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- PRICING -->
+<div class="screen active" id="pricing">
+  <div class="pricing-hero">
+    <button class="back-pill" onclick="history.back()">← Back to Stokmate</button>
+    <div class="pricing-title">Choose your plan</div>
+    <div class="pricing-sub">Start free. No card needed. Cancel anytime.</div>
+  </div>
+
+  <!-- Sandbox notice -->
+  <div class="sandbox-banner">
+    <span style="font-size:16px">🧪</span>
+    <div class="sandbox-text"><strong>Sandbox mode active.</strong> This is a test environment — no real payments will be taken. Replace sandbox credentials with live ones once your PayFast account is approved.</div>
+  </div>
+
+  <div class="plans-wrap">
+
+    <!-- FREE -->
+    <div class="plan-card">
+      <div class="plan-name">Free forever</div>
+      <div class="plan-price"><span class="plan-amount">R0</span><span class="plan-period">/month</span></div>
+      <div class="plan-desc">Try Stokmate with a small group. No commitment.</div>
+      <div class="features">
+        <div class="feat"><div class="feat-icon yes">✓</div>1 group, up to 8 members</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>Basic payment tracking</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>Contribution history</div>
+        <div class="feat"><div class="feat-icon no">✕</div>WhatsApp reminders</div>
+        <div class="feat"><div class="feat-icon no">✕</div>AI dispute assistant</div>
+        <div class="feat"><div class="feat-icon no">✕</div>PDF statements</div>
+        <div class="feat"><div class="feat-icon no">✕</div>Multiple groups</div>
+        <div class="feat"><div class="feat-icon no">✕</div>Reliability scores</div>
+      </div>
+      <button class="btn-outline" onclick="showToast('You are on the Free plan ✓')">Continue with free</button>
+    </div>
+
+    <!-- PRO MONTHLY -->
+    <div class="plan-card featured">
+      <div class="popular-tag">⚡ Most popular</div>
+      <div class="plan-name" style="margin-top:10px">Pro monthly</div>
+      <div class="plan-price"><span class="plan-amount">R49</span><span class="plan-period">/month per group</span></div>
+      <div class="plan-desc">Everything your stokvel needs. Billed automatically each month.</div>
+      <div class="features">
+        <div class="feat"><div class="feat-icon yes">✓</div>Unlimited members per group</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>Unlimited groups</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>WhatsApp payment reminders</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>AI dispute assistant</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>PDF statements & records</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>Member reliability scores</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>Auto-generated constitution</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>Priority support</div>
+      </div>
+      <button class="btn-navy" onclick="startCheckout('monthly')">Subscribe — R49/month →</button>
+      <div class="guarantee">🔒 Cancel anytime · Secure via PayFast</div>
+    </div>
+
+    <!-- PRO ANNUAL — best value anchoring -->
+    <div class="plan-card annual">
+      <div class="plan-name" style="color:var(--gold)">Pro annual — best value</div>
+      <div class="plan-price"><span class="plan-amount" style="color:var(--gold)">R490</span><span class="plan-period">/year per group</span></div>
+      <div class="plan-desc" style="color:#92400E"><strong>Save R98</strong> — that is 2 months completely free. Pay once, forget about it all year.</div>
+      <div class="features">
+        <div class="feat"><div class="feat-icon yes">✓</div>Everything in Pro monthly</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>2 months free (save R98)</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>Annual PDF tax summary</div>
+        <div class="feat"><div class="feat-icon yes">✓</div>Early access to new features</div>
+      </div>
+      <button class="btn-gold" onclick="startCheckout('annual')">Get annual — save R98 🌟</button>
+      <div class="guarantee">🔒 Cancel anytime · Secure via PayFast</div>
+    </div>
+
+    <div class="nav-spacer"></div>
+  </div>
+</div>
+
+<!-- CHECKOUT -->
+<div class="screen" id="checkout">
+  <div class="checkout-hero">
+    <button class="back-pill" onclick="goTo('pricing')">← Change plan</button>
+    <div class="checkout-title">Complete your order</div>
+    <div class="checkout-sub">Secured by PayFast · PCI DSS Level 1</div>
+    <div class="order-summary">
+      <div class="order-row">
+        <span class="order-label">Plan</span>
+        <span class="order-val" id="summaryPlan">Stokmate Pro</span>
+      </div>
+      <div class="order-row">
+        <span class="order-label">Billing</span>
+        <span class="order-val" id="summaryBilling">Monthly</span>
+      </div>
+      <div class="order-row">
+        <span class="order-label">Free trial</span>
+        <span class="order-val green">30 days free ✓</span>
+      </div>
+      <div class="order-row">
+        <span class="order-label">First charge</span>
+        <span class="order-val" id="summaryDate">After trial ends</span>
+      </div>
+      <div class="order-row">
+        <span class="order-label">Amount</span>
+        <span class="order-val gold" id="summaryAmount">R49</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="checkout-body">
+
+    <!-- PayFast redirect notice -->
+    <div class="payfast-notice">
+      <span style="font-size:20px">🔒</span>
+      <div class="pf-notice-text">
+        <strong>You will be redirected to PayFast</strong> — South Africa's most trusted payment gateway — to securely enter your card details. Stokmate never sees or stores your card information.
+      </div>
+    </div>
+
+    <div class="section-label">Your details</div>
+
+    <div class="form-group">
+      <label class="form-label">Full name</label>
+      <input class="form-input" type="text" id="firstName" placeholder="e.g. Thandi Dlamini">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Email address</label>
+      <input class="form-input" type="email" id="email" placeholder="thandi@gmail.com">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Cellphone number</label>
+      <input class="form-input" type="tel" id="phone" placeholder="082 000 0000">
+    </div>
+
+    <div class="section-label">Payment method</div>
+
+    <div class="pay-tabs">
+      <div class="pay-tab active" onclick="selectTab(this)">
+        <span class="pay-tab-icon">💳</span>Card
+      </div>
+      <div class="pay-tab" onclick="selectTab(this)">
+        <span class="pay-tab-icon">🏦</span>EFT
+      </div>
+      <div class="pay-tab" onclick="selectTab(this)">
+        <span class="pay-tab-icon">📱</span>SnapScan
+      </div>
+    </div>
+
+    <div style="background:var(--navy-pale);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:20px;text-align:center;">
+      <div style="font-size:13px;color:var(--navy);font-weight:600;margin-bottom:4px;">You will be taken to PayFast's secure page</div>
+      <div style="font-size:12px;color:var(--gray);">Your payment details are entered on PayFast's encrypted servers — never on Stokmate's system.</div>
+    </div>
+
+    <!-- Security badges -->
+    <div class="security-row">
+      <div class="sec-badge">🔒 SSL Encrypted</div>
+      <div class="sec-badge">✓ PCI DSS Level 1</div>
+      <div class="sec-badge">🇿🇦 PayFast Secured</div>
+    </div>
+
+    <button class="btn-navy" style="margin-top:16px" onclick="processPayment()">
+      Proceed to PayFast →
+    </button>
+
+    <div class="nav-spacer"></div>
+  </div>
+</div>
+
+<!-- PAYFAST REDIRECT LOADING -->
+<div class="screen" id="pf-redirect">
+  <div class="pf-logo">🔒</div>
+  <div class="redirect-spinner"></div>
+  <div class="redirect-title">Connecting to PayFast...</div>
+  <div class="redirect-sub">You are being securely redirected to PayFast to complete your payment. Please do not close this page.</div>
+</div>
+
+<!-- SUCCESS -->
+<div class="screen" id="success">
+  <div class="success-circle">🎉</div>
+  <div class="success-title">You're on Pro!</div>
+  <div class="success-sub">Welcome to Stokmate Pro. Your subscription is now active and your group is fully unlocked.</div>
+
+  <div class="success-card">
+    <div class="success-row">
+      <span class="s-label">Plan</span>
+      <span class="s-val" id="successPlan">Stokmate Pro Monthly</span>
+    </div>
+    <div class="success-row">
+      <span class="s-label">Amount</span>
+      <span class="s-val" id="successAmount">R49/month</span>
+    </div>
+    <div class="success-row">
+      <span class="s-label">Next billing</span>
+      <span class="s-val" id="successNext">After 30-day trial</span>
+    </div>
+    <div class="success-row">
+      <span class="s-label">Payment via</span>
+      <span class="s-val">PayFast ✓</span>
+    </div>
+    <div class="success-row">
+      <span class="s-label">Status</span>
+      <span class="s-val" style="color:#4ADE80">● Active</span>
+    </div>
+  </div>
+
+  <button class="btn-navy" style="width:100%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);" onclick="goTo('pricing')">
+    Back to Stokmate →
+  </button>
+</div>
+
+<!-- HIDDEN PAYFAST FORM — this is the actual integration -->
+<form id="payfastForm" action="https://sandbox.payfast.co.za/eng/process" method="post" style="display:none">
+  <!-- SANDBOX MERCHANT CREDENTIALS -->
+  <!-- Replace with your real Merchant ID and Key from payfast.io once approved -->
+  <input type="hidden" name="merchant_id" value="10000100">
+  <input type="hidden" name="merchant_key" value="46f0cd694581a">
+
+  <!-- WHERE TO SEND USER AFTER PAYMENT -->
+  <input type="hidden" name="return_url" id="pf_return" value="">
+  <input type="hidden" name="cancel_url" id="pf_cancel" value="">
+  <input type="hidden" name="notify_url" id="pf_notify" value="">
+
+  <!-- BUYER DETAILS — filled by JS -->
+  <input type="hidden" name="name_first" id="pf_firstname" value="">
+  <input type="hidden" name="name_last" id="pf_lastname" value="">
+  <input type="hidden" name="email_address" id="pf_email" value="">
+  <input type="hidden" name="cell_number" id="pf_phone" value="">
+
+  <!-- PAYMENT DETAILS -->
+  <input type="hidden" name="m_payment_id" id="pf_payment_id" value="">
+  <input type="hidden" name="amount" id="pf_amount" value="49.00">
+  <input type="hidden" name="item_name" id="pf_item" value="Stokmate Pro Monthly">
+  <input type="hidden" name="item_description" id="pf_desc" value="Monthly subscription to Stokmate Pro">
+
+  <!-- SUBSCRIPTION FIELDS — enables recurring billing -->
+  <input type="hidden" name="subscription_type" value="1">
+  <input type="hidden" name="billing_date" id="pf_billing_date" value="">
+  <input type="hidden" name="recurring_amount" id="pf_recurring" value="49.00">
+  <input type="hidden" name="frequency" id="pf_frequency" value="3"> <!-- 3=monthly, 6=annual -->
+  <input type="hidden" name="cycles" id="pf_cycles" value="0"> <!-- 0=indefinite -->
+</form>
+
+<script>
+// ============================================================
+// PAYFAST SANDBOX CREDENTIALS
+// When PayFast approves your account, replace these with your
+// real Merchant ID and Merchant Key from your PayFast dashboard
+// ============================================================
+const PAYFAST_CONFIG = {
+  sandbox: true,
+  merchant_id: '10000100',      // REPLACE with your real Merchant ID
+  merchant_key: '46f0cd694581a', // REPLACE with your real Merchant Key
+  // These URLs need to point to your live hosted domain once on Netlify
+  return_url: window.location.href.split('?')[0] + '?payment=success',
+  cancel_url: window.location.href.split('?')[0] + '?payment=cancel',
+  notify_url: 'https://stokmate.co.za/api/payfast/notify' // Your backend webhook
+};
+
+let selectedPlan = 'monthly';
+
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function selectTab(el) {
+  el.closest('.pay-tabs').querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function startCheckout(plan) {
+  selectedPlan = plan;
+  // Update order summary
+  if (plan === 'monthly') {
+    document.getElementById('summaryPlan').textContent = 'Stokmate Pro';
+    document.getElementById('summaryBilling').textContent = 'Monthly (auto-renews)';
+    document.getElementById('summaryAmount').textContent = 'R49/month';
+  } else {
+    document.getElementById('summaryPlan').textContent = 'Stokmate Pro Annual';
+    document.getElementById('summaryBilling').textContent = 'Annual (save R98)';
+    document.getElementById('summaryAmount').textContent = 'R490/year';
+  }
+  // Set trial end date (30 days from now)
+  const trialEnd = new Date();
+  trialEnd.setDate(trialEnd.getDate() + 30);
+  document.getElementById('summaryDate').textContent = trialEnd.toLocaleDateString('en-ZA', {day:'numeric',month:'long',year:'numeric'});
+  goTo('checkout');
+}
+
+function processPayment() {
+  const name = document.getElementById('firstName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+
+  // Basic validation
+  if (!name) { showToast('Please enter your full name'); return; }
+  if (!email || !email.includes('@')) { showToast('Please enter a valid email'); return; }
+  if (!phone) { showToast('Please enter your cellphone number'); return; }
+
+  // Split name
+  const nameParts = name.split(' ');
+  const firstName = nameParts[0];
+  const lastName = nameParts.slice(1).join(' ') || firstName;
+
+  // Set billing date (30 days from now for trial)
+  const billingDate = new Date();
+  billingDate.setDate(billingDate.getDate() + 30);
+  const billingDateStr = billingDate.toISOString().split('T')[0];
+
+  // Generate unique payment ID
+  const paymentId = 'STK_' + Date.now();
+
+  // Fill the PayFast form
+  document.getElementById('pf_firstname').value = firstName;
+  document.getElementById('pf_lastname').value = lastName;
+  document.getElementById('pf_email').value = email;
+  document.getElementById('pf_phone').value = phone.replace(/\s/g, '');
+  document.getElementById('pf_payment_id').value = paymentId;
+  document.getElementById('pf_billing_date').value = billingDateStr;
+  document.getElementById('pf_return').value = PAYFAST_CONFIG.return_url;
+  document.getElementById('pf_cancel').value = PAYFAST_CONFIG.cancel_url;
+  document.getElementById('pf_notify').value = PAYFAST_CONFIG.notify_url;
+
+  if (selectedPlan === 'monthly') {
+    document.getElementById('pf_amount').value = '0.00'; // R0 for trial
+    document.getElementById('pf_recurring').value = '49.00';
+    document.getElementById('pf_frequency').value = '3'; // Monthly
+    document.getElementById('pf_item').value = 'Stokmate Pro Monthly';
+    document.getElementById('pf_desc').value = 'Stokmate Pro - Monthly subscription (R49/month after trial)';
+  } else {
+    document.getElementById('pf_amount').value = '0.00'; // R0 for trial
+    document.getElementById('pf_recurring').value = '490.00';
+    document.getElementById('pf_frequency').value = '6'; // Annual
+    document.getElementById('pf_item').value = 'Stokmate Pro Annual';
+    document.getElementById('pf_desc').value = 'Stokmate Pro - Annual subscription (R490/year after trial)';
+  }
+
+  // Show redirect screen
+  goTo('pf-redirect');
+
+  // In sandbox mode — simulate PayFast redirect and return
+  // In production — uncomment document.getElementById('payfastForm').submit()
+  if (PAYFAST_CONFIG.sandbox) {
+    // Simulate PayFast processing (3 seconds) then show success
+    setTimeout(() => {
+      showSuccess(name, selectedPlan);
+    }, 3000);
+  } else {
+    // PRODUCTION: This actually submits to PayFast
+    document.getElementById('payfastForm').submit();
+  }
+}
+
+function showSuccess(name, plan) {
+  goTo('success');
+  document.getElementById('successPlan').textContent = plan === 'monthly' ? 'Stokmate Pro Monthly' : 'Stokmate Pro Annual';
+  document.getElementById('successAmount').textContent = plan === 'monthly' ? 'R49/month' : 'R490/year';
+  const nextDate = new Date();
+  nextDate.setDate(nextDate.getDate() + 30);
+  document.getElementById('successNext').textContent = nextDate.toLocaleDateString('en-ZA', {day:'numeric',month:'long',year:'numeric'});
+}
+
+// Check for PayFast return URL parameters
+window.addEventListener('load', () => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('payment') === 'success') {
+    showSuccess('Subscriber', 'monthly');
+  } else if (params.get('payment') === 'cancel') {
+    goTo('pricing');
+    showToast('Payment cancelled — try again when ready');
+  }
+});
+</script>
+</body>
+</html>
