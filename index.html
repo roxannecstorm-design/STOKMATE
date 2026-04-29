@@ -25,8 +25,9 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden;}
-.screen{display:none;min-height:100vh;flex-direction:column;}
-.screen.active{display:flex;}
+.screen{display:none !important;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex !important;}
+html,body{overflow-x:hidden;}
 
 /* LANDING */
 #landing{background:var(--green);min-height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;}
@@ -392,8 +393,22 @@ async function signUp(){
 
     if(error) throw error;
 
-    if(data.user){
-      // Create profile
+    // If Supabase email confirmation is on, signUp returns a user but no session.
+    // We must NOT navigate to home in that case — DB writes will silently fail without a session.
+    if(data.user && !data.session){
+      hideLoading();
+      successEl.innerHTML = '<strong>Almost there!</strong> Check your inbox at <strong>' + email + '</strong> and click the confirmation link to finish creating your account. Then come back here and sign in.';
+      successEl.style.display='block';
+      // Pre-fill the login tab so when they come back, sign-in is one tap away
+      const loginEmail = document.getElementById('loginEmail');
+      if(loginEmail) loginEmail.value = email;
+      return;
+    }
+
+    if(data.user && data.session){
+      // Real session — safe to write to RLS-protected tables
+      currentUser = data.user;
+      currentProfile = { full_name: name, email, phone };
       await db.from('profiles').upsert({
         id: data.user.id,
         full_name: name,
@@ -401,9 +416,6 @@ async function signUp(){
         phone,
         referral_code: name.toUpperCase().replace(/\s/g,'').slice(0,8) + Math.floor(Math.random()*1000)
       });
-
-      currentUser = data.user;
-      currentProfile = { full_name: name, email, phone };
       await loadGroups();
       hideLoading();
       goTo('home');
