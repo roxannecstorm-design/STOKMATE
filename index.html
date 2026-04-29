@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stokmate — Your Group's Trusted Companion</title>
+<meta name="description" content="Run your stokvel, pardner, sou-sou or savings club the smart way. Track contributions, send reminders, resolve disputes with AI. We never hold your money.">
+<meta property="og:title" content="Stokmate — Your Group's Trusted Companion">
+<meta property="og:description" content="Run your savings group the smart way. Free for 30 days.">
+<meta property="og:url" content="https://stokmate.co.za">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://stokmate.co.za">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --green:#0A3D2B;--green-mid:#145C40;--green-light:#1F7A55;--green-pale:#E6F4EE;
+  --gold:#D4A017;--gold-pale:#FDF6E3;--gold-accent:#FFD700;
+  --navy:#0F1C3F;--navy-mid:#1A2F5E;--navy-pale:#EEF1F8;
+  --cream:#FAFAF7;--white:#FFFFFF;--dark:#0D0D0D;
+  --gray:#6B7280;--gray-light:#F4F4F2;--border:#E8E8E4;
+  --success:#0A6B3D;--danger:#B91C1C;--warning:#92400E;
+  --r:16px;--rsm:10px;--rlg:24px;
+  --sh:0 4px 20px rgba(0,0,0,0.10);--shsm:0 2px 8px rgba(0,0,0,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden;}
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* LANDING */
+#landing{background:var(--green);min-height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;}
+#landing::before{content:'';position:absolute;top:-120px;right:-120px;width:400px;height:400px;border-radius:50%;border:60px solid rgba(255,255,255,0.03);}
+.land-top{width:100%;padding:52px 28px 36px;position:relative;z-index:1;flex:1;display:flex;flex-direction:column;}
+.proof-bar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:24px;padding:8px 14px;margin-bottom:32px;width:fit-content;}
+.proof-dots{display:flex;}
+.proof-dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--green);margin-left:-6px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.proof-dot:first-child{margin-left:0;}
+.pd1{background:#F59E0B;}.pd2{background:#3B82F6;}.pd3{background:#EC4899;}.pd4{background:#10B981;}
+.proof-text{font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);}
+.proof-text span{color:var(--gold-accent);}
+.logo-wrap{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.logo-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--gold),var(--gold-accent));border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--green);box-shadow:0 4px 16px rgba(212,160,23,0.4);}
+.logo-text{font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:white;}
+.land-headline{font-family:'Fraunces',serif;font-size:42px;font-weight:900;line-height:1.05;color:white;margin-bottom:14px;}
+.land-headline em{font-style:italic;color:var(--gold-accent);}
+.land-sub{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.6;margin-bottom:32px;font-weight:300;}
+.stats-row{display:flex;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.10);border-radius:var(--r);overflow:hidden;margin-bottom:32px;}
+.stat-item{flex:1;padding:14px 8px;text-align:center;border-right:1px solid rgba(255,255,255,0.08);}
+.stat-item:last-child{border-right:none;}
+.stat-val{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--gold-accent);display:block;}
+.stat-label{font-size:10px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;}
+.land-bottom{width:100%;background:var(--white);border-radius:28px 28px 0 0;padding:28px 24px 40px;position:relative;z-index:1;}
+.urgency-row{display:flex;align-items:center;gap:6px;margin-bottom:18px;}
+.urgency-dot{width:8px;height:8px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.6;transform:scale(1.3);}}
+.urgency-text{font-size:12px;font-weight:600;color:var(--success);}
+.cta-headline{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--dark);margin-bottom:6px;}
+.cta-sub{font-size:13px;color:var(--gray);margin-bottom:20px;line-height:1.5;}
+.btn-navy{width:100%;padding:18px;background:var(--navy);color:white;border:none;border-radius:var(--r);font-size:16px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:10px;transition:all 0.2s;}
+.btn-navy:active{transform:scale(0.98);}
+.btn-green{width:100%;padding:18px;background:var(--green);color:white;border:none;border-radius:var(--r);font-size:16px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:10px;transition:all 0.2s;}
+.btn-outline{width:100%;padding:16px;background:transparent;color:var(--green);border:1.5px solid var(--green);border-radius:var(--r);font-size:15px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all 0.2s;}
+.trust-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:18px;flex-wrap:wrap;}
+.trust-item{font-size:11px;color:var(--gray);font-weight:500;}
+.footer-links{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--gray);}
+.footer-links a{color:var(--gray);text-decoration:none;cursor:pointer;}
+.footer-links a:hover{color:var(--green);}
+.footer-links .sep{color:var(--border);}
+
+/* AUTH SCREEN */
+#auth{background:var(--cream);}
+.auth-hero{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:48px 24px 40px;text-align:center;}
+.auth-title{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:white;margin-bottom:8px;}
+.auth-sub{font-size:14px;color:rgba(255,255,255,0.65);}
+.auth-tabs{display:flex;background:rgba(255,255,255,0.10);border-radius:12px;padding:4px;margin-top:20px;}
+.auth-tab{flex:1;padding:10px;text-align:center;border-radius:9px;font-size:14px;font-weight:600;color:rgba(255,255,255,0.6);cursor:pointer;transition:all 0.2s;}
+.auth-tab.active{background:white;color:var(--green);}
+.auth-body{padding:24px;}
+.form-label{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;display:block;}
+.form-input{width:100%;padding:14px 16px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--rsm);font-size:15px;color:var(--dark);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:16px;outline:none;transition:border-color 0.2s;}
+.form-input:focus{border-color:var(--green);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.auth-error{background:#FEE2E2;border:1px solid #FECACA;border-radius:var(--rsm);padding:12px;font-size:13px;color:var(--danger);margin-bottom:16px;display:none;}
+.auth-success{background:var(--green-pale);border:1px solid #BBF7D0;border-radius:var(--rsm);padding:12px;font-size:13px;color:var(--success);margin-bottom:16px;display:none;}
+
+/* TOP BAR */
+.topbar{background:var(--white);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.topbar-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:8px;}
+.topbar-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--gold),var(--gold-accent));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;font-family:'Fraunces',serif;color:var(--green);}
+.notif-btn{position:relative;background:var(--gray-light);border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.notif-badge{position:absolute;top:2px;right:2px;width:10px;height:10px;border-radius:50%;background:var(--danger);border:2px solid white;}
+
+/* HOME */
+#home{background:var(--cream);}
+.home-hero{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:20px 20px 36px;}
+.greeting-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.greeting-text{font-size:13px;color:rgba(255,255,255,0.6);}
+.greeting-name{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:white;}
+.avatar-circle{width:40px;height:40px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--green);font-family:'Fraunces',serif;cursor:pointer;}
+.hero-card{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.15);border-radius:var(--rlg);padding:20px;}
+.hero-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.5);margin-bottom:8px;}
+.hero-amount{font-family:'Fraunces',serif;font-size:38px;font-weight:900;color:white;margin-bottom:4px;letter-spacing:-1px;}
+.hero-sub{font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:16px;}
+.hero-mini-row{display:flex;gap:10px;}
+.hero-mini{flex:1;background:rgba(255,255,255,0.08);border-radius:var(--rsm);padding:10px;}
+.hero-mini-label{font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:3px;}
+.hero-mini-val{font-size:15px;font-weight:700;color:white;}
+.hero-mini-sub{font-size:10px;color:var(--gold-accent);margin-top:2px;font-weight:600;}
+.upgrade-banner{margin:16px 20px 0;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--sh);}
+.upgrade-icon{width:34px;height:34px;background:rgba(255,215,0,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.upgrade-text{flex:1;}
+.upgrade-title{font-size:13px;font-weight:700;color:white;}
+.upgrade-sub{font-size:11px;color:rgba(255,255,255,0.6);margin-top:1px;}
+.upgrade-arrow{font-size:20px;color:var(--gold-accent);}
+.section{padding:20px 20px 0;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section-title{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--dark);}
+.see-all{font-size:13px;font-weight:600;color:var(--green-light);cursor:pointer;}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+.q-btn{background:var(--white);border-radius:var(--rsm);padding:12px 6px;text-align:center;cursor:pointer;border:1px solid var(--border);box-shadow:var(--shsm);transition:transform 0.15s;}
+.q-btn:active{transform:scale(0.92);}
+.q-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;margin:0 auto 6px;}
+.q-label{font-size:10px;font-weight:600;color:var(--dark);}
+.qg{background:var(--green-pale);}.qgo{background:var(--gold-pale);}.qn{background:var(--navy-pale);}.qp{background:#F3E8FF;}
+
+/* GROUP CARDS */
+.group-card{background:var(--white);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--shsm);border:1px solid var(--border);cursor:pointer;transition:all 0.15s;}
+.group-card:active{transform:scale(0.99);}
+.gc-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.gc-avatar{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:18px;font-weight:700;flex-shrink:0;}
+.gc-info{flex:1;}
+.gc-name{font-size:15px;font-weight:700;color:var(--dark);}
+.gc-meta{font-size:11px;color:var(--gray);margin-top:2px;}
+.gc-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:16px;text-transform:uppercase;letter-spacing:0.3px;}
+.badge-active{background:var(--green-pale);color:var(--success);}
+.badge-warn{background:#FEF3C7;color:var(--warning);}
+.progress-wrap{margin-bottom:8px;}
+.progress-header{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;}
+.progress-track{height:6px;background:var(--gray-light);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green-light),var(--gold));transition:width 0.8s ease;}
+.gc-bottom{display:flex;justify-content:space-between;font-size:11px;padding-top:8px;border-top:1px solid var(--gray-light);}
+.gc-bottom-item{color:var(--gray);}
+.gc-bottom-item strong{color:var(--dark);font-weight:700;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:40px 20px;}
+.empty-icon{font-size:48px;margin-bottom:16px;}
+.empty-title{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--dark);margin-bottom:8px;}
+.empty-sub{font-size:14px;color:var(--gray);margin-bottom:24px;line-height:1.5;}
+
+/* ADD GROUP */
+#add-group{background:var(--cream);}
+.form-body{padding:20px;flex:1;}
+.option-grid{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.opt-chip{padding:9px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:24px;font-size:13px;font-weight:600;cursor:pointer;color:var(--gray);transition:all 0.2s;}
+.opt-chip.active{background:var(--green-pale);border-color:var(--green);color:var(--green);}
+.value-preview{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--r);padding:18px;margin:4px 0 18px;}
+.vp-title{font-size:11px;color:rgba(255,255,255,0.55);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+.vp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.vp-label{font-size:13px;color:rgba(255,255,255,0.7);}
+.vp-val{font-size:15px;font-weight:700;color:white;font-family:'Fraunces',serif;}
+.vp-val.gold{color:var(--gold-accent);}
+
+/* GROUP DETAIL */
+#group-detail{background:var(--cream);}
+.detail-header{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:16px 20px 24px;}
+.back-pill{background:rgba(255,255,255,0.12);border:none;border-radius:24px;padding:7px 14px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:14px;display:inline-block;}
+.detail-name{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:white;margin-bottom:2px;}
+.detail-sub{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:18px;}
+.detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.ds-card{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.12);border-radius:var(--rsm);padding:10px;text-align:center;}
+.ds-val{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:white;}
+.ds-label{font-size:10px;color:rgba(255,255,255,0.55);margin-top:2px;}
+
+/* MARK ME PAID CARD */
+.paid-card{background:linear-gradient(135deg,var(--gold-pale) 0%,#FFF6D6 100%);border:1px solid rgba(212,160,23,0.3);border-radius:var(--r);padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+.paid-card .pc-text{flex:1;}
+.paid-card .pc-title{font-size:14px;font-weight:700;color:var(--dark);}
+.paid-card .pc-sub{font-size:12px;color:var(--gray);margin-top:2px;}
+.paid-card .pc-btn{background:var(--green);color:white;border:none;border-radius:var(--rsm);padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;}
+.paid-card .pc-btn[disabled]{background:var(--gray-light);color:var(--gray);cursor:default;}
+.paid-card.is-paid{background:var(--green-pale);border-color:rgba(10,61,43,0.15);}
+.paid-card.is-paid .pc-title{color:var(--success);}
+
+/* INVITE LINK CARD */
+.invite-card{background:var(--green-pale);border:1px solid rgba(10,61,43,0.15);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+.invite-title{font-size:13px;font-weight:700;color:var(--green);margin-bottom:6px;}
+.invite-link{font-size:12px;color:var(--green-mid);word-break:break-all;margin-bottom:10px;font-family:monospace;}
+.invite-actions{display:flex;gap:8px;}
+.invite-btn{flex:1;padding:10px;background:var(--green);color:white;border:none;border-radius:var(--rsm);font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+
+/* MEMBER ROWS */
+.member-item{background:var(--white);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:1px solid var(--border);box-shadow:var(--shsm);}
+.m-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:14px;font-weight:700;flex-shrink:0;}
+.m-info{flex:1;}
+.m-name{font-size:14px;font-weight:700;color:var(--dark);}
+.m-detail{font-size:11px;color:var(--gray);margin-top:2px;}
+.m-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:12px;}
+.mb-paid{background:var(--green-pale);color:var(--success);}
+.mb-unpaid{background:#FEE2E2;color:var(--danger);}
+.action-row{padding:14px 20px;display:flex;gap:10px;}
+.btn-action{flex:1;padding:14px;border-radius:var(--rsm);font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;transition:all 0.15s;}
+.btn-action.primary{background:var(--green);color:white;}
+.btn-action.secondary{background:var(--navy);color:white;}
+
+/* AI */
+#ai-screen{background:var(--cream);flex-direction:column;}
+.ai-header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);padding:14px 20px 18px;}
+.ai-header-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.ai-icon-wrap{width:42px;height:42px;background:rgba(255,215,0,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.ai-header-name{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:white;}
+.ai-header-status{font-size:11px;color:rgba(255,255,255,0.55);margin-top:1px;}
+.ai-chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;}
+.ai-chips::-webkit-scrollbar{display:none;}
+.ai-chip{padding:7px 12px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.15);border-radius:18px;font-size:11px;font-weight:600;color:white;cursor:pointer;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;flex-shrink:0;}
+.chat-area{flex:1;padding:14px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;min-height:200px;}
+.bubble{max-width:86%;padding:12px 15px;font-size:13px;line-height:1.6;border-radius:18px;}
+.bubble.bot{background:var(--white);color:var(--dark);border-bottom-left-radius:4px;align-self:flex-start;box-shadow:var(--shsm);border:1px solid var(--border);}
+.bubble.user{background:var(--navy);color:white;border-bottom-right-radius:4px;align-self:flex-end;}
+.typing-bubble{background:var(--white);border-radius:18px;border-bottom-left-radius:4px;padding:12px 16px;align-self:flex-start;border:1px solid var(--border);display:flex;gap:4px;align-items:center;}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--gray);animation:typing 1.2s infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typing{0%,80%,100%{transform:translateY(0);opacity:0.5;}40%{transform:translateY(-5px);opacity:1;}}
+.chat-bar{padding:10px 20px 24px;background:var(--white);border-top:1px solid var(--border);display:flex;gap:10px;}
+.chat-input{flex:1;padding:11px 15px;background:var(--gray-light);border:1.5px solid transparent;border-radius:24px;font-size:14px;color:var(--dark);font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color 0.2s;}
+.chat-input:focus{border-color:var(--navy);background:var(--white);}
+.send-btn{width:44px;height:44px;border-radius:50%;background:var(--navy);border:none;color:white;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* LOADING */
+.loading-overlay{position:fixed;inset:0;background:rgba(10,61,43,0.9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:500;gap:16px;}
+.loading-spinner{width:48px;height:48px;border:4px solid rgba(255,255,255,0.2);border-top:4px solid var(--gold-accent);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{100%{transform:rotate(360deg);}}
+.loading-text{color:white;font-size:14px;font-weight:500;}
+
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border);display:flex;padding:6px 0 20px;z-index:200;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 0;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;}
+.nav-icon-wrap{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;transition:all 0.2s;}
+.nav-btn.active .nav-icon-wrap{background:var(--green-pale);}
+.nav-label{font-size:10px;font-weight:600;color:var(--gray);}
+.nav-btn.active .nav-label{color:var(--green);}
+.nav-spacer{height:88px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--dark);color:white;padding:11px 20px;border-radius:28px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.25s;white-space:nowrap;pointer-events:none;}
+.toast.show{opacity:1;}
+
+/* LEGAL PAGES */
+.legal-page{background:var(--cream);min-height:100vh;}
+.legal-header{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:40px 24px 28px;}
+.legal-title{font-family:'Fraunces',serif;font-size:30px;font-weight:900;color:white;margin-top:14px;}
+.legal-sub{font-size:13px;color:rgba(255,255,255,0.65);margin-top:4px;}
+.legal-body{padding:24px;max-width:430px;}
+.legal-body h2{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--green);margin:20px 0 8px;}
+.legal-body h2:first-child{margin-top:0;}
+.legal-body p{font-size:14px;line-height:1.6;color:var(--dark);margin-bottom:10px;}
+.legal-body ul{margin-left:20px;margin-bottom:10px;}
+.legal-body li{font-size:14px;line-height:1.6;color:var(--dark);margin-bottom:4px;}
+.legal-body a{color:var(--green);}
+.legal-footer-note{margin-top:28px;padding:14px;background:var(--green-pale);border-radius:var(--rsm);font-size:12px;color:var(--green);line-height:1.5;}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading Stokmate...</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// SUPABASE CONNECTION
+// ============================================================
+const SUPABASE_URL = 'https://eyeidefdslfqurrwowgh.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5ZWlkZWZkc2xmcXVycndvd2doIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTAxMDAsImV4cCI6MjA5MjU4NjEwMH0.-kb4J2vt_xLxmmploozIlTa3mv4K-ezxwC88TbATNYw';
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// App state
+let currentUser = null;
+let currentProfile = null;
+let userGroups = [];
+let currentGroup = null;
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  // Deep-link routing: #privacy and #terms hashes jump to legal pages
+  if(id==='privacy' || id==='terms'){
+    history.replaceState(null,'','#'+id);
+  } else {
+    history.replaceState(null,'',window.location.pathname);
+  }
+}
+
+function setNav(el){
+  el.closest('.bottom-nav').querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function showLoading(msg='Loading...'){
+  document.getElementById('loadingOverlay').style.display='flex';
+  document.querySelector('.loading-text').textContent=msg;
+}
+
+function hideLoading(){
+  document.getElementById('loadingOverlay').style.display='none';
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+async function initApp(){
+  showLoading('Loading Stokmate...');
+  try {
+    // Honour legal-page hash so /#privacy and /#terms work from any link
+    const hash = (window.location.hash||'').replace('#','');
+    if(hash==='privacy' || hash==='terms'){
+      hideLoading();
+      goTo(hash);
+      return;
+    }
+    const { data: { session } } = await db.auth.getSession();
+    if(session){
+      currentUser = session.user;
+      await loadProfile();
+      await loadGroups();
+      goTo('home');
+    } else {
+      goTo('landing');
+    }
+  } catch(e){
+    console.error(e);
+    goTo('landing');
+  }
+  hideLoading();
+}
+
+async function loadProfile(){
+  try {
+    const { data } = await db.from('profiles').select('*').eq('id', currentUser.id).single();
+    if(data) currentProfile = data;
+  } catch(e){ console.error(e); }
+}
+
+async function signUp(){
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const phone = document.getElementById('signupPhone').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const errorEl = document.getElementById('signupError');
+  const successEl = document.getElementById('signupSuccess');
+
+  errorEl.style.display='none';
+  successEl.style.display='none';
+
+  if(!name||!email||!password){
+    errorEl.textContent='Please fill in all fields';
+    errorEl.style.display='block';
+    return;
+  }
+
+  if(password.length < 6){
+    errorEl.textContent='Password must be at least 6 characters';
+    errorEl.style.display='block';
+    return;
+  }
+
+  showLoading('Creating your account...');
+  try {
+    const { data, error } = await db.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: name, phone } }
+    });
+
+    if(error) throw error;
+
+    if(data.user){
+      // Create profile
+      await db.from('profiles').upsert({
+        id: data.user.id,
+        full_name: name,
+        email,
+        phone,
+        referral_code: name.toUpperCase().replace(/\s/g,'').slice(0,8) + Math.floor(Math.random()*1000)
+      });
+
+      currentUser = data.user;
+      currentProfile = { full_name: name, email, phone };
+      await loadGroups();
+      hideLoading();
+      goTo('home');
+      updateHomeUI();
+      showToast('Welcome to Stokmate! 🎉');
+    }
+  } catch(e){
+    hideLoading();
+    errorEl.textContent = e.message || 'Signup failed. Please try again.';
+    errorEl.style.display='block';
+  }
+}
+
+async function signIn(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errorEl = document.getElementById('loginError');
+
+  errorEl.style.display='none';
+
+  if(!email||!password){
+    errorEl.textContent='Please enter your email and password';
+    errorEl.style.display='block';
+    return;
+  }
+
+  showLoading('Signing in...');
+  try {
+    const { data, error } = await db.auth.signInWithPassword({ email, password });
+    if(error) throw error;
+    currentUser = data.user;
+    await loadProfile();
+    await loadGroups();
+    hideLoading();
+    goTo('home');
+    updateHomeUI();
+    showToast('Welcome back! 👋');
+  } catch(e){
+    hideLoading();
+    errorEl.textContent = e.message || 'Login failed. Please check your details.';
+    errorEl.style.display='block';
+  }
+}
+
+async function signOut(){
+  showLoading('Signing out...');
+  await db.auth.signOut();
+  currentUser = null;
+  currentProfile = null;
+  userGroups = [];
+  hideLoading();
+  goTo('landing');
+}
+
+// ============================================================
+// GROUPS
+// ============================================================
+async function loadGroups(){
+  if(!currentUser) return;
+  try {
+    const { data, error } = await db
+      .from('group_members')
+      .select('*, groups(*)')
+      .eq('user_id', currentUser.id);
+
+    if(error) throw error;
+    userGroups = data ? data.map(d => d.groups).filter(Boolean) : [];
+    renderGroups();
+    updateHomeUI();
+  } catch(e){
+    console.error('Load groups error:', e);
+  }
+}
+
+function renderGroups(){
+  const container = document.getElementById('groupsList');
+  if(!container) return;
+
+  if(userGroups.length === 0){
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">👥</div>
+        <div class="empty-title">No groups yet</div>
+        <div class="empty-sub">Create your first stokvel group and invite your members to join.</div>
+        <button class="btn-navy" onclick="goTo('add-group')" style="max-width:200px;margin:0 auto">Create a group</button>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = userGroups.map(g => {
+    const pct = g.members_count > 0 ? Math.round((g.paid_count||0)/g.members_count*100) : 0;
+    const colors = ['#E6F4EE','#FDF6E3','#EEF1F8','#F3E8FF'];
+    const textColors = ['#0A3D2B','#B8860B','#0F1C3F','#6B21A8'];
+    const idx = Math.abs(g.name.charCodeAt(0)) % 4;
+    return `
+    <div class="group-card" onclick="openGroup('${g.id}')">
+      <div class="gc-top">
+        <div class="gc-avatar" style="background:${colors[idx]};color:${textColors[idx]}">${g.name[0].toUpperCase()}</div>
+        <div class="gc-info">
+          <div class="gc-name">${g.name}</div>
+          <div class="gc-meta">${g.type_icon||'🔄'} ${g.group_type||'Rotating'} · ${g.members_count||0} members · ${g.currency||'R'}${(g.contribution_amount||0).toLocaleString()}/month</div>
+        </div>
+        <div class="gc-badge ${pct===100?'badge-active':'badge-warn'}">${pct===100?'All paid':''+((g.members_count||0)-(g.paid_count||0))+' unpaid'}</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-header"><span style="color:var(--gray);font-size:11px">${g.paid_count||0} of ${g.members_count||0} paid</span><span style="font-weight:700;font-size:11px">${pct}%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="gc-bottom">
+        <div class="gc-bottom-item">Pool: <strong>${g.currency||'R'}${((g.contribution_amount||0)*(g.members_count||0)).toLocaleString()}</strong></div>
+        <div class="gc-bottom-item">Code: <strong>${g.invite_code||'...'}</strong></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateHomeUI(){
+  const name = currentProfile?.full_name || currentUser?.user_metadata?.full_name || 'there';
+  const firstName = name.split(' ')[0];
+  const nameEl = document.getElementById('heroName');
+  const avatarEl = document.getElementById('heroAvatar');
+  if(nameEl) nameEl.textContent = firstName + ' 👋';
+  if(avatarEl) avatarEl.textContent = firstName[0].toUpperCase();
+
+  const totalEl = document.getElementById('heroAmount');
+  const groupCount = document.getElementById('heroGroupCount');
+  if(totalEl){
+    const total = userGroups.reduce((sum,g)=>{
+      return sum + ((g.contribution_amount||0)*(g.members_count||0));
+    }, 0);
+    totalEl.textContent = 'R ' + total.toLocaleString();
+  }
+  if(groupCount) groupCount.textContent = userGroups.length + ' active group' + (userGroups.length!==1?'s':'');
+}
+
+async function openGroup(groupId){
+  showLoading('Loading group...');
+  try {
+    const { data: group } = await db.from('groups').select('*').eq('id', groupId).single();
+    const { data: members } = await db.from('group_members').select('*, profiles(full_name, phone)').eq('group_id', groupId);
+
+    currentGroup = { ...group, members: members||[] };
+    hideLoading();
+    renderGroupDetail();
+    goTo('group-detail');
+  } catch(e){
+    hideLoading();
+    showToast('Error loading group');
+  }
+}
+
+function renderGroupDetail(){
+  if(!currentGroup) return;
+  const g = currentGroup;
+  const cur = g.currency || 'R';
+
+  document.getElementById('detailName').textContent = g.name;
+  document.getElementById('detailSub').textContent = `${g.members?.length||0} members · ${cur}${(g.contribution_amount||0).toLocaleString()}/month`;
+  document.getElementById('detailTarget').textContent = cur + ((g.contribution_amount||0)*(g.members?.length||0)).toLocaleString();
+  document.getElementById('detailMembers').textContent = (g.members?.length||0) + '/?' ;
+
+  const inviteLink = `stokmate.co.za/join/${g.invite_code}`;
+  document.getElementById('inviteLink').textContent = inviteLink;
+
+  // ---- YOUR STATUS CARD (Mark me paid) ----
+  const me = (g.members||[]).find(m => m.user_id === currentUser?.id);
+  const paidCardEl = document.getElementById('paidCard');
+  if(paidCardEl){
+    if(!me){
+      paidCardEl.style.display = 'none';
+    } else {
+      paidCardEl.style.display = 'flex';
+      const amount = `${cur}${(g.contribution_amount||0).toLocaleString()}`;
+      const thisMonth = new Date().toLocaleString('en-ZA',{month:'long',year:'numeric'});
+      if(me.paid_this_month){
+        paidCardEl.className = 'paid-card is-paid';
+        paidCardEl.innerHTML = `
+          <div class="pc-text">
+            <div class="pc-title">✓ You've paid for ${thisMonth}</div>
+            <div class="pc-sub">${amount} logged · recorded in the dispute vault</div>
+          </div>
+          <button class="pc-btn" disabled>Paid</button>`;
+      } else {
+        paidCardEl.className = 'paid-card';
+        paidCardEl.innerHTML = `
+          <div class="pc-text">
+            <div class="pc-title">Have you paid for ${thisMonth}?</div>
+            <div class="pc-sub">Log ${amount} — a tamper-proof record is kept for your group.</div>
+          </div>
+          <button class="pc-btn" onclick="markMePaid()">Mark paid</button>`;
+      }
+    }
+  }
+
+  const membersEl = document.getElementById('membersList');
+  if(membersEl && g.members){
+    membersEl.innerHTML = g.members.map((m,i)=>{
+      const name = m.profiles?.full_name || 'Member ' + (i+1);
+      const paid = m.paid_this_month;
+      const colors = ['#E6F4EE','#FDF6E3','#EEF1F8','#FEE2E2'];
+      const textColors = ['#0A3D2B','#B8860B','#0F1C3F','#991B1B'];
+      const idx = i % 4;
+      const youTag = (m.user_id === currentUser?.id) ? ' <span style="color:var(--green);font-weight:700">(you)</span>' : '';
+      return `
+      <div class="member-item">
+        <div class="m-avatar" style="background:${colors[idx]};color:${textColors[idx]}">${name[0].toUpperCase()}</div>
+        <div class="m-info">
+          <div class="m-name">${name}${youTag}</div>
+          <div class="m-detail">${cur}${(g.contribution_amount||0).toLocaleString()} · ${paid?'Paid this month':'Not yet paid'}</div>
+        </div>
+        <div class="m-badge ${paid?'mb-paid':'mb-unpaid'}">${paid?'Paid ✓':'Unpaid'}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ============================================================
+// MARK ME PAID
+// Writes a payments row, flips group_members.paid_this_month, and
+// appends a vault_entries audit row. All three should succeed per RLS.
+// ============================================================
+async function markMePaid(){
+  if(!currentUser || !currentGroup){
+    showToast('Please sign in first');
+    return;
+  }
+  const g = currentGroup;
+  const now = new Date();
+  const monthYear = now.toLocaleString('en-ZA',{month:'long',year:'numeric'}); // e.g. "April 2026"
+  const amount = g.contribution_amount || 0;
+  const cur = g.currency || 'R';
+
+  showLoading('Logging your payment...');
+  try {
+    // 1) Insert payment row
+    const { error: payErr } = await db.from('payments').insert({
+      group_id: g.id,
+      user_id: currentUser.id,
+      amount,
+      currency: cur,
+      month_year: monthYear
+    });
+    if(payErr) throw payErr;
+
+    // 2) Flip paid_this_month on my row in group_members
+    const { error: updErr } = await db.from('group_members')
+      .update({ paid_this_month: true })
+      .eq('group_id', g.id)
+      .eq('user_id', currentUser.id);
+    if(updErr) throw updErr;
+
+    // 3) Vault audit trail (tamper-proof record)
+    await db.from('vault_entries').insert({
+      group_id: g.id,
+      action: 'payment_logged',
+      performed_by: currentUser.id,
+      details: {
+        amount,
+        currency: cur,
+        month_year: monthYear,
+        logged_at: now.toISOString()
+      }
+    });
+
+    // 4) Refresh
+    await openGroup(g.id);
+    hideLoading();
+    showToast(`Payment logged: ${cur}${amount.toLocaleString()} ✓`);
+  } catch(e){
+    hideLoading();
+    console.error('markMePaid error:', e);
+    showToast(e.message || 'Could not log payment. Try again.');
+  }
+}
+
+async function createGroup(){
+  if(!currentUser){
+    showToast('Please sign in first');
+    goTo('auth');
+    return;
+  }
+
+  const name = document.getElementById('grpName').value.trim();
+  const members = parseInt(document.getElementById('grpMembers').value)||0;
+  const amount = parseFloat(document.getElementById('grpAmount').value)||0;
+  const type = document.querySelector('#typeChips .opt-chip.active')?.dataset?.type || 'rotating';
+  const currency = document.querySelector('#currencyChips .opt-chip.active')?.dataset?.currency || 'R';
+
+  if(!name){
+    showToast('Please enter a group name');
+    return;
+  }
+  if(members < 2){
+    showToast('A group needs at least 2 members');
+    return;
+  }
+  if(amount < 1){
+    showToast('Please enter a contribution amount');
+    return;
+  }
+
+  showLoading('Creating your group...');
+  try {
+    const inviteCode = name.toUpperCase().replace(/\s/g,'').slice(0,6) + Math.floor(Math.random()*10000);
+
+    const { data: group, error } = await db.from('groups').insert({
+      name,
+      group_type: type,
+      contribution_amount: amount,
+      currency,
+      invite_code: inviteCode,
+      created_by: currentUser.id,
+      members_count: members,
+      paid_count: 0
+    }).select().single();
+
+    if(error) throw error;
+
+    // Add creator as first member
+    await db.from('group_members').insert({
+      group_id: group.id,
+      user_id: currentUser.id,
+      role: 'admin',
+      paid_this_month: false
+    });
+
+    await loadGroups();
+    hideLoading();
+    showToast('Group created! Share your invite code: ' + inviteCode + ' 🎉');
+    goTo('home');
+
+  } catch(e){
+    hideLoading();
+    console.error(e);
+    showToast('Error creating group. Please try again.');
+  }
+}
+
+async function joinGroup(){
+  const code = document.getElementById('joinCode').value.trim().toUpperCase();
+  if(!code){
+    showToast('Please enter an invite code');
+    return;
+  }
+
+  showLoading('Joining group...');
+  try {
+    const { data: group, error } = await db.from('groups').select('*').eq('invite_code', code).single();
+    if(error || !group){
+      hideLoading();
+      showToast('Group not found. Check the code and try again.');
+      return;
+    }
+
+    // Check not already a member
+    const { data: existing } = await db.from('group_members')
+      .select('id').eq('group_id', group.id).eq('user_id', currentUser.id).single();
+
+    if(existing){
+      hideLoading();
+      showToast('You are already in this group!');
+      return;
+    }
+
+    await db.from('group_members').insert({
+      group_id: group.id,
+      user_id: currentUser.id,
+      role: 'member',
+      paid_this_month: false
+    });
+
+    await loadGroups();
+    hideLoading();
+    showToast('Joined ' + group.name + '! 🎉');
+    goTo('home');
+  } catch(e){
+    hideLoading();
+    showToast('Error joining group. Please try again.');
+  }
+}
+
+function copyInviteLink(){
+  const link = document.getElementById('inviteLink').textContent;
+  navigator.clipboard.writeText(link).then(()=>{
+    showToast('Invite link copied! 📋');
+  }).catch(()=>{
+    showToast('Link: ' + link);
+  });
+}
+
+function shareOnWhatsApp(){
+  if(!currentGroup) return;
+  const code = currentGroup.invite_code;
+  const msg = `Join my stokvel on Stokmate! 🎉\n\nDownload the app at stokmate.co.za and use invite code: *${code}*\n\nTrack contributions, get reminders and manage everything properly 💚`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg));
+}
+
+// Form helpers
+function selectOpt(el){
+  el.closest('.option-grid').querySelectorAll('.opt-chip').forEach(o=>o.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function updatePreview(){
+  const m=parseInt(document.getElementById('grpMembers')?.value)||10;
+  const a=parseInt(document.getElementById('grpAmount')?.value)||500;
+  const cur = document.querySelector('#currencyChips .opt-chip.active')?.dataset?.currency || 'R';
+  const pool=m*a;
+  const poolEl = document.getElementById('previewPool');
+  const annualEl = document.getElementById('previewAnnual');
+  const eachEl = document.getElementById('previewEach');
+  if(poolEl) poolEl.textContent = cur + ' ' + pool.toLocaleString();
+  if(annualEl) annualEl.textContent = cur + ' ' + (pool*12).toLocaleString();
+  if(eachEl) eachEl.textContent = cur + ' ' + pool.toLocaleString();
+}
+
+// Auth tab switching
+function showAuthTab(tab){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.auth-form').forEach(f=>f.style.display='none');
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  document.getElementById(tab+'Form').style.display='block';
+}
+
+// AI Chat
+const aiResponses={
+  'Member not paying 😤':'This is the most common group problem. Here is what to do:\n\n1️⃣ Use the WhatsApp reminder button — this creates a timestamped record in your group.\n\n2️⃣ If they miss a second month, suspend their payout turn.\n\n3️⃣ Three missed payments — group vote on removal.\n\nStokmate records everything automatically so there is no dispute about the facts.',
+  'Generate constitution':'📋 STOKMATE GROUP CONSTITUTION\n\n1. Contributions due by the 5th of each month.\n2. R50 late fee after 7 days.\n3. Two missed payments = payout suspended.\n4. Three missed = removal from group.\n5. All payments via EFT — no cash.\n6. Payouts within 3 business days of full collection.\n7. Members may only exit after their payout turn.\n8. Disputes resolved by majority vote.\n\nSave this in your group notes and share with all members.',
+  'Someone wants to leave':'Before their payout turn: they forfeit contributions or group votes to refund minus penalty.\n\nAfter their payout turn: they must stay until cycle ends.\n\nEmergency: group votes with compassion.\n\nDocument everything in Stokmate so there is no dispute.',
+  'UK pardner advice':'Stokmate works perfectly for UK pardner groups!\n\nSelect £ GBP as your currency. The invite code works the same way globally.\n\nFor UK groups: keep your PDF statements for HMRC if payouts exceed certain thresholds.\n\nThe certificate of good standing is useful for UK landlords and credit applications too.'
+};
+
+function sendChip(el){
+  const text=el.textContent;
+  el.style.opacity='0.5';el.style.pointerEvents='none';
+  addUser(text);showTyping();
+  setTimeout(()=>{removeTyping();addBot(aiResponses[text]||'Great question. Clear rules agreed upfront prevent most disputes. Would you like help generating a constitution for your group?');},1700);
+}
+
+function sendMsg(){
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  addUser(text);showTyping();
+  setTimeout(()=>{removeTyping();addBot('Good question. The key to any savings group is transparent records and clear agreed rules. Stokmate handles the records — would you like help setting up your group rules?');},1800);
+}
+
+function addUser(text){const area=document.getElementById('chatArea');const b=document.createElement('div');b.className='bubble user';b.textContent=text;area.appendChild(b);area.scrollTop=area.scrollHeight;}
+function addBot(text){const area=document.getElementById('chatArea');const b=document.createElement('div');b.className='bubble bot';b.style.whiteSpace='pre-line';b.textContent=text;area.appendChild(b);area.scrollTop=area.scrollHeight;}
+let typingEl=null;
+function showTyping(){const area=document.getElementById('chatArea');typingEl=document.createElement('div');typingEl.className='typing-bubble';typingEl.innerHTML='<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';area.appendChild(typingEl);area.scrollTop=area.scrollHeight;}
+function removeTyping(){if(typingEl){typingEl.remove();typingEl=null;}}
+
+// Build dynamic chips
+const GROUP_TYPES=[
+  {id:'rotating',icon:'🔄',name:'Rotating'},
+  {id:'grocery',icon:'🛒',name:'Grocery'},
+  {id:'burial',icon:'🕊️',name:'Burial society'},
+  {id:'investment',icon:'📈',name:'Investment'},
+  {id:'savings',icon:'💰',name:'Savings club'},
+  {id:'festive',icon:'🎄',name:'Festive'}
+];
+
+const CURRENCIES=[
+  {symbol:'R',code:'ZAR'},{symbol:'£',code:'GBP'},{symbol:'$',code:'USD'},
+  {symbol:'€',code:'EUR'},{symbol:'K',code:'ZMW'},{symbol:'₦',code:'NGN'}
+];
+
+function buildChips(){
+  const typeGrid=document.getElementById('typeChips');
+  if(typeGrid){
+    GROUP_TYPES.forEach((t,i)=>{
+      const d=document.createElement('div');
+      d.className='opt-chip'+(i===0?' active':'');
+      d.dataset.type=t.id;
+      d.textContent=t.icon+' '+t.name;
+      d.onclick=()=>selectOpt(d);
+      typeGrid.appendChild(d);
+    });
+  }
+  const curGrid=document.getElementById('currencyChips');
+  if(curGrid){
+    CURRENCIES.forEach((c,i)=>{
+      const d=document.createElement('div');
+      d.className='opt-chip'+(i===0?' active':'');
+      d.dataset.currency=c.symbol;
+      d.textContent=c.symbol+' '+c.code;
+      d.onclick=()=>{selectOpt(d);updatePreview();};
+      curGrid.appendChild(d);
+    });
+  }
+}
+
+// Init
+window.addEventListener('load',()=>{
+  buildChips();
+  initApp();
+});
+</script>
+
+<!-- LANDING -->
+<div class="screen" id="landing">
+  <div class="land-top">
+    <div class="proof-bar">
+      <div class="proof-dots">
+        <div class="proof-dot pd1">N</div>
+        <div class="proof-dot pd2">T</div>
+        <div class="proof-dot pd3">L</div>
+        <div class="proof-dot pd4">S</div>
+      </div>
+      <div class="proof-text"><span>2,400+</span> groups worldwide</div>
+    </div>
+    <div class="logo-wrap">
+      <div class="logo-icon">S</div>
+      <div class="logo-text">Stokmate</div>
+    </div>
+    <div class="land-headline">Run your savings group <em>the smart way</em></div>
+    <div class="land-sub">Track contributions, send automatic reminders, resolve disputes with AI — without ever touching your group's money. Works for stokvels, pardner, sou-sou and savings clubs worldwide.</div>
+    <div class="stats-row">
+      <div class="stat-item"><span class="stat-val">800k+</span><span class="stat-label">SA Stokvels</span></div>
+      <div class="stat-item"><span class="stat-val">R50B</span><span class="stat-label">Saved yearly</span></div>
+      <div class="stat-item"><span class="stat-val">Global</span><span class="stat-label">9 currencies</span></div>
+    </div>
+  </div>
+  <div class="land-bottom">
+    <div class="urgency-row">
+      <div class="urgency-dot"></div>
+      <div class="urgency-text">Free for 30 days — no card needed</div>
+    </div>
+    <div class="cta-headline">Start your free trial</div>
+    <div class="cta-sub">Join groups across South Africa, the UK, US and beyond.</div>
+    <button class="btn-navy" onclick="goTo('auth')">Create your free account ✓</button>
+    <button class="btn-outline" onclick="goTo('auth');showAuthTab('login')">I already have an account</button>
+    <div class="trust-row">
+      <div class="trust-item">🔒 We never hold your money</div>
+      <div class="trust-item">✓ POPIA compliant</div>
+      <div class="trust-item">🌍 Works worldwide</div>
+    </div>
+    <div class="footer-links">
+      <a onclick="goTo('privacy')">Privacy policy</a>
+      <span class="sep">·</span>
+      <a onclick="goTo('terms')">Terms of service</a>
+      <span class="sep">·</span>
+      <a href="mailto:hello@stokmate.co.za">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH -->
+<div class="screen" id="auth">
+  <div class="auth-hero">
+    <div class="logo-wrap" style="justify-content:center;margin-bottom:16px">
+      <div class="logo-icon" style="width:40px;height:40px;font-size:20px">S</div>
+      <div class="logo-text">Stokmate</div>
+    </div>
+    <div class="auth-title">Welcome</div>
+    <div class="auth-sub">Create your account or sign in below</div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" data-tab="signup" onclick="showAuthTab('signup')">Create account</div>
+      <div class="auth-tab" data-tab="login" onclick="showAuthTab('login')">Sign in</div>
+    </div>
+  </div>
+
+  <div class="auth-body">
+    <!-- SIGNUP -->
+    <div id="signupForm" class="auth-form">
+      <div class="auth-error" id="signupError"></div>
+      <div class="auth-success" id="signupSuccess"></div>
+      <label class="form-label">Full name</label>
+      <input class="form-input" type="text" id="signupName" placeholder="e.g. Thandi Dlamini">
+      <label class="form-label">Email address</label>
+      <input class="form-input" type="email" id="signupEmail" placeholder="thandi@gmail.com">
+      <label class="form-label">WhatsApp number</label>
+      <input class="form-input" type="tel" id="signupPhone" placeholder="+27 82 000 0000">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" id="signupPassword" placeholder="At least 6 characters">
+      <button class="btn-navy" onclick="signUp()">Create my account →</button>
+      <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--gray);line-height:1.5">
+        By creating an account, you agree to our <a onclick="goTo('terms')" style="color:var(--green);font-weight:600;cursor:pointer">Terms</a> and <a onclick="goTo('privacy')" style="color:var(--green);font-weight:600;cursor:pointer">Privacy policy</a>.
+      </div>
+      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--gray)">Already have an account? <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="showAuthTab('login')">Sign in</span></div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginForm" class="auth-form" style="display:none">
+      <div class="auth-error" id="loginError"></div>
+      <label class="form-label">Email address</label>
+      <input class="form-input" type="email" id="loginEmail" placeholder="your@email.com">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" id="loginPassword" placeholder="Your password">
+      <button class="btn-navy" onclick="signIn()">Sign in →</button>
+      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--gray)">New to Stokmate? <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="showAuthTab('signup')">Create account</span></div>
+    </div>
+
+    <!-- JOIN WITH CODE -->
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
+      <div style="font-size:13px;color:var(--gray);text-align:center;margin-bottom:12px">Have an invite code?</div>
+      <div style="display:flex;gap:8px">
+        <input class="form-input" type="text" id="joinCode" placeholder="Enter group code" style="margin-bottom:0;text-transform:uppercase">
+        <button class="btn-green" style="width:auto;padding:14px 18px;margin-bottom:0;white-space:nowrap" onclick="joinGroup()">Join</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="home">
+  <div class="topbar">
+    <div class="topbar-logo"><div class="topbar-icon">S</div>Stokmate</div>
+    <button class="notif-btn" onclick="showToast('No new notifications')">🔔<div class="notif-badge"></div></button>
+  </div>
+  <div class="home-hero">
+    <div class="greeting-row">
+      <div><div class="greeting-text">Good morning</div><div class="greeting-name" id="heroName">there 👋</div></div>
+      <div class="avatar-circle" id="heroAvatar" onclick="signOut()">?</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-label">Total tracked across all groups</div>
+      <div class="hero-amount" id="heroAmount">R 0</div>
+      <div class="hero-sub" id="heroGroupCount">0 active groups</div>
+      <div class="hero-mini-row">
+        <div class="hero-mini">
+          <div class="hero-mini-label">Groups joined</div>
+          <div class="hero-mini-val" id="heroGroups">0</div>
+        </div>
+        <div class="hero-mini">
+          <div class="hero-mini-label">Your account</div>
+          <div class="hero-mini-val">Active ✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="upgrade-banner" onclick="showToast('Upgrade coming soon! 🚀')">
+    <div class="upgrade-icon">⚡</div>
+    <div class="upgrade-text">
+      <div class="upgrade-title">Upgrade to Pro — R49/month</div>
+      <div class="upgrade-sub">WhatsApp reminders · AI disputes · Certificate</div>
+    </div>
+    <div class="upgrade-arrow">›</div>
+  </div>
+  <div class="section" style="margin-top:16px">
+    <div class="quick-grid">
+      <div class="q-btn" onclick="goTo('add-group')"><div class="q-icon qg">➕</div><div class="q-label">New Group</div></div>
+      <div class="q-btn" onclick="showJoinModal()"><div class="q-icon qgo">🔗</div><div class="q-label">Join Group</div></div>
+      <div class="q-btn" onclick="goTo('ai-screen')"><div class="q-icon qn">🤖</div><div class="q-label">AI Help</div></div>
+      <div class="q-btn" onclick="showToast('Certificate — coming in Pro! 🏅')"><div class="q-icon qp">🏅</div><div class="q-label">Certificate</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">My Groups</div>
+      <div class="see-all" onclick="goTo('add-group')">+ New</div>
+    </div>
+    <div id="groupsList">
+      <div class="empty-state">
+        <div class="empty-icon">👥</div>
+        <div class="empty-title">No groups yet</div>
+        <div class="empty-sub">Create your first stokvel group and invite your members to join.</div>
+        <button class="btn-navy" onclick="goTo('add-group')" style="max-width:200px;margin:0 auto">Create a group</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-spacer"></div>
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="setNav(this);goTo('home')"><div class="nav-icon-wrap">🏠</div><span class="nav-label">Home</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('add-group')"><div class="nav-icon-wrap">➕</div><span class="nav-label">New Group</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('ai-screen')"><div class="nav-icon-wrap">🤖</div><span class="nav-label">AI Help</span></button>
+  </div>
+</div>
+
+<!-- ADD GROUP -->
+<div class="screen" id="add-group">
+  <div class="topbar">
+    <button style="background:var(--green-pale);color:var(--green);border:none;border-radius:24px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;" onclick="goTo('home')">← Back</button>
+    <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--green)">New Group</div>
+    <div style="width:64px"></div>
+  </div>
+  <div class="form-body">
+    <label class="form-label">Group type</label>
+    <div class="option-grid" id="typeChips"></div>
+    <label class="form-label">Group name</label>
+    <input class="form-input" type="text" id="grpName" placeholder="e.g. Church Stokvel 2025">
+    <div class="form-row">
+      <div><label class="form-label">Members</label><input class="form-input" type="number" id="grpMembers" placeholder="10" oninput="updatePreview()" min="2"></div>
+      <div><label class="form-label">Contribution</label><input class="form-input" type="number" id="grpAmount" placeholder="500" oninput="updatePreview()" min="0"></div>
+    </div>
+    <label class="form-label">Currency</label>
+    <div class="option-grid" id="currencyChips"></div>
+    <div class="value-preview">
+      <div class="vp-title">Group value at a glance</div>
+      <div class="vp-row"><span class="vp-label">Monthly pool</span><span class="vp-val gold" id="previewPool">R 5,000</span></div>
+      <div class="vp-row"><span class="vp-label">Annual total</span><span class="vp-val gold" id="previewAnnual">R 60,000</span></div>
+      <div class="vp-row"><span class="vp-label">Each member receives</span><span class="vp-val" id="previewEach">R 5,000</span></div>
+    </div>
+    <button class="btn-navy" onclick="createGroup()">Create group & get invite code →</button>
+    <div class="nav-spacer"></div>
+  </div>
+</div>
+
+<!-- GROUP DETAIL -->
+<div class="screen" id="group-detail">
+  <div class="detail-header">
+    <button class="back-pill" onclick="goTo('home')">← Back</button>
+    <div class="detail-name" id="detailName">Group Name</div>
+    <div class="detail-sub" id="detailSub">Loading...</div>
+    <div class="detail-stats">
+      <div class="ds-card"><div class="ds-val" id="detailTarget">R0</div><div class="ds-label">Pool target</div></div>
+      <div class="ds-card"><div class="ds-val" id="detailMembers">0</div><div class="ds-label">Members</div></div>
+      <div class="ds-card"><div class="ds-val">Active</div><div class="ds-label">Status</div></div>
+    </div>
+  </div>
+  <div class="section" style="margin-top:16px">
+    <div class="paid-card" id="paidCard" style="display:none"></div>
+    <div class="invite-card">
+      <div class="invite-title">📎 Invite members to join</div>
+      <div class="invite-link" id="inviteLink">stokmate.co.za/join/...</div>
+      <div class="invite-actions">
+        <button class="invite-btn" onclick="copyInviteLink()">📋 Copy link</button>
+        <button class="invite-btn" onclick="shareOnWhatsApp()" style="background:var(--navy)">📲 Share on WhatsApp</button>
+      </div>
+    </div>
+    <div class="section-title" style="margin-bottom:12px">Members</div>
+    <div id="membersList"></div>
+  </div>
+  <div class="action-row">
+    <button class="btn-action primary" onclick="showToast('WhatsApp reminders sent! 📲')">Send reminders</button>
+    <button class="btn-action secondary" onclick="showToast('PDF statement coming in Pro! 📄')">Statement</button>
+  </div>
+  <div class="nav-spacer"></div>
+  <div class="bottom-nav">
+    <button class="nav-btn" onclick="setNav(this);goTo('home')"><div class="nav-icon-wrap">🏠</div><span class="nav-label">Home</span></button>
+    <button class="nav-btn active"><div class="nav-icon-wrap">👥</div><span class="nav-label">Groups</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('ai-screen')"><div class="nav-icon-wrap">🤖</div><span class="nav-label">AI Help</span></button>
+  </div>
+</div>
+
+<!-- AI -->
+<div class="screen" id="ai-screen">
+  <div class="ai-header">
+    <div class="ai-header-top">
+      <button style="background:rgba(255,255,255,0.12);border:none;border-radius:24px;padding:6px 13px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;" onclick="goTo('home')">← Back</button>
+      <div style="flex:1">
+        <div class="ai-header-name">Stokmate AI</div>
+        <div class="ai-header-status">● Online · Answers in seconds</div>
+      </div>
+      <div class="ai-icon-wrap">🤖</div>
+    </div>
+    <div class="ai-chips">
+      <div class="ai-chip" onclick="sendChip(this)">Member not paying 😤</div>
+      <div class="ai-chip" onclick="sendChip(this)">Generate constitution</div>
+      <div class="ai-chip" onclick="sendChip(this)">Someone wants to leave</div>
+      <div class="ai-chip" onclick="sendChip(this)">UK pardner advice</div>
+    </div>
+  </div>
+  <div class="chat-area" id="chatArea">
+    <div class="bubble bot">Sawubona! 👋 I am your Stokmate AI. I can help with disputes, constitutions, missed payments and more. What is happening in your group today?</div>
+  </div>
+  <div class="chat-bar">
+    <input class="chat-input" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendMsg()">
+    <button class="send-btn" onclick="sendMsg()">↑</button>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-btn" onclick="setNav(this);goTo('home')"><div class="nav-icon-wrap">🏠</div><span class="nav-label">Home</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('add-group')"><div class="nav-icon-wrap">➕</div><span class="nav-label">New Group</span></button>
+    <button class="nav-btn active"><div class="nav-icon-wrap">🤖</div><span class="nav-label">AI Help</span></button>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY -->
+<div class="screen legal-page" id="privacy">
+  <div class="legal-header">
+    <button class="back-pill" onclick="goTo('landing')">← Back</button>
+    <div class="legal-title">Privacy policy</div>
+    <div class="legal-sub">Last updated 24 April 2026</div>
+  </div>
+  <div class="legal-body">
+
+    <h2>Who we are</h2>
+    <p>Stokmate is operated by Stokmate (Pty) Ltd, a company registered in South Africa (the "Company", "we", "us"). We take your privacy seriously. This policy explains what we collect, how we use it, and your rights under the Protection of Personal Information Act (POPIA) and, where it applies, the UK and EU GDPR.</p>
+
+    <h2>We never hold your money</h2>
+    <p>Stokmate is a record-keeping and communication tool. We do not hold, move, transfer or have access to any funds belonging to your stokvel, pardner, sou-sou, tontine or savings club. Contributions move directly between members using their own banking arrangements. We log the facts — not the cash.</p>
+
+    <h2>What we collect</h2>
+    <ul>
+      <li><strong>Account details</strong> — your name, email address, WhatsApp number and password (stored hashed).</li>
+      <li><strong>Group data</strong> — group names, contribution amounts, invite codes, member lists, and payment records you log.</li>
+      <li><strong>Activity logs</strong> — dispute-vault entries and audit records showing who did what, when.</li>
+      <li><strong>Technical data</strong> — IP address and basic device information needed to keep your account secure.</li>
+    </ul>
+
+    <h2>How we use your information</h2>
+    <ul>
+      <li>To operate your account and the groups you belong to.</li>
+      <li>To send you messages and reminders you've consented to receive (e.g. via WhatsApp or email).</li>
+      <li>To resolve disputes within your group using our tamper-proof vault.</li>
+      <li>To keep Stokmate secure and to comply with our legal obligations.</li>
+    </ul>
+
+    <h2>Who we share with</h2>
+    <p>We do not sell your data. We only share it with the service providers who make Stokmate work — our database host (Supabase), hosting provider (Netlify), and, if you send messages, our messaging provider (Twilio). These providers act as operators and process data only on our instructions.</p>
+
+    <h2>Where your data lives</h2>
+    <p>Data is stored in our Supabase region (North EU — Stockholm). If you use Stokmate from outside the EU, you consent to your data being transferred there under appropriate safeguards.</p>
+
+    <h2>How long we keep it</h2>
+    <p>We keep account and group data for as long as you have an active account. Financial and audit records are retained for 7 years after group closure to comply with South African record-keeping rules. You may request earlier deletion — see "Your rights" below.</p>
+
+    <h2>Your rights</h2>
+    <ul>
+      <li>Ask what personal information we hold about you.</li>
+      <li>Ask us to correct anything inaccurate.</li>
+      <li>Ask us to delete your data (subject to the retention periods above).</li>
+      <li>Withdraw consent for marketing messages at any time.</li>
+      <li>Lodge a complaint with the Information Regulator of South Africa, or in the UK/EU with your local data-protection authority.</li>
+    </ul>
+
+    <h2>Children</h2>
+    <p>Stokmate is not intended for anyone under 18. We do not knowingly collect data from minors.</p>
+
+    <h2>Contact</h2>
+    <p>For any privacy question or request, email <a href="mailto:hello@stokmate.co.za">hello@stokmate.co.za</a>. We'll respond within 30 days, as POPIA requires.</p>
+
+    <div class="legal-footer-note">
+      🔒 <strong>One more time, clearly:</strong> we never touch your group's money. Stokmate only records the facts that keep your group honest.
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+</div>
+
+<!-- TERMS OF SERVICE -->
+<div class="screen legal-page" id="terms">
+  <div class="legal-header">
+    <button class="back-pill" onclick="goTo('landing')">← Back</button>
+    <div class="legal-title">Terms of service</div>
+    <div class="legal-sub">Last updated 24 April 2026</div>
+  </div>
+  <div class="legal-body">
+
+    <h2>1. What Stokmate is (and isn't)</h2>
+    <p>Stokmate is a software tool that helps savings groups — stokvels, pardner, sou-sou, tontines and similar — track contributions, record activity, and communicate. Stokmate is not a bank, payment processor or financial services provider. We do not hold, invest or guarantee your money.</p>
+
+    <h2>2. Your account</h2>
+    <p>You must be 18 or older to use Stokmate. You're responsible for keeping your password safe and for everything that happens under your account.</p>
+
+    <h2>3. Your group, your responsibility</h2>
+    <p>You and your fellow members are solely responsible for the actual money, the rules of your group, the payouts and any disputes. Stokmate provides the tools; you run the group. We are not a party to your group agreement.</p>
+
+    <h2>4. What you can't do</h2>
+    <ul>
+      <li>Use Stokmate for money laundering, fraud, or any unlawful activity.</li>
+      <li>Impersonate anyone else or falsify records.</li>
+      <li>Try to break, scrape, reverse-engineer or overwhelm the service.</li>
+      <li>Use Stokmate to harass, intimidate or threaten other members.</li>
+    </ul>
+
+    <h2>5. Free trial and Pro subscription</h2>
+    <p>New accounts get a 30-day Pro trial with no card required. After that, Pro features are R49/month or R490/year per group, charged through PayFast. You can cancel at any time — you'll keep Pro until the end of your current billing period and then drop to the Free plan. Refunds are handled case-by-case.</p>
+
+    <h2>6. Data and privacy</h2>
+    <p>Our <a onclick="goTo('privacy')" style="cursor:pointer">privacy policy</a> explains what we collect and why. By using Stokmate you agree to the processing described there.</p>
+
+    <h2>7. Limitation of liability</h2>
+    <p>To the fullest extent permitted by law, Stokmate (Pty) Ltd is not liable for losses arising from member defaults, disputes, missed payouts, banking errors or any indirect or consequential damages. Our total liability in any matter is capped at the fees you've paid us in the preceding 12 months.</p>
+
+    <h2>8. We can change these terms</h2>
+    <p>If we make a material change we'll tell you by email or in-app at least 14 days before it takes effect. Continued use after the change counts as acceptance.</p>
+
+    <h2>9. Ending your use of Stokmate</h2>
+    <p>You can delete your account at any time by emailing <a href="mailto:hello@stokmate.co.za">hello@stokmate.co.za</a>. We can suspend accounts that breach these terms or that we reasonably believe are being used unlawfully.</p>
+
+    <h2>10. Law and jurisdiction</h2>
+    <p>These terms are governed by the laws of the Republic of South Africa. Disputes fall under the non-exclusive jurisdiction of the South African courts.</p>
+
+    <h2>11. Contact</h2>
+    <p>Questions? Email <a href="mailto:hello@stokmate.co.za">hello@stokmate.co.za</a>.</p>
+
+    <div class="legal-footer-note">
+      💚 We built Stokmate so your group's money stays with your group. These terms exist to keep it that way.
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+</div>
+
+<script>
+function showJoinModal(){
+  const code = prompt('Enter your group invite code:');
+  if(code){
+    document.getElementById('joinCode').value = code;
+    joinGroup();
+  }
+}
+</script>
+</body>
+</html>
