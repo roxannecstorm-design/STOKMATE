@@ -1,82 +1,64 @@
-const crypto = require('crypto');
 const https = require('https');
-const { createClient } = require('@supabase/supabase-js');
+const crypto = require('crypto');
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
+function supabaseRequest(url, serviceKey, method, path, body) {
+  return new Promise((resolve, reject) => {
+    const payload = body ? JSON.stringify(body) : '';
+    const req = https.request({
+      hostname: new URL(url).hostname,
+      path,
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${serviceKey}`,
+        'apikey': serviceKey,
+        ...(payload ? { 'Content-Length': Buffer.byteLength(payload) } : {})
+      }
+    }, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => resolve({ status: res.statusCode, body: data }));
+    });
+    req.on('error', reject);
+    if (payload) req.write(payload);
+    req.end();
+  });
+}
 
-function verifyPayFastSignature(data, receivedSignature, passphrase) {
+function verifySignature(data, received, passphrase) {
   const params = { ...data };
   delete params.signature;
   if (passphrase) params.passphrase = passphrase;
-
-  const queryString = Object.keys(params)
-    .sort()
+  const str = Object.keys(params).sort()
     .map(k => `${k}=${encodeURIComponent(params[k]).replace(/%20/g, '+')}`)
     .join('&');
-
-  return crypto.createHash('md5').update(queryString).digest('hex') === receivedSignature;
-}
-
-function verifyPayFastIP(ip) {
-  const validIPs = [
-    '41.74.179.194', '41.74.179.195', '41.74.179.196',
-    '41.74.179.197', '41.74.179.198', '41.74.179.199',
-    '41.74.179.200', '41.74.179.201',
-  ];
-  return validIPs.includes(ip);
+  return crypto.createHash('md5').update(str).digest('hex') === received;
 }
 
 exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method not allowed' };
-  }
+  if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method not allowed' };
 
   try {
     const params = Object.fromEntries(new URLSearchParams(event.body));
-
-    const clientIP = event.headers['x-forwarded-for']?.split(',')[0]?.trim() || event.headers['client-ip'];
-    if (process.env.NODE_ENV === 'production' && !verifyPayFastIP(clientIP)) {
-      console.warn('PayFast notify from unrecognised IP:', clientIP);
-      return { statusCode: 400, body: 'Invalid IP' };
-    }
-
-    const isValid = verifyPayFastSignature(params, params.signature, process.env.PAYFAST_PASSPHRASE);
-    if (!isValid) {
-      console.error('PayFast signature mismatch');
-      return { statusCode: 400, body: 'Invalid signature' };
-    }
+    const isValid = verifySignature(params, params.signature, process.env.PAYFAST_PASSPHRASE);
+    if (!isValid) return { statusCode: 400, body: 'Invalid signature' };
 
     const { payment_status, m_payment_id, custom_str1: userId, custom_str2: groupId, amount_gross } = params;
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SERVICE_KEY;
 
-    if (payment_status === 'COMPLETE') {
-      await supabase.from('subscriptions').upsert({
-        user_id: userId,
-        group_id: groupId,
-        payfast_payment_id: m_payment_id,
-        amount: parseFloat(amount_gross),
-        status: 'active',
-        activated_at: new Date().toISOString(),
-        expires_at: new Date(Date.now() + 31 * 24 * 60 * 60 * 1000).toISOString(),
-      });
-
-      await supabase.from('vault_entries').insert({
+    if (supabaseUrl && serviceKey && payment_status === 'COMPLETE') {
+      await supabaseRequest(supabaseUrl, serviceKey, 'POST', '/rest/v1/vault_entries', {
         group_id: groupId,
         action: 'subscription_activated',
         performed_by: userId,
-        details: { payment_id: m_payment_id, amount: amount_gross },
+        details: { payment_id: m_payment_id, amount: amount_gross }
       });
-    } else if (payment_status === 'CANCELLED') {
-      await supabase.from('subscriptions')
-        .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
-        .eq('group_id', groupId).eq('user_id', userId);
     }
 
     return { statusCode: 200, body: 'OK' };
   } catch (err) {
-    console.error('PayFast notify error:', err);
+    console.error('payfast-notify error:', err);
     return { statusCode: 500, body: 'Server error' };
   }
 };
