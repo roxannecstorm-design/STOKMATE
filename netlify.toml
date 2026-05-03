@@ -5,6 +5,9 @@
 [build.environment]
   NODE_VERSION = "18"
 
+[functions]
+  node_bundler = "esbuild"
+
 [[redirects]]
   from = "/join/:code"
   to = "/stokmate-latest.html?join=:code"
