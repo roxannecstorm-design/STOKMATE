@@ -2,12 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0A3D2B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Stokmate — Your Group's Trusted Companion</title>
+<link rel="manifest" href="/manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
+:root{
   --green:#0A3D2B;--green-mid:#145C40;--green-light:#1F7A55;--green-pale:#E6F4EE;
   --gold:#D4A017;--gold-pale:#FDF6E3;--gold-accent:#FFD700;
   --navy:#0F1C3F;--navy-mid:#1A2F5E;--navy-pale:#EEF1F8;
@@ -36,7 +40,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:va
 .logo-wrap{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
 .logo-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--gold),var(--gold-accent));border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--green);box-shadow:0 4px 16px rgba(212,160,23,0.4);}
 .logo-text{font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:white;}
-.land-headline{font-family:'Fraunces',serif;font-size:42px;font-weight:900;line-height:1.05;color:white;margin-bottom:14px;}
+.land-headline{font-family:'Fraunces',serif;font-size:40px;font-weight:900;line-height:1.05;color:white;margin-bottom:14px;}
 .land-headline em{font-style:italic;color:var(--gold-accent);}
 .land-sub{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.6;margin-bottom:32px;font-weight:300;}
 .stats-row{display:flex;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.10);border-radius:var(--r);overflow:hidden;margin-bottom:32px;}
@@ -51,80 +55,87 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:va
 .urgency-text{font-size:12px;font-weight:600;color:var(--success);}
 .cta-headline{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--dark);margin-bottom:6px;}
 .cta-sub{font-size:13px;color:var(--gray);margin-bottom:20px;line-height:1.5;}
-.btn-navy{width:100%;padding:18px;background:var(--navy);color:white;border:none;border-radius:var(--r);font-size:16px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:10px;transition:all 0.2s;}
-.btn-navy:active{transform:scale(0.98);}
-.btn-green{width:100%;padding:18px;background:var(--green);color:white;border:none;border-radius:var(--r);font-size:16px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:10px;transition:all 0.2s;}
-.btn-outline{width:100%;padding:16px;background:transparent;color:var(--green);border:1.5px solid var(--green);border-radius:var(--r);font-size:15px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all 0.2s;}
+
+/* BUTTONS */
+.btn-navy{width:100%;padding:17px;background:var(--navy);color:white;border:none;border-radius:var(--r);font-size:15px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:10px;transition:all 0.2s;display:block;text-align:center;}
+.btn-navy:active{transform:scale(0.98);opacity:0.9;}
+.btn-green{width:100%;padding:17px;background:var(--green);color:white;border:none;border-radius:var(--r);font-size:15px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:10px;transition:all 0.2s;}
+.btn-green:active{transform:scale(0.98);}
+.btn-outline{width:100%;padding:15px;background:transparent;color:var(--green);border:1.5px solid var(--green);border-radius:var(--r);font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all 0.2s;}
+.btn-danger{width:100%;padding:15px;background:#FEE2E2;color:var(--danger);border:1.5px solid #FECACA;border-radius:var(--r);font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;}
 .trust-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:18px;flex-wrap:wrap;}
 .trust-item{font-size:11px;color:var(--gray);font-weight:500;}
 
-/* AUTH SCREEN */
+/* AUTH */
 #auth{background:var(--cream);}
-.auth-hero{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:48px 24px 40px;text-align:center;}
+.auth-hero{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:48px 24px 32px;text-align:center;}
 .auth-title{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:white;margin-bottom:8px;}
 .auth-sub{font-size:14px;color:rgba(255,255,255,0.65);}
 .auth-tabs{display:flex;background:rgba(255,255,255,0.10);border-radius:12px;padding:4px;margin-top:20px;}
 .auth-tab{flex:1;padding:10px;text-align:center;border-radius:9px;font-size:14px;font-weight:600;color:rgba(255,255,255,0.6);cursor:pointer;transition:all 0.2s;}
 .auth-tab.active{background:white;color:var(--green);}
 .auth-body{padding:24px;}
-.form-label{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;display:block;}
-.form-input{width:100%;padding:14px 16px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--rsm);font-size:15px;color:var(--dark);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:16px;outline:none;transition:border-color 0.2s;}
+.form-label{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block;}
+.form-input{width:100%;padding:13px 15px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--rsm);font-size:15px;color:var(--dark);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:14px;outline:none;transition:border-color 0.2s;}
 .form-input:focus{border-color:var(--green);}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.auth-error{background:#FEE2E2;border:1px solid #FECACA;border-radius:var(--rsm);padding:12px;font-size:13px;color:var(--danger);margin-bottom:16px;display:none;}
-.auth-success{background:var(--green-pale);border:1px solid #BBF7D0;border-radius:var(--rsm);padding:12px;font-size:13px;color:var(--success);margin-bottom:16px;display:none;}
+.auth-error{background:#FEE2E2;border:1px solid #FECACA;border-radius:var(--rsm);padding:12px;font-size:13px;color:var(--danger);margin-bottom:14px;display:none;}
+.auth-success{background:var(--green-pale);border:1px solid #BBF7D0;border-radius:var(--rsm);padding:12px;font-size:13px;color:var(--success);margin-bottom:14px;display:none;}
 
 /* TOP BAR */
-.topbar{background:var(--white);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.topbar{background:var(--white);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
 .topbar-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:8px;}
 .topbar-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--gold),var(--gold-accent));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;font-family:'Fraunces',serif;color:var(--green);}
-.notif-btn{position:relative;background:var(--gray-light);border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;}
-.notif-badge{position:absolute;top:2px;right:2px;width:10px;height:10px;border-radius:50%;background:var(--danger);border:2px solid white;}
+.notif-btn{background:var(--gray-light);border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;}
 
 /* HOME */
 #home{background:var(--cream);}
-.home-hero{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:20px 20px 36px;}
+.home-hero{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:18px 20px 32px;}
 .greeting-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
-.greeting-text{font-size:13px;color:rgba(255,255,255,0.6);}
-.greeting-name{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:white;}
-.avatar-circle{width:40px;height:40px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--green);font-family:'Fraunces',serif;cursor:pointer;}
-.hero-card{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.15);border-radius:var(--rlg);padding:20px;}
-.hero-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.5);margin-bottom:8px;}
-.hero-amount{font-family:'Fraunces',serif;font-size:38px;font-weight:900;color:white;margin-bottom:4px;letter-spacing:-1px;}
-.hero-sub{font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:16px;}
+.greeting-text{font-size:12px;color:rgba(255,255,255,0.55);}
+.greeting-name{font-family:'Fraunces',serif;font-size:19px;font-weight:700;color:white;}
+.avatar-circle{width:40px;height:40px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--green);font-family:'Fraunces',serif;cursor:pointer;flex-shrink:0;}
+.hero-card{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.15);border-radius:var(--rlg);padding:18px;}
+.hero-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.5);margin-bottom:6px;}
+.hero-amount{font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:white;margin-bottom:4px;letter-spacing:-1px;}
+.hero-sub{font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:14px;}
 .hero-mini-row{display:flex;gap:10px;}
 .hero-mini{flex:1;background:rgba(255,255,255,0.08);border-radius:var(--rsm);padding:10px;}
 .hero-mini-label{font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:3px;}
-.hero-mini-val{font-size:15px;font-weight:700;color:white;}
+.hero-mini-val{font-size:14px;font-weight:700;color:white;}
 .hero-mini-sub{font-size:10px;color:var(--gold-accent);margin-top:2px;font-weight:600;}
-.upgrade-banner{margin:16px 20px 0;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--sh);}
+.countdown-strip{background:rgba(212,160,23,0.15);border:1px solid rgba(212,160,23,0.3);border-radius:var(--rsm);padding:10px 14px;margin-top:12px;display:flex;align-items:center;gap:10px;}
+.countdown-num{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--gold-accent);}
+.countdown-text{font-size:12px;color:rgba(255,255,255,0.7);line-height:1.4;}
+.upgrade-banner{margin:14px 20px 0;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--r);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--sh);}
 .upgrade-icon{width:34px;height:34px;background:rgba(255,215,0,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
 .upgrade-text{flex:1;}
 .upgrade-title{font-size:13px;font-weight:700;color:white;}
 .upgrade-sub{font-size:11px;color:rgba(255,255,255,0.6);margin-top:1px;}
 .upgrade-arrow{font-size:20px;color:var(--gold-accent);}
-.section{padding:20px 20px 0;}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section{padding:18px 20px 0;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .section-title{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--dark);}
 .see-all{font-size:13px;font-weight:600;color:var(--green-light);cursor:pointer;}
 .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
 .q-btn{background:var(--white);border-radius:var(--rsm);padding:12px 6px;text-align:center;cursor:pointer;border:1px solid var(--border);box-shadow:var(--shsm);transition:transform 0.15s;}
-.q-btn:active{transform:scale(0.92);}
+.q-btn:active{transform:scale(0.93);}
 .q-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;margin:0 auto 6px;}
 .q-label{font-size:10px;font-weight:600;color:var(--dark);}
 .qg{background:var(--green-pale);}.qgo{background:var(--gold-pale);}.qn{background:var(--navy-pale);}.qp{background:#F3E8FF;}
 
 /* GROUP CARDS */
-.group-card{background:var(--white);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--shsm);border:1px solid var(--border);cursor:pointer;transition:all 0.15s;}
+.group-card{background:var(--white);border-radius:var(--r);padding:15px;margin-bottom:10px;box-shadow:var(--shsm);border:1px solid var(--border);cursor:pointer;transition:all 0.15s;}
 .group-card:active{transform:scale(0.99);}
-.gc-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.gc-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
 .gc-avatar{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:18px;font-weight:700;flex-shrink:0;}
 .gc-info{flex:1;}
 .gc-name{font-size:15px;font-weight:700;color:var(--dark);}
 .gc-meta{font-size:11px;color:var(--gray);margin-top:2px;}
-.gc-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:16px;text-transform:uppercase;letter-spacing:0.3px;}
+.gc-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:16px;text-transform:uppercase;letter-spacing:0.3px;white-space:nowrap;}
 .badge-active{background:var(--green-pale);color:var(--success);}
 .badge-warn{background:#FEF3C7;color:var(--warning);}
+.badge-danger{background:#FEE2E2;color:var(--danger);}
 .progress-wrap{margin-bottom:8px;}
 .progress-header{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;}
 .progress-track{height:6px;background:var(--gray-light);border-radius:3px;overflow:hidden;}
@@ -134,68 +145,108 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:va
 .gc-bottom-item strong{color:var(--dark);font-weight:700;}
 
 /* EMPTY STATE */
-.empty-state{text-align:center;padding:40px 20px;}
-.empty-icon{font-size:48px;margin-bottom:16px;}
-.empty-title{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--dark);margin-bottom:8px;}
-.empty-sub{font-size:14px;color:var(--gray);margin-bottom:24px;line-height:1.5;}
+.empty-state{text-align:center;padding:36px 20px;}
+.empty-icon{font-size:44px;margin-bottom:14px;}
+.empty-title{font-family:'Fraunces',serif;font-size:19px;font-weight:700;color:var(--dark);margin-bottom:8px;}
+.empty-sub{font-size:13px;color:var(--gray);margin-bottom:20px;line-height:1.5;}
 
 /* ADD GROUP */
 #add-group{background:var(--cream);}
-.form-body{padding:20px;flex:1;}
-.option-grid{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
-.opt-chip{padding:9px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:24px;font-size:13px;font-weight:600;cursor:pointer;color:var(--gray);transition:all 0.2s;}
+.form-body{padding:18px;flex:1;}
+.option-grid{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.opt-chip{padding:8px 13px;background:var(--white);border:1.5px solid var(--border);border-radius:24px;font-size:13px;font-weight:600;cursor:pointer;color:var(--gray);transition:all 0.2s;}
 .opt-chip.active{background:var(--green-pale);border-color:var(--green);color:var(--green);}
-.value-preview{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--r);padding:18px;margin:4px 0 18px;}
+.value-preview{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--r);padding:16px;margin:4px 0 16px;}
 .vp-title{font-size:11px;color:rgba(255,255,255,0.55);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
-.vp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.vp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
 .vp-label{font-size:13px;color:rgba(255,255,255,0.7);}
 .vp-val{font-size:15px;font-weight:700;color:white;font-family:'Fraunces',serif;}
 .vp-val.gold{color:var(--gold-accent);}
 
 /* GROUP DETAIL */
 #group-detail{background:var(--cream);}
-.detail-header{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:16px 20px 24px;}
-.back-pill{background:rgba(255,255,255,0.12);border:none;border-radius:24px;padding:7px 14px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:14px;display:inline-block;}
-.detail-name{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:white;margin-bottom:2px;}
-.detail-sub{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:18px;}
+.detail-header{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:14px 20px 22px;}
+.back-pill{background:rgba(255,255,255,0.12);border:none;border-radius:24px;padding:7px 14px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:12px;display:inline-block;}
+.detail-name{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:white;margin-bottom:2px;}
+.detail-sub{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px;}
 .detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 .ds-card{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.12);border-radius:var(--rsm);padding:10px;text-align:center;}
 .ds-val{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:white;}
 .ds-label{font-size:10px;color:rgba(255,255,255,0.55);margin-top:2px;}
+.health-bar-wrap{margin:12px 0 0;}
+.health-bar-header{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:5px;}
+.health-bar-track{height:5px;background:rgba(255,255,255,0.15);border-radius:3px;overflow:hidden;}
+.health-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#22C55E,var(--gold-accent));transition:width 1s ease;}
 
-/* INVITE LINK CARD */
-.invite-card{background:var(--green-pale);border:1px solid rgba(10,61,43,0.15);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+/* INVITE CARD */
+.invite-card{background:var(--green-pale);border:1px solid rgba(10,61,43,0.15);border-radius:var(--r);padding:14px;margin-bottom:12px;}
 .invite-title{font-size:13px;font-weight:700;color:var(--green);margin-bottom:6px;}
-.invite-link{font-size:12px;color:var(--green-mid);word-break:break-all;margin-bottom:10px;font-family:monospace;}
+.invite-code-display{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--green);letter-spacing:4px;text-align:center;padding:8px 0;}
+.invite-link{font-size:11px;color:var(--green-mid);word-break:break-all;margin-bottom:8px;font-family:monospace;text-align:center;}
 .invite-actions{display:flex;gap:8px;}
-.invite-btn{flex:1;padding:10px;background:var(--green);color:white;border:none;border-radius:var(--rsm);font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+.invite-btn{flex:1;padding:10px;background:var(--green);color:white;border:none;border-radius:var(--rsm);font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:opacity 0.2s;}
+.invite-btn:active{opacity:0.8;}
 
 /* MEMBER ROWS */
-.member-item{background:var(--white);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:1px solid var(--border);box-shadow:var(--shsm);}
+.member-item{background:var(--white);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;border:1px solid var(--border);box-shadow:var(--shsm);}
 .m-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:14px;font-weight:700;flex-shrink:0;}
-.m-info{flex:1;}
-.m-name{font-size:14px;font-weight:700;color:var(--dark);}
+.m-info{flex:1;min-width:0;}
+.m-name{font-size:14px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .m-detail{font-size:11px;color:var(--gray);margin-top:2px;}
-.m-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:12px;}
+.m-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.m-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:12px;white-space:nowrap;}
 .mb-paid{background:var(--green-pale);color:var(--success);}
 .mb-unpaid{background:#FEE2E2;color:var(--danger);}
-.action-row{padding:14px 20px;display:flex;gap:10px;}
-.btn-action{flex:1;padding:14px;border-radius:var(--rsm);font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;transition:all 0.15s;}
+.mark-paid-btn{font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;border:none;background:var(--navy);color:white;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;}
+.mark-paid-btn:active{opacity:0.8;}
+
+/* PAYOUT ORDER CARD */
+.payout-card{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:var(--r);padding:16px;margin-bottom:12px;}
+.payout-title{font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;font-weight:600;}
+.payout-list{display:flex;flex-direction:column;gap:6px;}
+.payout-row{display:flex;align-items:center;gap:10px;}
+.payout-num{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.1);font-size:11px;font-weight:700;color:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.payout-row.current .payout-num{background:var(--gold);color:var(--navy);}
+.payout-name{font-size:13px;font-weight:600;color:rgba(255,255,255,0.8);flex:1;}
+.payout-row.current .payout-name{color:white;font-weight:700;}
+.payout-status{font-size:11px;color:rgba(255,255,255,0.4);}
+.payout-row.current .payout-status{color:var(--gold-accent);font-weight:600;}
+
+/* VAULT / ACTIVITY LOG */
+.vault-entry{background:var(--white);border-radius:var(--rsm);padding:10px 13px;margin-bottom:7px;border:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;}
+.vault-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.vi-payment{background:var(--green-pale);}
+.vi-join{background:var(--navy-pale);}
+.vi-group{background:var(--gold-pale);}
+.vi-dispute{background:#FEE2E2;}
+.vault-text{flex:1;}
+.vault-action{font-size:12px;font-weight:600;color:var(--dark);}
+.vault-time{font-size:10px;color:var(--gray);margin-top:1px;}
+
+/* TABS */
+.tab-bar{display:flex;background:var(--gray-light);border-radius:var(--rsm);padding:4px;margin:0 20px 14px;}
+.tab-btn{flex:1;padding:8px;text-align:center;border-radius:8px;font-size:12px;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s;}
+.tab-btn.active{background:var(--white);color:var(--dark);box-shadow:var(--shsm);}
+
+/* ACTION ROW */
+.action-row{padding:12px 20px;display:flex;gap:10px;}
+.btn-action{flex:1;padding:13px;border-radius:var(--rsm);font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;transition:all 0.15s;}
 .btn-action.primary{background:var(--green);color:white;}
 .btn-action.secondary{background:var(--navy);color:white;}
+.btn-action:active{opacity:0.85;}
 
-/* AI */
+/* AI SCREEN */
 #ai-screen{background:var(--cream);flex-direction:column;}
-.ai-header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);padding:14px 20px 18px;}
-.ai-header-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.ai-icon-wrap{width:42px;height:42px;background:rgba(255,215,0,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.ai-header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);padding:12px 20px 16px;}
+.ai-header-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.ai-icon-wrap{width:40px;height:40px;background:rgba(255,215,0,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;}
 .ai-header-name{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:white;}
 .ai-header-status{font-size:11px;color:rgba(255,255,255,0.55);margin-top:1px;}
 .ai-chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;}
 .ai-chips::-webkit-scrollbar{display:none;}
 .ai-chip{padding:7px 12px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.15);border-radius:18px;font-size:11px;font-weight:600;color:white;cursor:pointer;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;flex-shrink:0;}
 .chat-area{flex:1;padding:14px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;min-height:200px;}
-.bubble{max-width:86%;padding:12px 15px;font-size:13px;line-height:1.6;border-radius:18px;}
+.bubble{max-width:86%;padding:11px 14px;font-size:13px;line-height:1.6;border-radius:18px;}
 .bubble.bot{background:var(--white);color:var(--dark);border-bottom-left-radius:4px;align-self:flex-start;box-shadow:var(--shsm);border:1px solid var(--border);}
 .bubble.user{background:var(--navy);color:white;border-bottom-right-radius:4px;align-self:flex-end;}
 .typing-bubble{background:var(--white);border-radius:18px;border-bottom-left-radius:4px;padding:12px 16px;align-self:flex-start;border:1px solid var(--border);display:flex;gap:4px;align-items:center;}
@@ -203,16 +254,58 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:va
 .typing-dot:nth-child(2){animation-delay:0.2s;}
 .typing-dot:nth-child(3){animation-delay:0.4s;}
 @keyframes typing{0%,80%,100%{transform:translateY(0);opacity:0.5;}40%{transform:translateY(-5px);opacity:1;}}
-.chat-bar{padding:10px 20px 24px;background:var(--white);border-top:1px solid var(--border);display:flex;gap:10px;}
+.chat-bar{padding:10px 16px 24px;background:var(--white);border-top:1px solid var(--border);display:flex;gap:10px;}
 .chat-input{flex:1;padding:11px 15px;background:var(--gray-light);border:1.5px solid transparent;border-radius:24px;font-size:14px;color:var(--dark);font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color 0.2s;}
 .chat-input:focus{border-color:var(--navy);background:var(--white);}
 .send-btn{width:44px;height:44px;border-radius:50%;background:var(--navy);border:none;color:white;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 
+/* PROFILE SCREEN */
+#profile-screen{background:var(--cream);}
+.profile-hero{background:linear-gradient(160deg,var(--green) 0%,var(--green-mid) 100%);padding:40px 24px 32px;text-align:center;}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:var(--green);font-family:'Fraunces',serif;margin:0 auto 14px;border:3px solid rgba(255,255,255,0.3);}
+.profile-name{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:white;margin-bottom:4px;}
+.profile-email{font-size:13px;color:rgba(255,255,255,0.6);}
+.plan-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(212,160,23,0.2);border:1px solid rgba(212,160,23,0.4);border-radius:20px;padding:5px 12px;margin-top:10px;}
+.plan-badge-text{font-size:12px;font-weight:700;color:var(--gold-accent);}
+.profile-body{padding:20px;}
+.info-card{background:var(--white);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;margin-bottom:16px;}
+.info-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--gray-light);}
+.info-row:last-child{border-bottom:none;}
+.info-label{font-size:12px;color:var(--gray);font-weight:600;}
+.info-val{font-size:14px;font-weight:700;color:var(--dark);}
+.referral-card{background:linear-gradient(135deg,var(--gold-pale),#FFF8E1);border:1px solid rgba(212,160,23,0.3);border-radius:var(--r);padding:16px;margin-bottom:16px;}
+.referral-title{font-size:13px;font-weight:700;color:var(--warning);margin-bottom:6px;}
+.referral-code{font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--dark);letter-spacing:3px;margin-bottom:8px;}
+.referral-sub{font-size:12px;color:var(--gray);line-height:1.4;}
+
+/* UPGRADE SCREEN */
+#upgrade-screen{background:var(--cream);}
+.upgrade-hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-mid) 100%);padding:40px 24px 32px;text-align:center;}
+.upgrade-hero-title{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:white;margin-bottom:8px;}
+.upgrade-hero-sub{font-size:14px;color:rgba(255,255,255,0.6);line-height:1.5;}
+.plan-card{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);padding:18px;margin:0 20px 12px;}
+.plan-card.featured{border-color:var(--navy);position:relative;}
+.plan-tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--navy);color:white;font-size:10px;font-weight:700;padding:3px 12px;border-radius:12px;letter-spacing:0.5px;}
+.plan-name{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--dark);margin-bottom:4px;}
+.plan-price{font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--navy);margin-bottom:6px;}
+.plan-price span{font-size:14px;color:var(--gray);font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;}
+.plan-features{list-style:none;margin-bottom:16px;}
+.plan-features li{font-size:13px;color:var(--gray);padding:5px 0;border-bottom:1px solid var(--gray-light);display:flex;gap:8px;}
+.plan-features li:last-child{border-bottom:none;}
+.plan-features li::before{content:'✓';color:var(--success);font-weight:700;flex-shrink:0;}
+
 /* LOADING */
-.loading-overlay{position:fixed;inset:0;background:rgba(10,61,43,0.9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:500;gap:16px;}
-.loading-spinner{width:48px;height:48px;border:4px solid rgba(255,255,255,0.2);border-top:4px solid var(--gold-accent);border-radius:50%;animation:spin 0.8s linear infinite;}
+.loading-overlay{position:fixed;inset:0;background:rgba(10,61,43,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:500;gap:16px;}
+.loading-spinner{width:44px;height:44px;border:4px solid rgba(255,255,255,0.2);border-top:4px solid var(--gold-accent);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{100%{transform:rotate(360deg);}}
-.loading-text{color:white;font-size:14px;font-weight:500;}
+.loading-text{color:white;font-size:13px;font-weight:500;}
+
+/* MODAL */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300;display:none;align-items:flex-end;}
+.modal-backdrop.show{display:flex;}
+.modal-sheet{background:var(--white);border-radius:24px 24px 0 0;padding:20px;width:100%;max-height:80vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 16px;}
+.modal-title{font-family:'Fraunces',serif;font-size:19px;font-weight:700;color:var(--dark);margin-bottom:16px;}
 
 /* NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border);display:flex;padding:6px 0 20px;z-index:200;}
@@ -224,551 +317,1049 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:va
 .nav-spacer{height:88px;}
 
 /* TOAST */
-.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--dark);color:white;padding:11px 20px;border-radius:28px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.25s;white-space:nowrap;pointer-events:none;}
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--dark);color:white;padding:11px 20px;border-radius:28px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.25s;white-space:nowrap;pointer-events:none;max-width:90%;}
 .toast.show{opacity:1;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:0 20px;}
+.section-label{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;padding:12px 20px 6px;}
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
 <div class="loading-overlay" id="loadingOverlay">
   <div class="loading-spinner"></div>
-  <div class="loading-text">Loading Stokmate...</div>
+  <div class="loading-text" id="loadingText">Loading Stokmate...</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
+<!-- JOIN CODE MODAL -->
+<div class="modal-backdrop" id="joinModal" onclick="closeJoinModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Join a group</div>
+    <label class="form-label">Invite code</label>
+    <input class="form-input" type="text" id="joinCodeInput" placeholder="e.g. SUNDAY4821" style="text-transform:uppercase;letter-spacing:2px;font-weight:700;font-size:18px;">
+    <button class="btn-navy" onclick="joinGroupFromModal()">Join group →</button>
+    <button class="btn-outline" onclick="closeJoinModal()">Cancel</button>
+  </div>
+</div>
+
 <script>
 // ============================================================
-// SUPABASE CONNECTION
+// CONFIG
 // ============================================================
 const SUPABASE_URL = 'https://eyeidefdslfqurrwowgh.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5ZWlkZWZkc2xmcXVycndvd2doIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTAxMDAsImV4cCI6MjA5MjU4NjEwMH0.-kb4J2vt_xLxmmploozIlTa3mv4K-ezxwC88TbATNYw';
+const FREE_GROUP_LIMIT = 1;
+const FREE_MEMBER_LIMIT = 8;
+const FREE_TX_LIMIT = 10;
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// App state
+// ============================================================
+// STATE
+// ============================================================
 let currentUser = null;
 let currentProfile = null;
 let userGroups = [];
 let currentGroup = null;
+let currentTab = 'members';
+let chatHistory = [];
 
 // ============================================================
-// NAVIGATION
+// UTILITIES
 // ============================================================
-function goTo(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) { el.classList.add('active'); window.scrollTo(0, 0); }
 }
 
-function setNav(el){
-  el.closest('.bottom-nav').querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+function setNav(el) {
+  el.closest('.bottom-nav').querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
+function showToast(msg, duration = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+  setTimeout(() => t.classList.remove('show'), duration);
 }
 
-function showLoading(msg='Loading...'){
-  document.getElementById('loadingOverlay').style.display='flex';
-  document.querySelector('.loading-text').textContent=msg;
+function showLoading(msg = 'Loading...') {
+  document.getElementById('loadingText').textContent = msg;
+  document.getElementById('loadingOverlay').style.display = 'flex';
 }
 
-function hideLoading(){
-  document.getElementById('loadingOverlay').style.display='none';
+function hideLoading() {
+  document.getElementById('loadingOverlay').style.display = 'none';
+}
+
+function currentMonthYear() {
+  return new Date().toLocaleDateString('en-ZA', { month: 'long', year: 'numeric' });
+}
+
+function decemberCountdown() {
+  const now = new Date();
+  const dec1 = new Date(now.getFullYear(), 11, 1);
+  if (now >= dec1) return 0;
+  return Math.ceil((dec1 - now) / (1000 * 60 * 60 * 24));
+}
+
+function formatCurrency(amount, currency) {
+  return (currency || 'R') + ' ' + Number(amount || 0).toLocaleString('en-ZA');
+}
+
+function timeAgo(ts) {
+  const diff = (Date.now() - new Date(ts)) / 1000;
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+  return Math.floor(diff / 86400) + 'd ago';
+}
+
+const avatarColors = [
+  ['#E6F4EE','#0A3D2B'],['#FDF6E3','#B8860B'],['#EEF1F8','#0F1C3F'],
+  ['#F3E8FF','#6B21A8'],['#FEE2E2','#991B1B'],['#E0F2FE','#0369A1']
+];
+
+function avatarStyle(seed) {
+  const idx = Math.abs((seed || 'x').charCodeAt(0)) % avatarColors.length;
+  return `background:${avatarColors[idx][0]};color:${avatarColors[idx][1]}`;
 }
 
 // ============================================================
 // AUTH
 // ============================================================
-async function initApp(){
+async function initApp() {
   showLoading('Loading Stokmate...');
   try {
+    // Handle invite code from URL
+    const params = new URLSearchParams(window.location.search);
+    const inviteCode = params.get('join');
+    if (inviteCode) {
+      document.getElementById('joinCodeInput').value = inviteCode.toUpperCase();
+    }
+
     const { data: { session } } = await db.auth.getSession();
-    if(session){
+    if (session) {
       currentUser = session.user;
       await loadProfile();
       await loadGroups();
       goTo('home');
+      updateHomeUI();
+      if (inviteCode) { openJoinModal(); }
     } else {
       goTo('landing');
+      if (inviteCode) {
+        document.getElementById('joinCode').value = inviteCode.toUpperCase();
+        goTo('auth');
+        showAuthTab('signup');
+      }
     }
-  } catch(e){
+  } catch (e) {
     console.error(e);
     goTo('landing');
   }
   hideLoading();
 }
 
-async function loadProfile(){
+async function loadProfile() {
+  if (!currentUser) return;
   try {
     const { data } = await db.from('profiles').select('*').eq('id', currentUser.id).single();
-    if(data) currentProfile = data;
-  } catch(e){ console.error(e); }
+    if (data) currentProfile = data;
+    else {
+      // Profile might not exist yet (trigger race condition) — create it
+      const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
+      const { data: newProfile } = await db.from('profiles').upsert({
+        id: currentUser.id,
+        full_name: name,
+        email: currentUser.email,
+        phone: currentUser.user_metadata?.phone || '',
+        referral_code: name.toUpperCase().replace(/\s+/g,'').slice(0,8) + Math.floor(Math.random()*9000+1000)
+      }).select().single();
+      if (newProfile) currentProfile = newProfile;
+    }
+  } catch (e) { console.error('loadProfile:', e); }
 }
 
-async function signUp(){
-  const name = document.getElementById('signupName').value.trim();
-  const email = document.getElementById('signupEmail').value.trim();
-  const phone = document.getElementById('signupPhone').value.trim();
+async function signUp() {
+  const name     = document.getElementById('signupName').value.trim();
+  const email    = document.getElementById('signupEmail').value.trim();
+  const phone    = document.getElementById('signupPhone').value.trim();
   const password = document.getElementById('signupPassword').value;
-  const errorEl = document.getElementById('signupError');
+  const errorEl  = document.getElementById('signupError');
   const successEl = document.getElementById('signupSuccess');
 
-  errorEl.style.display='none';
-  successEl.style.display='none';
+  errorEl.style.display = 'none';
+  successEl.style.display = 'none';
 
-  if(!name||!email||!password){
-    errorEl.textContent='Please fill in all fields';
-    errorEl.style.display='block';
+  if (!name || !email || !password) {
+    errorEl.textContent = 'Please fill in all required fields';
+    errorEl.style.display = 'block';
     return;
   }
-
-  if(password.length < 6){
-    errorEl.textContent='Password must be at least 6 characters';
-    errorEl.style.display='block';
+  if (password.length < 6) {
+    errorEl.textContent = 'Password must be at least 6 characters';
+    errorEl.style.display = 'block';
     return;
   }
 
   showLoading('Creating your account...');
   try {
     const { data, error } = await db.auth.signUp({
-      email,
-      password,
+      email, password,
       options: { data: { full_name: name, phone } }
     });
+    if (error) throw error;
 
-    if(error) throw error;
-
-    if(data.user){
-      // Create profile
+    if (data.user) {
       await db.from('profiles').upsert({
-        id: data.user.id,
-        full_name: name,
-        email,
-        phone,
-        referral_code: name.toUpperCase().replace(/\s/g,'').slice(0,8) + Math.floor(Math.random()*1000)
+        id: data.user.id, full_name: name, email, phone,
+        referral_code: name.toUpperCase().replace(/\s+/g,'').slice(0,8) + Math.floor(Math.random()*9000+1000)
       });
-
       currentUser = data.user;
       currentProfile = { full_name: name, email, phone };
       await loadGroups();
       hideLoading();
       goTo('home');
       updateHomeUI();
-      showToast('Welcome to Stokmate! 🎉');
+      showToast('Welcome to Stokmate!');
     }
-  } catch(e){
+  } catch (e) {
     hideLoading();
     errorEl.textContent = e.message || 'Signup failed. Please try again.';
-    errorEl.style.display='block';
+    errorEl.style.display = 'block';
   }
 }
 
-async function signIn(){
-  const email = document.getElementById('loginEmail').value.trim();
+async function signIn() {
+  const email    = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
-  const errorEl = document.getElementById('loginError');
+  const errorEl  = document.getElementById('loginError');
+  errorEl.style.display = 'none';
 
-  errorEl.style.display='none';
-
-  if(!email||!password){
-    errorEl.textContent='Please enter your email and password';
-    errorEl.style.display='block';
+  if (!email || !password) {
+    errorEl.textContent = 'Please enter your email and password';
+    errorEl.style.display = 'block';
     return;
   }
 
   showLoading('Signing in...');
   try {
     const { data, error } = await db.auth.signInWithPassword({ email, password });
-    if(error) throw error;
+    if (error) throw error;
     currentUser = data.user;
     await loadProfile();
     await loadGroups();
     hideLoading();
     goTo('home');
     updateHomeUI();
-    showToast('Welcome back! 👋');
-  } catch(e){
+    showToast('Welcome back!');
+  } catch (e) {
     hideLoading();
     errorEl.textContent = e.message || 'Login failed. Please check your details.';
-    errorEl.style.display='block';
+    errorEl.style.display = 'block';
   }
 }
 
-async function signOut(){
+async function signOut() {
   showLoading('Signing out...');
   await db.auth.signOut();
-  currentUser = null;
-  currentProfile = null;
-  userGroups = [];
+  currentUser = null; currentProfile = null; userGroups = []; currentGroup = null;
   hideLoading();
   goTo('landing');
+}
+
+function showAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.auth-form').forEach(f => f.style.display = 'none');
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  document.getElementById(tab + 'Form').style.display = 'block';
 }
 
 // ============================================================
 // GROUPS
 // ============================================================
-async function loadGroups(){
-  if(!currentUser) return;
+async function loadGroups() {
+  if (!currentUser) return;
   try {
     const { data, error } = await db
       .from('group_members')
       .select('*, groups(*)')
       .eq('user_id', currentUser.id);
-
-    if(error) throw error;
-    userGroups = data ? data.map(d => d.groups).filter(Boolean) : [];
+    if (error) throw error;
+    userGroups = (data || []).map(d => ({ ...d.groups, _myRole: d.role })).filter(Boolean);
     renderGroups();
-    updateHomeUI();
-  } catch(e){
-    console.error('Load groups error:', e);
-  }
+  } catch (e) { console.error('loadGroups:', e); }
 }
 
-function renderGroups(){
+function renderGroups() {
   const container = document.getElementById('groupsList');
-  if(!container) return;
+  if (!container) return;
 
-  if(userGroups.length === 0){
+  if (!userGroups.length) {
     container.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">👥</div>
         <div class="empty-title">No groups yet</div>
-        <div class="empty-sub">Create your first stokvel group and invite your members to join.</div>
+        <div class="empty-sub">Create your first stokvel group or join one with an invite code.</div>
         <button class="btn-navy" onclick="goTo('add-group')" style="max-width:200px;margin:0 auto">Create a group</button>
       </div>`;
     return;
   }
 
   container.innerHTML = userGroups.map(g => {
-    const pct = g.members_count > 0 ? Math.round((g.paid_count||0)/g.members_count*100) : 0;
-    const colors = ['#E6F4EE','#FDF6E3','#EEF1F8','#F3E8FF'];
-    const textColors = ['#0A3D2B','#B8860B','#0F1C3F','#6B21A8'];
-    const idx = Math.abs(g.name.charCodeAt(0)) % 4;
+    const pct = g.members_count > 0 ? Math.round((g.paid_count || 0) / g.members_count * 100) : 0;
+    const unpaid = (g.members_count || 0) - (g.paid_count || 0);
+    const badgeClass = pct === 100 ? 'badge-active' : (pct >= 50 ? 'badge-warn' : 'badge-danger');
+    const badgeText = pct === 100 ? 'All paid ✓' : (unpaid + ' unpaid');
     return `
     <div class="group-card" onclick="openGroup('${g.id}')">
       <div class="gc-top">
-        <div class="gc-avatar" style="background:${colors[idx]};color:${textColors[idx]}">${g.name[0].toUpperCase()}</div>
+        <div class="gc-avatar" style="${avatarStyle(g.name)}">${(g.type_icon || g.name[0]).slice(0,2)}</div>
         <div class="gc-info">
           <div class="gc-name">${g.name}</div>
-          <div class="gc-meta">${g.type_icon||'🔄'} ${g.group_type||'Rotating'} · ${g.members_count||0} members · ${g.currency||'R'}${(g.contribution_amount||0).toLocaleString()}/month</div>
+          <div class="gc-meta">${g.group_type || 'Rotating'} · ${g.members_count || 0} members · ${formatCurrency(g.contribution_amount, g.currency)}/month</div>
         </div>
-        <div class="gc-badge ${pct===100?'badge-active':'badge-warn'}">${pct===100?'All paid':''+((g.members_count||0)-(g.paid_count||0))+' unpaid'}</div>
+        <div class="gc-badge ${badgeClass}">${badgeText}</div>
       </div>
       <div class="progress-wrap">
-        <div class="progress-header"><span style="color:var(--gray);font-size:11px">${g.paid_count||0} of ${g.members_count||0} paid</span><span style="font-weight:700;font-size:11px">${pct}%</span></div>
+        <div class="progress-header">
+          <span style="color:var(--gray)">${g.paid_count || 0} of ${g.members_count || 0} paid this month</span>
+          <span style="font-weight:700">${pct}%</span>
+        </div>
         <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
       </div>
       <div class="gc-bottom">
-        <div class="gc-bottom-item">Pool: <strong>${g.currency||'R'}${((g.contribution_amount||0)*(g.members_count||0)).toLocaleString()}</strong></div>
-        <div class="gc-bottom-item">Code: <strong>${g.invite_code||'...'}</strong></div>
+        <div class="gc-bottom-item">Pool: <strong>${formatCurrency((g.contribution_amount || 0) * (g.members_count || 0), g.currency)}</strong></div>
+        <div class="gc-bottom-item">Code: <strong>${g.invite_code || '—'}</strong></div>
       </div>
     </div>`;
   }).join('');
 }
 
-function updateHomeUI(){
+function updateHomeUI() {
   const name = currentProfile?.full_name || currentUser?.user_metadata?.full_name || 'there';
   const firstName = name.split(' ')[0];
-  const nameEl = document.getElementById('heroName');
-  const avatarEl = document.getElementById('heroAvatar');
-  if(nameEl) nameEl.textContent = firstName + ' 👋';
-  if(avatarEl) avatarEl.textContent = firstName[0].toUpperCase();
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 
-  const totalEl = document.getElementById('heroAmount');
-  const groupCount = document.getElementById('heroGroupCount');
-  if(totalEl){
-    const total = userGroups.reduce((sum,g)=>{
-      return sum + ((g.contribution_amount||0)*(g.members_count||0));
-    }, 0);
-    totalEl.textContent = 'R ' + total.toLocaleString();
-  }
-  if(groupCount) groupCount.textContent = userGroups.length + ' active group' + (userGroups.length!==1?'s':'');
+  const nameEl = document.getElementById('heroName');
+  const greetEl = document.getElementById('heroGreeting');
+  const avatarEl = document.getElementById('heroAvatar');
+  if (nameEl) nameEl.textContent = firstName;
+  if (greetEl) greetEl.textContent = greeting;
+  if (avatarEl) avatarEl.textContent = firstName[0].toUpperCase();
+
+  const totalTracked = userGroups.reduce((s, g) => s + ((g.contribution_amount || 0) * (g.members_count || 0)), 0);
+  const groupCurrency = userGroups[0]?.currency || 'R';
+  const el = document.getElementById('heroAmount');
+  const sub = document.getElementById('heroGroupCount');
+  const grps = document.getElementById('heroGroups');
+  if (el) el.textContent = formatCurrency(totalTracked, groupCurrency);
+  if (sub) sub.textContent = userGroups.length + ' active group' + (userGroups.length !== 1 ? 's' : '');
+  if (grps) grps.textContent = userGroups.length;
+
+  const daysLeft = decemberCountdown();
+  const countEl = document.getElementById('countdownNum');
+  const countText = document.getElementById('countdownText');
+  if (countEl) countEl.textContent = daysLeft;
+  if (countText) countText.textContent = daysLeft === 0 ? 'December is here!' : `days until December — is your group on track?`;
 }
 
-async function openGroup(groupId){
+async function openGroup(groupId) {
   showLoading('Loading group...');
   try {
-    const { data: group } = await db.from('groups').select('*').eq('id', groupId).single();
-    const { data: members } = await db.from('group_members').select('*, profiles(full_name, phone)').eq('group_id', groupId);
+    const [{ data: group }, { data: members }] = await Promise.all([
+      db.from('groups').select('*').eq('id', groupId).single(),
+      db.from('group_members').select('*, profiles(full_name, phone, email)').eq('group_id', groupId).order('payout_turn', { ascending: true })
+    ]);
 
-    currentGroup = { ...group, members: members||[] };
+    if (!group) throw new Error('Group not found');
+
+    // Check if month has rolled over and reset paid_this_month if needed
+    const storedMonth = group.current_month_year;
+    const nowMonth = currentMonthYear();
+    if (storedMonth && storedMonth !== nowMonth) {
+      await db.from('groups').update({ paid_count: 0, current_month_year: nowMonth }).eq('id', groupId);
+      await db.from('group_members').update({ paid_this_month: false }).eq('group_id', groupId);
+      group.paid_count = 0;
+      group.current_month_year = nowMonth;
+      if (members) members.forEach(m => m.paid_this_month = false);
+    }
+
+    const myMember = (members || []).find(m => m.user_id === currentUser?.id);
+    currentGroup = { ...group, members: members || [], _myRole: myMember?.role || 'member', _myMemberId: myMember?.id };
+
     hideLoading();
     renderGroupDetail();
     goTo('group-detail');
-  } catch(e){
+    switchTab('members');
+  } catch (e) {
     hideLoading();
-    showToast('Error loading group');
+    showToast('Error loading group. Please try again.');
+    console.error(e);
   }
 }
 
-function renderGroupDetail(){
-  if(!currentGroup) return;
+function renderGroupDetail() {
+  if (!currentGroup) return;
   const g = currentGroup;
-  const cur = g.currency || 'R';
 
   document.getElementById('detailName').textContent = g.name;
-  document.getElementById('detailSub').textContent = `${g.members?.length||0} members · ${cur}${(g.contribution_amount||0).toLocaleString()}/month`;
-  document.getElementById('detailTarget').textContent = cur + ((g.contribution_amount||0)*(g.members?.length||0)).toLocaleString();
-  document.getElementById('detailMembers').textContent = (g.members?.length||0) + '/?' ;
+  document.getElementById('detailSub').textContent = `${g.group_type || 'Rotating'} · ${g.currency || 'R'}${(g.contribution_amount || 0).toLocaleString()}/month`;
 
-  const inviteLink = `stokmate.co.za/join/${g.invite_code}`;
-  document.getElementById('inviteLink').textContent = inviteLink;
+  const paidCount = g.paid_count || 0;
+  const memberCount = g.members?.length || g.members_count || 0;
+  const pct = memberCount > 0 ? Math.round(paidCount / memberCount * 100) : 0;
+  const poolTotal = (g.contribution_amount || 0) * memberCount;
 
+  document.getElementById('detailTarget').textContent = formatCurrency(poolTotal, g.currency);
+  document.getElementById('detailMembers').textContent = memberCount;
+  document.getElementById('detailPaid').textContent = paidCount + '/' + memberCount;
+  document.getElementById('detailHealth').textContent = (g.health_score || 100) + '%';
+  document.getElementById('healthBarFill').style.width = (g.health_score || 100) + '%';
+
+  document.getElementById('inviteCodeDisplay').textContent = g.invite_code || '—';
+  document.getElementById('inviteLinkText').textContent = `stokmate.co.za/join/${g.invite_code}`;
+
+  renderMembersList();
+  renderPayoutOrder();
+}
+
+function renderMembersList() {
+  const g = currentGroup;
+  const isAdmin = g._myRole === 'admin';
   const membersEl = document.getElementById('membersList');
-  if(membersEl && g.members){
-    membersEl.innerHTML = g.members.map((m,i)=>{
-      const name = m.profiles?.full_name || 'Member ' + (i+1);
-      const paid = m.paid_this_month;
-      const colors = ['#E6F4EE','#FDF6E3','#EEF1F8','#FEE2E2'];
-      const textColors = ['#0A3D2B','#B8860B','#0F1C3F','#991B1B'];
-      const idx = i % 4;
-      return `
-      <div class="member-item">
-        <div class="m-avatar" style="background:${colors[idx]};color:${textColors[idx]}">${name[0].toUpperCase()}</div>
-        <div class="m-info">
-          <div class="m-name">${name}</div>
-          <div class="m-detail">${cur}${(g.contribution_amount||0).toLocaleString()} · ${paid?'Paid this month':'Not yet paid'}</div>
-        </div>
-        <div class="m-badge ${paid?'mb-paid':'mb-unpaid'}">${paid?'Paid ✓':'Unpaid'}</div>
-      </div>`;
-    }).join('');
+  if (!membersEl || !g.members) return;
+
+  if (!g.members.length) {
+    membersEl.innerHTML = `<div class="empty-state"><div class="empty-icon">👤</div><div class="empty-title">No members yet</div><div class="empty-sub">Share your invite code to add members.</div></div>`;
+    return;
+  }
+
+  // Sort: unpaid first, then paid
+  const sorted = [...g.members].sort((a, b) => (a.paid_this_month ? 1 : 0) - (b.paid_this_month ? 1 : 0));
+
+  membersEl.innerHTML = sorted.map((m, i) => {
+    const name = m.profiles?.full_name || m.display_name || 'Member ' + (i + 1);
+    const isMe = m.user_id === currentUser?.id;
+    const canMark = isAdmin || isMe;
+    const reliabilityColor = (m.reliability_score || 100) >= 90 ? 'var(--success)' : (m.reliability_score || 100) >= 70 ? 'var(--warning)' : 'var(--danger)';
+    const monthsText = m.months_paid && m.months_total ? `${m.months_paid}/${m.months_total} months paid` : (m.role === 'admin' ? 'Admin' : 'Member');
+
+    return `
+    <div class="member-item" id="member-${m.id}">
+      <div class="m-avatar" style="${avatarStyle(name)}">${name[0].toUpperCase()}</div>
+      <div class="m-info">
+        <div class="m-name">${name}${isMe ? ' (you)' : ''}${m.role === 'admin' ? ' ⭐' : ''}</div>
+        <div class="m-detail">${monthsText} · <span style="color:${reliabilityColor};font-weight:600">${m.reliability_score || 100}% reliable</span></div>
+      </div>
+      <div class="m-right">
+        <div class="m-badge ${m.paid_this_month ? 'mb-paid' : 'mb-unpaid'}">${m.paid_this_month ? 'Paid ✓' : 'Unpaid'}</div>
+        ${!m.paid_this_month && canMark ? `<button class="mark-paid-btn" onclick="markAsPaid('${m.id}','${m.user_id}')">Mark paid</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderPayoutOrder() {
+  const g = currentGroup;
+  const payoutEl = document.getElementById('payoutList');
+  if (!payoutEl) return;
+
+  const withTurn = g.members.filter(m => m.payout_turn != null).sort((a, b) => a.payout_turn - b.payout_turn);
+  const withoutTurn = g.members.filter(m => m.payout_turn == null);
+  const ordered = [...withTurn, ...withoutTurn];
+
+  if (!ordered.length) {
+    payoutEl.innerHTML = '<div style="color:rgba(255,255,255,0.5);font-size:12px;text-align:center;padding:10px 0">No payout order set yet</div>';
+    return;
+  }
+
+  const currentTurn = g.current_payout_turn || 1;
+  payoutEl.innerHTML = ordered.slice(0, 6).map((m, i) => {
+    const name = m.profiles?.full_name || m.display_name || 'Member ' + (i + 1);
+    const turn = m.payout_turn || (i + 1);
+    const isCurrent = turn === currentTurn;
+    return `
+    <div class="payout-row ${isCurrent ? 'current' : ''}">
+      <div class="payout-num">${turn}</div>
+      <div class="payout-name">${name}</div>
+      <div class="payout-status">${isCurrent ? 'Receives this month' : 'Upcoming'}</div>
+    </div>`;
+  }).join('');
+
+  if (ordered.length > 6) {
+    payoutEl.innerHTML += `<div style="color:rgba(255,255,255,0.4);font-size:11px;text-align:center;margin-top:6px">+${ordered.length - 6} more members</div>`;
   }
 }
 
-async function createGroup(){
-  if(!currentUser){
-    showToast('Please sign in first');
-    goTo('auth');
+async function renderVaultLog() {
+  const vaultEl = document.getElementById('vaultList');
+  if (!vaultEl || !currentGroup) return;
+
+  vaultEl.innerHTML = '<div style="color:var(--gray);font-size:12px;padding:10px 0">Loading activity...</div>';
+
+  try {
+    const { data } = await db
+      .from('vault_entries')
+      .select('*, profiles(full_name)')
+      .eq('group_id', currentGroup.id)
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    if (!data || !data.length) {
+      vaultEl.innerHTML = `
+        <div class="empty-state" style="padding:24px 0">
+          <div class="empty-icon">🔒</div>
+          <div class="empty-title">Vault is empty</div>
+          <div class="empty-sub">All group activity will be recorded here automatically.</div>
+        </div>`;
+      return;
+    }
+
+    const icons = {
+      payment_confirmed: { icon: '✓', cls: 'vi-payment', label: 'Payment confirmed' },
+      member_joined: { icon: '👤', cls: 'vi-join', label: 'Member joined' },
+      group_created: { icon: '🏦', cls: 'vi-group', label: 'Group created' },
+      reminder_sent: { icon: '📲', cls: 'vi-join', label: 'Reminder sent' },
+      default: { icon: '📋', cls: 'vi-group', label: 'Activity' }
+    };
+
+    vaultEl.innerHTML = data.map(entry => {
+      const meta = icons[entry.action] || icons.default;
+      const actor = entry.profiles?.full_name || 'System';
+      const details = entry.details || {};
+      let desc = '';
+      if (entry.action === 'payment_confirmed') {
+        desc = `${formatCurrency(details.amount, details.currency || currentGroup.currency)} for ${details.month || currentMonthYear()}`;
+      } else if (entry.action === 'member_joined') {
+        desc = `Joined the group`;
+      } else if (entry.action === 'reminder_sent') {
+        desc = `${details.count || 0} reminder(s) sent`;
+      } else {
+        desc = entry.action.replace(/_/g, ' ');
+      }
+      return `
+      <div class="vault-entry">
+        <div class="vault-icon ${meta.cls}">${meta.icon}</div>
+        <div class="vault-text">
+          <div class="vault-action">${actor} — ${desc}</div>
+          <div class="vault-time">${timeAgo(entry.created_at)}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    vaultEl.innerHTML = '<div style="color:var(--danger);font-size:12px;padding:10px 0">Could not load activity log</div>';
+  }
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+  const membersSection = document.getElementById('membersSection');
+  const payoutSection = document.getElementById('payoutSection');
+  const vaultSection = document.getElementById('vaultSection');
+
+  membersSection.style.display = tab === 'members' ? 'block' : 'none';
+  payoutSection.style.display = tab === 'payout' ? 'block' : 'none';
+  vaultSection.style.display = tab === 'vault' ? 'block' : 'none';
+
+  if (tab === 'vault') renderVaultLog();
+}
+
+// ============================================================
+// MARK AS PAID
+// ============================================================
+async function markAsPaid(memberId, memberUserId) {
+  if (!currentGroup) return;
+  const g = currentGroup;
+
+  // Permission check
+  if (g._myRole !== 'admin' && memberUserId !== currentUser?.id) {
+    showToast('Only the group admin can mark others as paid');
     return;
   }
 
-  const name = document.getElementById('grpName').value.trim();
-  const members = parseInt(document.getElementById('grpMembers').value)||0;
-  const amount = parseFloat(document.getElementById('grpAmount').value)||0;
-  const type = document.querySelector('#typeChips .opt-chip.active')?.dataset?.type || 'rotating';
-  const currency = document.querySelector('#currencyChips .opt-chip.active')?.dataset?.currency || 'R';
+  const member = g.members.find(m => m.id === memberId);
+  if (!member) return;
+  if (member.paid_this_month) {
+    showToast('Already marked as paid this month');
+    return;
+  }
 
-  if(!name){
-    showToast('Please enter a group name');
+  showLoading('Recording payment...');
+  try {
+    const monthYear = currentMonthYear();
+    const amount = g.contribution_amount || 0;
+    const currency = g.currency || 'R';
+
+    // 1. Update member record
+    const newMonthsTotal = (member.months_total || 0) + 1;
+    const newMonthsPaid = (member.months_paid || 0) + 1;
+    const newReliability = Math.round((newMonthsPaid / newMonthsTotal) * 100);
+
+    await db.from('group_members').update({
+      paid_this_month: true,
+      months_paid: newMonthsPaid,
+      months_total: newMonthsTotal,
+      reliability_score: newReliability
+    }).eq('id', memberId);
+
+    // 2. Record in payments table
+    await db.from('payments').insert({
+      group_id: g.id,
+      user_id: memberUserId,
+      amount, currency, month_year: monthYear,
+      confirmed_by: currentUser.id,
+      confirmed_at: new Date().toISOString()
+    });
+
+    // 3. Log to vault
+    await db.from('vault_entries').insert({
+      group_id: g.id,
+      action: 'payment_confirmed',
+      performed_by: currentUser.id,
+      target_user_id: memberUserId,
+      details: { amount, currency, month: monthYear, member_name: member.profiles?.full_name || 'Member' }
+    });
+
+    // 4. Update group paid_count and health score
+    const newPaidCount = (g.paid_count || 0) + 1;
+    const newHealth = Math.round((newPaidCount / (g.members?.length || 1)) * 100);
+    await db.from('groups').update({
+      paid_count: newPaidCount,
+      health_score: newHealth,
+      current_month_year: monthYear
+    }).eq('id', g.id);
+
+    // 5. Reload group
+    await openGroup(g.id);
+    showToast('Payment recorded!');
+  } catch (e) {
+    hideLoading();
+    console.error('markAsPaid error:', e);
+    showToast('Failed to record payment. Please try again.');
+  }
+}
+
+// ============================================================
+// CREATE GROUP
+// ============================================================
+async function createGroup() {
+  if (!currentUser) { goTo('auth'); return; }
+
+  // Free tier: 1 group max
+  if (userGroups.length >= FREE_GROUP_LIMIT && !currentProfile?.plan?.includes('pro')) {
+    showUpgradePrompt('You\'ve reached the free limit of 1 group. Upgrade to Pro for unlimited groups!');
     return;
   }
-  if(members < 2){
-    showToast('A group needs at least 2 members');
-    return;
-  }
-  if(amount < 1){
-    showToast('Please enter a contribution amount');
+
+  const name     = document.getElementById('grpName').value.trim();
+  const members  = parseInt(document.getElementById('grpMembers').value) || 0;
+  const amount   = parseFloat(document.getElementById('grpAmount').value) || 0;
+  const typeChip = document.querySelector('#typeChips .opt-chip.active');
+  const curChip  = document.querySelector('#currencyChips .opt-chip.active');
+  const type     = typeChip?.dataset?.type || 'rotating';
+  const typeIcon = typeChip?.dataset?.icon || '🔄';
+  const currency = curChip?.dataset?.currency || 'R';
+
+  if (!name) { showToast('Please enter a group name'); return; }
+  if (members < 2) { showToast('A group needs at least 2 members'); return; }
+  if (amount < 1) { showToast('Please enter a contribution amount'); return; }
+  if (!currentProfile?.plan?.includes('pro') && members > FREE_MEMBER_LIMIT) {
+    showUpgradePrompt(`Free plan supports up to ${FREE_MEMBER_LIMIT} members. Upgrade to Pro for unlimited members!`);
     return;
   }
 
   showLoading('Creating your group...');
   try {
-    const inviteCode = name.toUpperCase().replace(/\s/g,'').slice(0,6) + Math.floor(Math.random()*10000);
+    const inviteCode = name.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6) + Math.floor(Math.random() * 9000 + 1000);
 
     const { data: group, error } = await db.from('groups').insert({
-      name,
-      group_type: type,
-      contribution_amount: amount,
-      currency,
-      invite_code: inviteCode,
-      created_by: currentUser.id,
-      members_count: members,
-      paid_count: 0
+      name, group_type: type, type_icon: typeIcon, contribution_amount: amount, currency,
+      invite_code: inviteCode, created_by: currentUser.id, members_count: members,
+      paid_count: 0, health_score: 100, current_month_year: currentMonthYear()
     }).select().single();
 
-    if(error) throw error;
+    if (error) throw error;
 
-    // Add creator as first member
     await db.from('group_members').insert({
-      group_id: group.id,
-      user_id: currentUser.id,
-      role: 'admin',
-      paid_this_month: false
+      group_id: group.id, user_id: currentUser.id, role: 'admin',
+      paid_this_month: false, payout_turn: 1, reliability_score: 100,
+      months_paid: 0, months_total: 0
+    });
+
+    await db.from('vault_entries').insert({
+      group_id: group.id, action: 'group_created', performed_by: currentUser.id,
+      details: { name, type, currency, amount, members }
     });
 
     await loadGroups();
     hideLoading();
-    showToast('Group created! Share your invite code: ' + inviteCode + ' 🎉');
+    showToast('Group created! Code: ' + inviteCode);
     goTo('home');
-
-  } catch(e){
+    updateHomeUI();
+  } catch (e) {
     hideLoading();
-    console.error(e);
+    console.error('createGroup:', e);
     showToast('Error creating group. Please try again.');
   }
 }
 
-async function joinGroup(){
-  const code = document.getElementById('joinCode').value.trim().toUpperCase();
-  if(!code){
-    showToast('Please enter an invite code');
-    return;
-  }
+// ============================================================
+// JOIN GROUP
+// ============================================================
+async function joinGroup(code) {
+  if (!currentUser) { goTo('auth'); return; }
+  const trimmed = (code || '').trim().toUpperCase();
+  if (!trimmed) { showToast('Please enter an invite code'); return; }
 
   showLoading('Joining group...');
   try {
-    const { data: group, error } = await db.from('groups').select('*').eq('invite_code', code).single();
-    if(error || !group){
+    const { data: group, error } = await db.from('groups').select('*').eq('invite_code', trimmed).single();
+    if (error || !group) {
       hideLoading();
       showToast('Group not found. Check the code and try again.');
       return;
     }
 
-    // Check not already a member
     const { data: existing } = await db.from('group_members')
       .select('id').eq('group_id', group.id).eq('user_id', currentUser.id).single();
-
-    if(existing){
+    if (existing) {
       hideLoading();
       showToast('You are already in this group!');
+      openGroup(group.id);
       return;
     }
 
+    const memberCount = group.members_count || 0;
     await db.from('group_members').insert({
-      group_id: group.id,
-      user_id: currentUser.id,
-      role: 'member',
-      paid_this_month: false
+      group_id: group.id, user_id: currentUser.id, role: 'member',
+      paid_this_month: false, payout_turn: memberCount + 1,
+      reliability_score: 100, months_paid: 0, months_total: 0
+    });
+
+    await db.from('vault_entries').insert({
+      group_id: group.id, action: 'member_joined', performed_by: currentUser.id,
+      details: { name: currentProfile?.full_name || 'New member' }
     });
 
     await loadGroups();
     hideLoading();
-    showToast('Joined ' + group.name + '! 🎉');
-    goTo('home');
-  } catch(e){
+    showToast('Joined ' + group.name + '!');
+    openGroup(group.id);
+  } catch (e) {
     hideLoading();
+    console.error('joinGroup:', e);
     showToast('Error joining group. Please try again.');
   }
 }
 
-function copyInviteLink(){
-  const link = document.getElementById('inviteLink').textContent;
-  navigator.clipboard.writeText(link).then(()=>{
-    showToast('Invite link copied! 📋');
-  }).catch(()=>{
-    showToast('Link: ' + link);
-  });
+function openJoinModal() {
+  document.getElementById('joinModal').classList.add('show');
+  setTimeout(() => document.getElementById('joinCodeInput').focus(), 300);
 }
 
-function shareOnWhatsApp(){
-  if(!currentGroup) return;
+function closeJoinModal(e) {
+  if (!e || e.target === document.getElementById('joinModal')) {
+    document.getElementById('joinModal').classList.remove('show');
+  }
+}
+
+function joinGroupFromModal() {
+  const code = document.getElementById('joinCodeInput').value.trim();
+  closeJoinModal();
+  joinGroup(code);
+}
+
+// ============================================================
+// WHATSAPP REMINDERS
+// ============================================================
+async function sendReminders() {
+  if (!currentGroup) return;
+  const g = currentGroup;
+
+  if (g._myRole !== 'admin') {
+    showToast('Only the group admin can send reminders');
+    return;
+  }
+
+  const unpaidMembers = g.members.filter(m => !m.paid_this_month);
+  if (!unpaidMembers.length) {
+    showToast('Everyone has paid this month!');
+    return;
+  }
+
+  const membersWithPhone = unpaidMembers.filter(m => m.profiles?.phone || m.phone);
+  const adminName = currentProfile?.full_name || 'your admin';
+
+  showLoading(`Sending ${unpaidMembers.length} reminder(s)...`);
+  try {
+    const res = await fetch('/.netlify/functions/send-reminder', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        members: unpaidMembers.map(m => ({
+          name: m.profiles?.full_name || m.display_name || 'Member',
+          phone: m.profiles?.phone || m.phone,
+          paid: m.paid_this_month
+        })),
+        groupName: g.name,
+        amount: g.contribution_amount,
+        currency: g.currency,
+        adminName
+      })
+    });
+
+    const data = await res.json();
+
+    await db.from('vault_entries').insert({
+      group_id: g.id, action: 'reminder_sent', performed_by: currentUser.id,
+      details: { count: data.sent || 0, total: unpaidMembers.length, month: currentMonthYear() }
+    });
+
+    hideLoading();
+    if (data.mode === 'demo') {
+      showToast('Demo mode: ' + unpaidMembers.length + ' reminders logged (Twilio not configured yet)');
+    } else {
+      showToast(`Sent ${data.sent} WhatsApp reminder(s)!`);
+    }
+  } catch (e) {
+    hideLoading();
+    // Fallback: open WhatsApp manually for first unpaid member
+    const first = unpaidMembers[0];
+    const name = first.profiles?.full_name || 'Member';
+    const msg = `Hi ${name.split(' ')[0]}! Friendly reminder from *${g.name}* — your contribution of *${formatCurrency(g.contribution_amount, g.currency)}* for ${currentMonthYear()} is still outstanding. Please confirm once paid. Thank you! 🙏`;
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg));
+    showToast('Opened WhatsApp — ' + unpaidMembers.length + ' members unpaid');
+  }
+}
+
+// ============================================================
+// SHARE / INVITE
+// ============================================================
+function copyInviteCode() {
+  if (!currentGroup) return;
   const code = currentGroup.invite_code;
-  const msg = `Join my stokvel on Stokmate! 🎉\n\nDownload the app at stokmate.co.za and use invite code: *${code}*\n\nTrack contributions, get reminders and manage everything properly 💚`;
+  navigator.clipboard.writeText(code).catch(() => {});
+  showToast('Invite code copied: ' + code);
+}
+
+function shareOnWhatsApp() {
+  if (!currentGroup) return;
+  const g = currentGroup;
+  const msg = `Join my stokvel *${g.name}* on Stokmate! 🎉\n\nDownload at *stokmate.co.za* and use invite code:\n\n*${g.invite_code}*\n\nTrack contributions, get reminders and manage everything properly. No money ever held by the app. 💚`;
   window.open('https://wa.me/?text=' + encodeURIComponent(msg));
 }
 
-// Form helpers
-function selectOpt(el){
-  el.closest('.option-grid').querySelectorAll('.opt-chip').forEach(o=>o.classList.remove('active'));
+// ============================================================
+// PROFILE SCREEN
+// ============================================================
+function openProfile() {
+  if (!currentProfile && !currentUser) return;
+  const name  = currentProfile?.full_name || currentUser?.user_metadata?.full_name || 'User';
+  const email = currentProfile?.email || currentUser?.email || '';
+  const phone = currentProfile?.phone || currentUser?.user_metadata?.phone || 'Not set';
+  const plan  = currentProfile?.plan || 'free';
+  const ref   = currentProfile?.referral_code || '—';
+
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('profileEmail').textContent = email;
+  document.getElementById('profileAvatar').textContent = name[0].toUpperCase();
+  document.getElementById('profilePlanText').textContent = plan === 'free' ? 'Free Plan' : 'Pro Plan';
+  document.getElementById('profilePhone').textContent = phone;
+  document.getElementById('profileGroupCount').textContent = userGroups.length;
+  document.getElementById('referralCode').textContent = ref;
+  document.getElementById('referralEarnings').textContent = 'R' + (currentProfile?.referral_earnings || 0);
+  goTo('profile-screen');
+}
+
+// ============================================================
+// UPGRADE SCREEN
+// ============================================================
+function showUpgradePrompt(msg) {
+  if (msg) showToast(msg, 4000);
+  goTo('upgrade-screen');
+}
+
+// ============================================================
+// AI CHAT
+// ============================================================
+const FALLBACK_RESPONSES = {
+  'Member not paying': 'The most effective approach:\n\n1. Send a polite WhatsApp reminder with the exact amount and due date.\n2. If no response in 3 days, ask the group to verify the situation.\n3. If it becomes a pattern (2+ months), suspend their payout turn.\n4. Three consecutive misses = group vote on removal.\n\nStokmate logs everything automatically, so the facts are never in dispute.',
+  'Generate constitution': '📋 STOKMATE GROUP CONSTITUTION\n\n1. Contributions due by the 5th of each month.\n2. R50 late fee after the 7th.\n3. Two missed payments = payout turn suspended.\n4. Three missed = removal by majority vote.\n5. All payments confirmed via Stokmate — no cash accepted.\n6. Payouts within 3 business days of full collection.\n7. Members may only exit after receiving their payout.\n8. Disputes resolved by admin + majority vote, recorded in vault.\n\nCopy this and share with all members.',
+  'Someone wants to leave': 'Handling a member exit fairly:\n\n✓ Before their payout turn — they forfeit their contributions OR group votes to refund minus a 10% admin penalty.\n✓ After their payout turn — they are obligated to complete the cycle.\n✓ Emergency (illness, retrenchment) — group votes with compassion.\n\nRecord the decision in the vault so there is no future dispute.',
+  'UK pardner advice': 'Stokmate works perfectly for UK pardner groups!\n\nSelect £ GBP as your currency. Invite codes work globally.\n\nFor UK groups:\n• Keep PDF statements for HMRC if individual payouts exceed £1,000\n• The Certificate of Good Standing is useful for credit and tenancy applications\n• "Banker" = Admin in Stokmate terminology'
+};
+
+async function sendAiMessage(text) {
+  if (!text.trim()) return;
+  addChatMessage('user', text);
+
+  const typingEl = showTyping();
+  chatHistory.push({ role: 'user', content: text });
+
+  // Build group context
+  const groupCtx = currentGroup
+    ? `Group: ${currentGroup.name}, Type: ${currentGroup.group_type}, Currency: ${currentGroup.currency}, Members: ${currentGroup.members?.length || 0}, Contribution: ${formatCurrency(currentGroup.contribution_amount, currentGroup.currency)}/month`
+    : null;
+
+  try {
+    const res = await fetch('/.netlify/functions/ai-chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text, groupContext: groupCtx, history: chatHistory.slice(-6) })
+    });
+
+    const data = await res.json();
+    removeTyping(typingEl);
+
+    let reply;
+    if (data.error || data.fallback) {
+      // Use fallback for common questions
+      const key = Object.keys(FALLBACK_RESPONSES).find(k => text.toLowerCase().includes(k.toLowerCase()));
+      reply = key ? FALLBACK_RESPONSES[key] : 'The key to any savings group is transparent records and agreed rules. Stokmate handles the records — would you like help setting up your group constitution?';
+    } else {
+      reply = data.response;
+    }
+
+    chatHistory.push({ role: 'assistant', content: reply });
+    addChatMessage('bot', reply);
+  } catch {
+    removeTyping(typingEl);
+    const key = Object.keys(FALLBACK_RESPONSES).find(k => text.toLowerCase().includes(k.toLowerCase()));
+    const reply = key ? FALLBACK_RESPONSES[key] : 'Great question. Clear rules agreed upfront prevent most disputes. Would you like help generating a constitution for your group?';
+    chatHistory.push({ role: 'assistant', content: reply });
+    addChatMessage('bot', reply);
+  }
+}
+
+function sendChip(el) {
+  const text = el.textContent.trim();
+  el.style.opacity = '0.5';
+  el.style.pointerEvents = 'none';
+  sendAiMessage(text);
+}
+
+function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  sendAiMessage(text);
+}
+
+function addChatMessage(role, text) {
+  const area = document.getElementById('chatArea');
+  const b = document.createElement('div');
+  b.className = 'bubble ' + role;
+  b.style.whiteSpace = 'pre-line';
+  b.textContent = text;
+  area.appendChild(b);
+  area.scrollTop = area.scrollHeight;
+}
+
+function showTyping() {
+  const area = document.getElementById('chatArea');
+  const el = document.createElement('div');
+  el.className = 'typing-bubble';
+  el.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  area.appendChild(el);
+  area.scrollTop = area.scrollHeight;
+  return el;
+}
+
+function removeTyping(el) {
+  if (el && el.parentNode) el.remove();
+}
+
+// ============================================================
+// FORM HELPERS
+// ============================================================
+function selectOpt(el) {
+  el.closest('.option-grid').querySelectorAll('.opt-chip').forEach(o => o.classList.remove('active'));
   el.classList.add('active');
 }
 
-function updatePreview(){
-  const m=parseInt(document.getElementById('grpMembers')?.value)||10;
-  const a=parseInt(document.getElementById('grpAmount')?.value)||500;
+function updatePreview() {
+  const m = parseInt(document.getElementById('grpMembers')?.value) || 10;
+  const a = parseInt(document.getElementById('grpAmount')?.value) || 500;
   const cur = document.querySelector('#currencyChips .opt-chip.active')?.dataset?.currency || 'R';
-  const pool=m*a;
+  const pool = m * a;
   const poolEl = document.getElementById('previewPool');
   const annualEl = document.getElementById('previewAnnual');
   const eachEl = document.getElementById('previewEach');
-  if(poolEl) poolEl.textContent = cur + ' ' + pool.toLocaleString();
-  if(annualEl) annualEl.textContent = cur + ' ' + (pool*12).toLocaleString();
-  if(eachEl) eachEl.textContent = cur + ' ' + pool.toLocaleString();
+  if (poolEl) poolEl.textContent = cur + ' ' + pool.toLocaleString();
+  if (annualEl) annualEl.textContent = cur + ' ' + (pool * 12).toLocaleString();
+  if (eachEl) eachEl.textContent = cur + ' ' + pool.toLocaleString();
 }
 
-// Auth tab switching
-function showAuthTab(tab){
-  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.auth-form').forEach(f=>f.style.display='none');
-  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-  document.getElementById(tab+'Form').style.display='block';
-}
-
-// AI Chat
-const aiResponses={
-  'Member not paying 😤':'This is the most common group problem. Here is what to do:\n\n1️⃣ Use the WhatsApp reminder button — this creates a timestamped record in your group.\n\n2️⃣ If they miss a second month, suspend their payout turn.\n\n3️⃣ Three missed payments — group vote on removal.\n\nStokmate records everything automatically so there is no dispute about the facts.',
-  'Generate constitution':'📋 STOKMATE GROUP CONSTITUTION\n\n1. Contributions due by the 5th of each month.\n2. R50 late fee after 7 days.\n3. Two missed payments = payout suspended.\n4. Three missed = removal from group.\n5. All payments via EFT — no cash.\n6. Payouts within 3 business days of full collection.\n7. Members may only exit after their payout turn.\n8. Disputes resolved by majority vote.\n\nSave this in your group notes and share with all members.',
-  'Someone wants to leave':'Before their payout turn: they forfeit contributions or group votes to refund minus penalty.\n\nAfter their payout turn: they must stay until cycle ends.\n\nEmergency: group votes with compassion.\n\nDocument everything in Stokmate so there is no dispute.',
-  'UK pardner advice':'Stokmate works perfectly for UK pardner groups!\n\nSelect £ GBP as your currency. The invite code works the same way globally.\n\nFor UK groups: keep your PDF statements for HMRC if payouts exceed certain thresholds.\n\nThe certificate of good standing is useful for UK landlords and credit applications too.'
-};
-
-function sendChip(el){
-  const text=el.textContent;
-  el.style.opacity='0.5';el.style.pointerEvents='none';
-  addUser(text);showTyping();
-  setTimeout(()=>{removeTyping();addBot(aiResponses[text]||'Great question. Clear rules agreed upfront prevent most disputes. Would you like help generating a constitution for your group?');},1700);
-}
-
-function sendMsg(){
-  const input=document.getElementById('chatInput');
-  const text=input.value.trim();
-  if(!text)return;
-  input.value='';
-  addUser(text);showTyping();
-  setTimeout(()=>{removeTyping();addBot('Good question. The key to any savings group is transparent records and clear agreed rules. Stokmate handles the records — would you like help setting up your group rules?');},1800);
-}
-
-function addUser(text){const area=document.getElementById('chatArea');const b=document.createElement('div');b.className='bubble user';b.textContent=text;area.appendChild(b);area.scrollTop=area.scrollHeight;}
-function addBot(text){const area=document.getElementById('chatArea');const b=document.createElement('div');b.className='bubble bot';b.style.whiteSpace='pre-line';b.textContent=text;area.appendChild(b);area.scrollTop=area.scrollHeight;}
-let typingEl=null;
-function showTyping(){const area=document.getElementById('chatArea');typingEl=document.createElement('div');typingEl.className='typing-bubble';typingEl.innerHTML='<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';area.appendChild(typingEl);area.scrollTop=area.scrollHeight;}
-function removeTyping(){if(typingEl){typingEl.remove();typingEl=null;}}
-
-// Build dynamic chips
-const GROUP_TYPES=[
-  {id:'rotating',icon:'🔄',name:'Rotating'},
-  {id:'grocery',icon:'🛒',name:'Grocery'},
-  {id:'burial',icon:'🕊️',name:'Burial society'},
-  {id:'investment',icon:'📈',name:'Investment'},
-  {id:'savings',icon:'💰',name:'Savings club'},
-  {id:'festive',icon:'🎄',name:'Festive'}
+// ============================================================
+// CHIP BUILDER
+// ============================================================
+const GROUP_TYPES = [
+  { id:'rotating', icon:'🔄', name:'Rotating' },
+  { id:'grocery',  icon:'🛒', name:'Grocery' },
+  { id:'burial',   icon:'🕊️', name:'Burial society' },
+  { id:'investment',icon:'📈',name:'Investment' },
+  { id:'savings',  icon:'💰', name:'Savings club' },
+  { id:'festive',  icon:'🎄', name:'Festive' }
 ];
 
-const CURRENCIES=[
-  {symbol:'R',code:'ZAR'},{symbol:'£',code:'GBP'},{symbol:'$',code:'USD'},
-  {symbol:'€',code:'EUR'},{symbol:'K',code:'ZMW'},{symbol:'₦',code:'NGN'}
+const CURRENCIES = [
+  { symbol:'R',  code:'ZAR' }, { symbol:'£', code:'GBP' },
+  { symbol:'$',  code:'USD' }, { symbol:'€', code:'EUR' },
+  { symbol:'K',  code:'ZMW' }, { symbol:'₦', code:'NGN' },
+  { symbol:'P',  code:'BWP' }, { symbol:'KSh',code:'KES'}
 ];
 
-function buildChips(){
-  const typeGrid=document.getElementById('typeChips');
-  if(typeGrid){
-    GROUP_TYPES.forEach((t,i)=>{
-      const d=document.createElement('div');
-      d.className='opt-chip'+(i===0?' active':'');
-      d.dataset.type=t.id;
-      d.textContent=t.icon+' '+t.name;
-      d.onclick=()=>selectOpt(d);
+function buildChips() {
+  const typeGrid = document.getElementById('typeChips');
+  if (typeGrid) {
+    GROUP_TYPES.forEach((t, i) => {
+      const d = document.createElement('div');
+      d.className = 'opt-chip' + (i === 0 ? ' active' : '');
+      d.dataset.type = t.id;
+      d.dataset.icon = t.icon;
+      d.textContent = t.icon + ' ' + t.name;
+      d.onclick = () => selectOpt(d);
       typeGrid.appendChild(d);
     });
   }
-  const curGrid=document.getElementById('currencyChips');
-  if(curGrid){
-    CURRENCIES.forEach((c,i)=>{
-      const d=document.createElement('div');
-      d.className='opt-chip'+(i===0?' active':'');
-      d.dataset.currency=c.symbol;
-      d.textContent=c.symbol+' '+c.code;
-      d.onclick=()=>{selectOpt(d);updatePreview();};
+  const curGrid = document.getElementById('currencyChips');
+  if (curGrid) {
+    CURRENCIES.forEach((c, i) => {
+      const d = document.createElement('div');
+      d.className = 'opt-chip' + (i === 0 ? ' active' : '');
+      d.dataset.currency = c.symbol;
+      d.textContent = c.symbol + ' ' + c.code;
+      d.onclick = () => { selectOpt(d); updatePreview(); };
       curGrid.appendChild(d);
     });
   }
 }
 
-// Init
-window.addEventListener('load',()=>{
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('load', () => {
   buildChips();
   initApp();
 });
 </script>
 
-<!-- LANDING -->
+<!-- ============================================================ -->
+<!-- LANDING SCREEN -->
+<!-- ============================================================ -->
 <div class="screen" id="landing">
   <div class="land-top">
     <div class="proof-bar">
@@ -785,11 +1376,11 @@ window.addEventListener('load',()=>{
       <div class="logo-text">Stokmate</div>
     </div>
     <div class="land-headline">Run your savings group <em>the smart way</em></div>
-    <div class="land-sub">Track contributions, send automatic reminders, resolve disputes with AI — without ever touching your group's money. Works for stokvels, pardner, sou-sou and savings clubs worldwide.</div>
+    <div class="land-sub">Track contributions, send automatic WhatsApp reminders, resolve disputes with AI — without ever touching your group's money.</div>
     <div class="stats-row">
       <div class="stat-item"><span class="stat-val">800k+</span><span class="stat-label">SA Stokvels</span></div>
       <div class="stat-item"><span class="stat-val">R50B</span><span class="stat-label">Saved yearly</span></div>
-      <div class="stat-item"><span class="stat-val">Global</span><span class="stat-label">9 currencies</span></div>
+      <div class="stat-item"><span class="stat-val">Global</span><span class="stat-label">8 currencies</span></div>
     </div>
   </div>
   <div class="land-bottom">
@@ -799,7 +1390,7 @@ window.addEventListener('load',()=>{
     </div>
     <div class="cta-headline">Start your free trial</div>
     <div class="cta-sub">Join groups across South Africa, the UK, US and beyond.</div>
-    <button class="btn-navy" onclick="goTo('auth')">Create your free account ✓</button>
+    <button class="btn-navy" onclick="goTo('auth')">Create your free account →</button>
     <button class="btn-outline" onclick="goTo('auth');showAuthTab('login')">I already have an account</button>
     <div class="trust-row">
       <div class="trust-item">🔒 We never hold your money</div>
@@ -809,10 +1400,12 @@ window.addEventListener('load',()=>{
   </div>
 </div>
 
-<!-- AUTH -->
+<!-- ============================================================ -->
+<!-- AUTH SCREEN -->
+<!-- ============================================================ -->
 <div class="screen" id="auth">
   <div class="auth-hero">
-    <div class="logo-wrap" style="justify-content:center;margin-bottom:16px">
+    <div class="logo-wrap" style="justify-content:center;margin-bottom:14px">
       <div class="logo-icon" style="width:40px;height:40px;font-size:20px">S</div>
       <div class="logo-text">Stokmate</div>
     </div>
@@ -829,50 +1422,54 @@ window.addEventListener('load',()=>{
     <div id="signupForm" class="auth-form">
       <div class="auth-error" id="signupError"></div>
       <div class="auth-success" id="signupSuccess"></div>
-      <label class="form-label">Full name</label>
-      <input class="form-input" type="text" id="signupName" placeholder="e.g. Thandi Dlamini">
-      <label class="form-label">Email address</label>
-      <input class="form-input" type="email" id="signupEmail" placeholder="thandi@gmail.com">
-      <label class="form-label">WhatsApp number</label>
-      <input class="form-input" type="tel" id="signupPhone" placeholder="+27 82 000 0000">
-      <label class="form-label">Password</label>
-      <input class="form-input" type="password" id="signupPassword" placeholder="At least 6 characters">
+      <label class="form-label">Full name *</label>
+      <input class="form-input" type="text" id="signupName" placeholder="e.g. Thandi Dlamini" autocomplete="name">
+      <label class="form-label">Email address *</label>
+      <input class="form-input" type="email" id="signupEmail" placeholder="thandi@gmail.com" autocomplete="email">
+      <label class="form-label">WhatsApp number (for reminders)</label>
+      <input class="form-input" type="tel" id="signupPhone" placeholder="+27 82 000 0000" autocomplete="tel">
+      <label class="form-label">Password *</label>
+      <input class="form-input" type="password" id="signupPassword" placeholder="At least 6 characters" autocomplete="new-password">
       <button class="btn-navy" onclick="signUp()">Create my account →</button>
-      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--gray)">Already have an account? <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="showAuthTab('login')">Sign in</span></div>
+      <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--gray)">Already have an account? <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="showAuthTab('login')">Sign in</span></div>
     </div>
 
     <!-- LOGIN -->
     <div id="loginForm" class="auth-form" style="display:none">
       <div class="auth-error" id="loginError"></div>
       <label class="form-label">Email address</label>
-      <input class="form-input" type="email" id="loginEmail" placeholder="your@email.com">
+      <input class="form-input" type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email">
       <label class="form-label">Password</label>
-      <input class="form-input" type="password" id="loginPassword" placeholder="Your password">
+      <input class="form-input" type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password">
       <button class="btn-navy" onclick="signIn()">Sign in →</button>
-      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--gray)">New to Stokmate? <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="showAuthTab('signup')">Create account</span></div>
+      <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--gray)">New to Stokmate? <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="showAuthTab('signup')">Create account</span></div>
     </div>
 
-    <!-- JOIN WITH CODE -->
-    <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
-      <div style="font-size:13px;color:var(--gray);text-align:center;margin-bottom:12px">Have an invite code?</div>
+    <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border)">
+      <div style="font-size:13px;color:var(--gray);text-align:center;margin-bottom:10px">Have an invite code?</div>
       <div style="display:flex;gap:8px">
-        <input class="form-input" type="text" id="joinCode" placeholder="Enter group code" style="margin-bottom:0;text-transform:uppercase">
-        <button class="btn-green" style="width:auto;padding:14px 18px;margin-bottom:0;white-space:nowrap" onclick="joinGroup()">Join</button>
+        <input class="form-input" type="text" id="joinCode" placeholder="Enter group code" style="margin-bottom:0;text-transform:uppercase;letter-spacing:1px;font-weight:600">
+        <button class="btn-green" style="width:auto;padding:13px 18px;margin-bottom:0;white-space:nowrap" onclick="joinGroup(document.getElementById('joinCode').value)">Join</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- HOME -->
+<!-- ============================================================ -->
+<!-- HOME SCREEN -->
+<!-- ============================================================ -->
 <div class="screen" id="home">
   <div class="topbar">
     <div class="topbar-logo"><div class="topbar-icon">S</div>Stokmate</div>
-    <button class="notif-btn" onclick="showToast('No new notifications')">🔔<div class="notif-badge"></div></button>
+    <button class="notif-btn" onclick="showToast('No new notifications')">🔔</button>
   </div>
   <div class="home-hero">
     <div class="greeting-row">
-      <div><div class="greeting-text">Good morning</div><div class="greeting-name" id="heroName">there 👋</div></div>
-      <div class="avatar-circle" id="heroAvatar" onclick="signOut()">?</div>
+      <div>
+        <div class="greeting-text" id="heroGreeting">Good morning</div>
+        <div class="greeting-name" id="heroName">there</div>
+      </div>
+      <div class="avatar-circle" id="heroAvatar" onclick="openProfile()">?</div>
     </div>
     <div class="hero-card">
       <div class="hero-label">Total tracked across all groups</div>
@@ -884,26 +1481,30 @@ window.addEventListener('load',()=>{
           <div class="hero-mini-val" id="heroGroups">0</div>
         </div>
         <div class="hero-mini">
-          <div class="hero-mini-label">Your account</div>
-          <div class="hero-mini-val">Active ✓</div>
+          <div class="hero-mini-label">Month</div>
+          <div class="hero-mini-val" style="font-size:11px" id="currentMonth">Loading...</div>
         </div>
+      </div>
+      <div class="countdown-strip">
+        <div class="countdown-num" id="countdownNum">—</div>
+        <div class="countdown-text" id="countdownText">days until December</div>
       </div>
     </div>
   </div>
-  <div class="upgrade-banner" onclick="showToast('Upgrade coming soon! 🚀')">
+  <div class="upgrade-banner" onclick="goTo('upgrade-screen')">
     <div class="upgrade-icon">⚡</div>
     <div class="upgrade-text">
       <div class="upgrade-title">Upgrade to Pro — R49/month</div>
-      <div class="upgrade-sub">WhatsApp reminders · AI disputes · Certificate</div>
+      <div class="upgrade-sub">WhatsApp reminders · Unlimited members · AI disputes · Certificates</div>
     </div>
     <div class="upgrade-arrow">›</div>
   </div>
-  <div class="section" style="margin-top:16px">
+  <div class="section" style="margin-top:14px">
     <div class="quick-grid">
       <div class="q-btn" onclick="goTo('add-group')"><div class="q-icon qg">➕</div><div class="q-label">New Group</div></div>
-      <div class="q-btn" onclick="showJoinModal()"><div class="q-icon qgo">🔗</div><div class="q-label">Join Group</div></div>
-      <div class="q-btn" onclick="goTo('ai-screen')"><div class="q-icon qn">🤖</div><div class="q-label">AI Help</div></div>
-      <div class="q-btn" onclick="showToast('Certificate — coming in Pro! 🏅')"><div class="q-icon qp">🏅</div><div class="q-label">Certificate</div></div>
+      <div class="q-btn" onclick="openJoinModal()"><div class="q-icon qgo">🔗</div><div class="q-label">Join Group</div></div>
+      <div class="q-btn" onclick="setNav(document.querySelector('.nav-btn:last-child'));goTo('ai-screen')"><div class="q-icon qn">🤖</div><div class="q-label">AI Help</div></div>
+      <div class="q-btn" onclick="goTo('upgrade-screen')"><div class="q-icon qp">🏅</div><div class="q-label">Go Pro</div></div>
     </div>
   </div>
   <div class="section">
@@ -928,7 +1529,9 @@ window.addEventListener('load',()=>{
   </div>
 </div>
 
-<!-- ADD GROUP -->
+<!-- ============================================================ -->
+<!-- ADD GROUP SCREEN -->
+<!-- ============================================================ -->
 <div class="screen" id="add-group">
   <div class="topbar">
     <button style="background:var(--green-pale);color:var(--green);border:none;border-radius:24px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;" onclick="goTo('home')">← Back</button>
@@ -941,8 +1544,14 @@ window.addEventListener('load',()=>{
     <label class="form-label">Group name</label>
     <input class="form-input" type="text" id="grpName" placeholder="e.g. Church Stokvel 2025">
     <div class="form-row">
-      <div><label class="form-label">Members</label><input class="form-input" type="number" id="grpMembers" placeholder="10" oninput="updatePreview()" min="2"></div>
-      <div><label class="form-label">Contribution</label><input class="form-input" type="number" id="grpAmount" placeholder="500" oninput="updatePreview()" min="0"></div>
+      <div>
+        <label class="form-label">Members</label>
+        <input class="form-input" type="number" id="grpMembers" placeholder="10" oninput="updatePreview()" min="2" max="100">
+      </div>
+      <div>
+        <label class="form-label">Contribution</label>
+        <input class="form-input" type="number" id="grpAmount" placeholder="500" oninput="updatePreview()" min="0">
+      </div>
     </div>
     <label class="form-label">Currency</label>
     <div class="option-grid" id="currencyChips"></div>
@@ -957,62 +1566,101 @@ window.addEventListener('load',()=>{
   </div>
 </div>
 
-<!-- GROUP DETAIL -->
+<!-- ============================================================ -->
+<!-- GROUP DETAIL SCREEN -->
+<!-- ============================================================ -->
 <div class="screen" id="group-detail">
   <div class="detail-header">
-    <button class="back-pill" onclick="goTo('home')">← Back</button>
+    <button class="back-pill" onclick="goTo('home');loadGroups()">← Back</button>
     <div class="detail-name" id="detailName">Group Name</div>
     <div class="detail-sub" id="detailSub">Loading...</div>
     <div class="detail-stats">
-      <div class="ds-card"><div class="ds-val" id="detailTarget">R0</div><div class="ds-label">Pool target</div></div>
-      <div class="ds-card"><div class="ds-val" id="detailMembers">0</div><div class="ds-label">Members</div></div>
-      <div class="ds-card"><div class="ds-val">Active</div><div class="ds-label">Status</div></div>
+      <div class="ds-card"><div class="ds-val" id="detailTarget">R0</div><div class="ds-label">Pool total</div></div>
+      <div class="ds-card"><div class="ds-val" id="detailPaid">0/0</div><div class="ds-label">Paid this month</div></div>
+      <div class="ds-card"><div class="ds-val" id="detailHealth">100%</div><div class="ds-label">Health</div></div>
+    </div>
+    <div class="health-bar-wrap">
+      <div class="health-bar-track"><div class="health-bar-fill" id="healthBarFill" style="width:100%"></div></div>
     </div>
   </div>
-  <div class="section" style="margin-top:16px">
+
+  <!-- INVITE CARD -->
+  <div style="padding:16px 20px 0">
     <div class="invite-card">
-      <div class="invite-title">📎 Invite members to join</div>
-      <div class="invite-link" id="inviteLink">stokmate.co.za/join/...</div>
+      <div class="invite-title">Share invite code with members</div>
+      <div class="invite-code-display" id="inviteCodeDisplay">—</div>
+      <div class="invite-link" id="inviteLinkText">stokmate.co.za/join/...</div>
       <div class="invite-actions">
-        <button class="invite-btn" onclick="copyInviteLink()">📋 Copy link</button>
+        <button class="invite-btn" onclick="copyInviteCode()">📋 Copy code</button>
         <button class="invite-btn" onclick="shareOnWhatsApp()" style="background:var(--navy)">📲 Share on WhatsApp</button>
       </div>
     </div>
-    <div class="section-title" style="margin-bottom:12px">Members</div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="members" onclick="switchTab('members')">Members</button>
+    <button class="tab-btn" data-tab="payout" onclick="switchTab('payout')">Payout order</button>
+    <button class="tab-btn" data-tab="vault" onclick="switchTab('vault')">Vault log</button>
+  </div>
+
+  <!-- MEMBERS TAB -->
+  <div id="membersSection" style="padding:0 20px">
     <div id="membersList"></div>
+    <div style="margin-bottom:8px;font-size:11px;color:var(--gray);text-align:center" id="membersCount"></div>
   </div>
+
+  <!-- PAYOUT ORDER TAB -->
+  <div id="payoutSection" style="padding:0 20px;display:none">
+    <div class="payout-card">
+      <div class="payout-title">Payout order — who receives the pot</div>
+      <div class="payout-list" id="payoutList"></div>
+    </div>
+    <div style="font-size:12px;color:var(--gray);text-align:center;padding:8px 0">Payout order is set when members join. Contact your admin to change it.</div>
+  </div>
+
+  <!-- VAULT LOG TAB -->
+  <div id="vaultSection" style="padding:0 20px;display:none">
+    <div id="vaultList"></div>
+  </div>
+
+  <!-- ACTION BUTTONS -->
   <div class="action-row">
-    <button class="btn-action primary" onclick="showToast('WhatsApp reminders sent! 📲')">Send reminders</button>
-    <button class="btn-action secondary" onclick="showToast('PDF statement coming in Pro! 📄')">Statement</button>
+    <button class="btn-action primary" onclick="sendReminders()">📲 Send reminders</button>
+    <button class="btn-action secondary" onclick="showToast('PDF statements available in Pro! Upgrade for R49/month.')">📄 Statement</button>
   </div>
+
   <div class="nav-spacer"></div>
   <div class="bottom-nav">
-    <button class="nav-btn" onclick="setNav(this);goTo('home')"><div class="nav-icon-wrap">🏠</div><span class="nav-label">Home</span></button>
-    <button class="nav-btn active"><div class="nav-icon-wrap">👥</div><span class="nav-label">Groups</span></button>
+    <button class="nav-btn" onclick="setNav(this);goTo('home');loadGroups()"><div class="nav-icon-wrap">🏠</div><span class="nav-label">Home</span></button>
+    <button class="nav-btn active"><div class="nav-icon-wrap">👥</div><span class="nav-label">Group</span></button>
     <button class="nav-btn" onclick="setNav(this);goTo('ai-screen')"><div class="nav-icon-wrap">🤖</div><span class="nav-label">AI Help</span></button>
   </div>
 </div>
 
-<!-- AI -->
+<!-- ============================================================ -->
+<!-- AI SCREEN -->
+<!-- ============================================================ -->
 <div class="screen" id="ai-screen">
   <div class="ai-header">
     <div class="ai-header-top">
       <button style="background:rgba(255,255,255,0.12);border:none;border-radius:24px;padding:6px 13px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;" onclick="goTo('home')">← Back</button>
       <div style="flex:1">
         <div class="ai-header-name">Stokmate AI</div>
-        <div class="ai-header-status">● Online · Answers in seconds</div>
+        <div class="ai-header-status">● Online · Powered by Claude</div>
       </div>
       <div class="ai-icon-wrap">🤖</div>
     </div>
     <div class="ai-chips">
-      <div class="ai-chip" onclick="sendChip(this)">Member not paying 😤</div>
+      <div class="ai-chip" onclick="sendChip(this)">Member not paying</div>
       <div class="ai-chip" onclick="sendChip(this)">Generate constitution</div>
       <div class="ai-chip" onclick="sendChip(this)">Someone wants to leave</div>
       <div class="ai-chip" onclick="sendChip(this)">UK pardner advice</div>
+      <div class="ai-chip" onclick="sendChip(this)">Late payment policy</div>
     </div>
   </div>
   <div class="chat-area" id="chatArea">
-    <div class="bubble bot">Sawubona! 👋 I am your Stokmate AI. I can help with disputes, constitutions, missed payments and more. What is happening in your group today?</div>
+    <div class="bubble bot">Sawubona! I am your Stokmate AI, powered by Claude. I can help with disputes, group constitutions, missed payments, payout order and more. What is happening in your group today?</div>
   </div>
   <div class="chat-bar">
     <input class="chat-input" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendMsg()">
@@ -1025,14 +1673,136 @@ window.addEventListener('load',()=>{
   </div>
 </div>
 
+<!-- ============================================================ -->
+<!-- PROFILE SCREEN -->
+<!-- ============================================================ -->
+<div class="screen" id="profile-screen">
+  <div class="topbar">
+    <button style="background:var(--green-pale);color:var(--green);border:none;border-radius:24px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;" onclick="goTo('home')">← Home</button>
+    <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--green)">My Profile</div>
+    <div style="width:64px"></div>
+  </div>
+  <div class="profile-hero">
+    <div class="profile-avatar" id="profileAvatar">?</div>
+    <div class="profile-name" id="profileName">Loading...</div>
+    <div class="profile-email" id="profileEmail"></div>
+    <div class="plan-badge">
+      <span>⭐</span>
+      <span class="plan-badge-text" id="profilePlanText">Free Plan</span>
+    </div>
+  </div>
+  <div class="profile-body">
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-label">WhatsApp number</span>
+        <span class="info-val" id="profilePhone">Not set</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Groups</span>
+        <span class="info-val" id="profileGroupCount">0</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Member since</span>
+        <span class="info-val">2025</span>
+      </div>
+    </div>
+
+    <div class="referral-card">
+      <div class="referral-title">Refer & Earn</div>
+      <div class="referral-code" id="referralCode">—</div>
+      <div class="referral-sub">Share your code — earn R20 credit when a friend upgrades to Pro.</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn-green" style="margin:0;padding:12px" onclick="navigator.clipboard.writeText(document.getElementById('referralCode').textContent);showToast('Referral code copied!')">Copy code</button>
+        <button class="btn-outline" style="margin:0;padding:12px" onclick="window.open('https://wa.me/?text='+encodeURIComponent('Join me on Stokmate — the best way to run your savings group! Sign up at stokmate.co.za and use my referral code: '+document.getElementById('referralCode').textContent+' to get started. No money held by the app!'))">Share on WhatsApp</button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-label">Referral earnings</span>
+        <span class="info-val" id="referralEarnings">R0</span>
+      </div>
+    </div>
+
+    <button class="btn-navy" onclick="goTo('upgrade-screen')" style="margin-bottom:12px">Upgrade to Pro — R49/month ⚡</button>
+    <button class="btn-danger" onclick="if(confirm('Sign out?'))signOut()">Sign out</button>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- UPGRADE SCREEN -->
+<!-- ============================================================ -->
+<div class="screen" id="upgrade-screen">
+  <div class="topbar">
+    <button style="background:var(--navy-pale);color:var(--navy);border:none;border-radius:24px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;" onclick="goTo('home')">← Back</button>
+    <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--navy)">Go Pro</div>
+    <div style="width:64px"></div>
+  </div>
+  <div class="upgrade-hero">
+    <div class="upgrade-hero-title">Unlock everything</div>
+    <div class="upgrade-hero-sub">One low monthly price. Cancel any time.<br>No hidden fees. We never touch your money.</div>
+  </div>
+
+  <div style="padding:20px 0 0">
+    <!-- FREE PLAN -->
+    <div class="plan-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">R0 <span>/ month</span></div>
+      <ul class="plan-features">
+        <li>1 group</li>
+        <li>Up to 8 members</li>
+        <li>10 transactions per month</li>
+        <li>Manual WhatsApp sharing</li>
+        <li>Basic AI assistance</li>
+      </ul>
+      <button class="btn-outline" onclick="showToast('You are on the free plan')">Current plan</button>
+    </div>
+
+    <!-- PRO PLAN -->
+    <div class="plan-card featured">
+      <div class="plan-tag">MOST POPULAR</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">R49 <span>/ month per group</span></div>
+      <ul class="plan-features">
+        <li>Unlimited groups</li>
+        <li>Unlimited members</li>
+        <li>Unlimited transactions</li>
+        <li>Automatic WhatsApp reminders via Twilio</li>
+        <li>Full AI dispute resolution (Claude-powered)</li>
+        <li>PDF &amp; CSV statement generation</li>
+        <li>Certificate of good standing</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="btn-navy" onclick="showToast('PayFast integration coming soon! We will notify you.')">Start 30-day free trial →</button>
+    </div>
+
+    <!-- ANNUAL -->
+    <div class="plan-card" style="margin-bottom:20px">
+      <div class="plan-name">Pro Annual</div>
+      <div class="plan-price">R490 <span>/ year per group</span></div>
+      <ul class="plan-features">
+        <li>Everything in Pro</li>
+        <li>Save R98 — 2 months free</li>
+        <li>Annual PDF report</li>
+      </ul>
+      <button class="btn-outline" onclick="showToast('Annual billing coming soon!')">Save R98/year →</button>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:0 20px 40px;font-size:12px;color:var(--gray);line-height:1.6">
+    🔒 Payments processed by PayFast — South Africa's leading payment gateway.<br>
+    We never store your card details. Cancel any time.
+  </div>
+</div>
+
 <script>
-function showJoinModal(){
-  const code = prompt('Enter your group invite code:');
-  if(code){
-    document.getElementById('joinCode').value = code;
-    joinGroup();
-  }
-}
+// Set current month on home screen
+document.addEventListener('DOMContentLoaded', () => {
+  const el = document.getElementById('currentMonth');
+  if (el) el.textContent = new Date().toLocaleDateString('en-ZA', { month: 'short', year: 'numeric' });
+});
 </script>
+
 </body>
 </html>
