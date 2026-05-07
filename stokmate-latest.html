@@ -323,6 +323,20 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:va
 /* DIVIDER */
 .divider{height:1px;background:var(--border);margin:0 20px;}
 .section-label{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;padding:12px 20px 6px;}
+
+/* ACTION SHEET */
+.action-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:white;border-radius:24px 24px 0 0;padding:20px 20px 32px;z-index:600;box-shadow:0 -4px 30px rgba(0,0,0,0.18);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);}
+.action-sheet.hidden{transform:translateX(-50%) translateY(110%);}
+.as-handle{width:36px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 16px;}
+.as-title{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:14px;text-align:center;}
+.as-btn{width:100%;padding:14px 16px;border:none;border-radius:var(--r);font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:8px;text-align:left;display:flex;align-items:center;gap:10px;}
+.as-btn-promote{background:var(--green-pale);color:var(--green);}
+.as-btn-remove{background:#FEE2E2;color:var(--danger);}
+.as-btn-leave{background:#FEE2E2;color:var(--danger);}
+.as-btn-delete{background:#7F1D1D;color:white;}
+.as-btn-cancel{background:var(--gray-light);color:var(--dark);}
+.member-menu-btn{background:none;border:none;cursor:pointer;font-size:20px;color:var(--gray);padding:4px 8px;border-radius:8px;line-height:1;flex-shrink:0;}
+.member-menu-btn:active{background:var(--gray-light);}
 </style>
 </head>
 <body>
@@ -333,6 +347,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:va
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- MEMBER ACTION SHEET -->
+<div id="actionSheetBackdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:599" onclick="closeMemberActions()"></div>
+<div id="memberActionSheet" class="action-sheet hidden">
+  <div class="as-handle"></div>
+  <div class="as-title" id="actionSheetTitle">Options</div>
+  <div id="actionSheetButtons"></div>
+  <button class="as-btn as-btn-cancel" onclick="closeMemberActions()">Cancel</button>
+</div>
 
 <!-- JOIN CODE MODAL -->
 <div class="modal-backdrop" id="joinModal" onclick="closeJoinModal(event)">
@@ -438,11 +461,12 @@ function avatarStyle(seed) {
 async function initApp() {
   showLoading('Loading Stokmate...');
   try {
-    // Handle invite code from URL
+    // Handle invite token/code from URL
     const params = new URLSearchParams(window.location.search);
     const inviteCode = params.get('join');
     if (inviteCode) {
-      pendingJoinCode = inviteCode.toUpperCase();
+      // Tokens are lowercase hex — don't uppercase them. Group codes are uppercase.
+      pendingJoinCode = isInviteToken(inviteCode) ? inviteCode : inviteCode.toUpperCase();
       document.getElementById('joinCodeInput').value = pendingJoinCode;
       document.getElementById('joinCode').value = pendingJoinCode;
     }
@@ -770,6 +794,8 @@ function renderMembersList() {
     const reliabilityColor = (m.reliability_score || 100) >= 90 ? 'var(--success)' : (m.reliability_score || 100) >= 70 ? 'var(--warning)' : 'var(--danger)';
     const monthsText = m.months_paid && m.months_total ? `${m.months_paid}/${m.months_total} months paid` : (m.role === 'admin' ? 'Admin' : 'Member');
 
+    const showMenu = isAdmin || isMe;
+    const safeName = name.replace(/'/g, "\\'");
     return `
     <div class="member-item" id="member-${m.id}">
       <div class="m-avatar" style="${avatarStyle(name)}">${name[0].toUpperCase()}</div>
@@ -780,6 +806,7 @@ function renderMembersList() {
       <div class="m-right">
         <div class="m-badge ${m.paid_this_month ? 'mb-paid' : 'mb-unpaid'}">${m.paid_this_month ? 'Paid ✓' : 'Unpaid'}</div>
         ${!m.paid_this_month && canMark ? `<button class="mark-paid-btn" onclick="markAsPaid('${m.id}','${m.user_id}')">Mark paid</button>` : ''}
+        ${showMenu ? `<button class="member-menu-btn" onclick="openMemberActions('${m.id}','${m.user_id}','${safeName}','${m.role}')">⋮</button>` : ''}
       </div>
     </div>`;
   }).join('');
@@ -1035,14 +1062,38 @@ async function createGroup() {
 // ============================================================
 // JOIN GROUP
 // ============================================================
+function isInviteToken(code) {
+  return /^[0-9a-f]{16}$/.test(code);
+}
+
 async function joinGroup(code) {
   if (!currentUser) { goTo('auth'); return; }
-  const trimmed = (code || '').trim().toUpperCase();
+  const trimmed = (code || '').trim();
   if (!trimmed) { showToast('Please enter an invite code'); return; }
 
   showLoading('Joining group...');
   try {
-    const { data: group, error } = await db.from('groups').select('*').eq('invite_code', trimmed).single();
+    // Single-use token path
+    if (isInviteToken(trimmed)) {
+      const { data, error } = await db.rpc('join_via_token', { p_token: trimmed });
+      if (error || !data) throw error || new Error('Join failed');
+      if (data.error) {
+        hideLoading();
+        showToast(data.error, 5000);
+        return;
+      }
+      await loadGroups();
+      updateHomeUI();
+      hideLoading();
+      document.getElementById('joinModal').classList.remove('show');
+      showToast(data.already_member ? 'You are already in this group!' : 'Joined ' + data.group_name + '!');
+      openGroup(data.group_id);
+      return;
+    }
+
+    // Manual invite code path (fallback)
+    const upper = trimmed.toUpperCase();
+    const { data: group, error } = await db.from('groups').select('*').eq('invite_code', upper).single();
     if (error || !group) {
       hideLoading();
       showToast('Group not found. Check the code and try again.');
@@ -1064,9 +1115,7 @@ async function joinGroup(code) {
       paid_this_month: false, payout_turn: memberCount + 1,
       reliability_score: 100, months_paid: 0, months_total: 0
     });
-
     await db.from('groups').update({ members_count: memberCount + 1 }).eq('id', group.id);
-
     await db.from('vault_entries').insert({
       group_id: group.id, action: 'member_joined', performed_by: currentUser.id,
       details: { name: currentProfile?.full_name || 'New member' }
@@ -1100,6 +1149,130 @@ function joinGroupFromModal() {
   const code = document.getElementById('joinCodeInput').value.trim();
   closeJoinModal();
   joinGroup(code);
+}
+
+// ============================================================
+// MEMBER ACTIONS (leave, remove, promote, delete group)
+// ============================================================
+function openMemberActions(memberId, memberUserId, memberName, memberRole) {
+  const g = currentGroup;
+  const isAdmin = g._myRole === 'admin';
+  const isMe = memberUserId === currentUser?.id;
+  if (!isAdmin && !isMe) return;
+
+  document.getElementById('actionSheetTitle').textContent = isMe ? 'Your options' : memberName;
+  let html = '';
+
+  if (isAdmin && !isMe) {
+    if (memberRole !== 'admin') {
+      html += `<button class="as-btn as-btn-promote" onclick="promoteMember('${memberId}','${memberName}')">⭐ Make ${memberName.split(' ')[0]} an admin</button>`;
+    }
+    html += `<button class="as-btn as-btn-remove" onclick="removeMember('${memberId}','${memberName}')">🚫 Remove ${memberName.split(' ')[0]} from group</button>`;
+  }
+
+  if (isMe) {
+    html += `<button class="as-btn as-btn-leave" onclick="leaveGroup()">👋 Leave this group</button>`;
+    if (isAdmin) {
+      html += `<button class="as-btn as-btn-delete" onclick="deleteGroup()">🗑️ Delete entire group</button>`;
+    }
+  }
+
+  if (!html) return;
+  document.getElementById('actionSheetButtons').innerHTML = html;
+  document.getElementById('memberActionSheet').classList.remove('hidden');
+  document.getElementById('actionSheetBackdrop').style.display = 'block';
+}
+
+function closeMemberActions() {
+  document.getElementById('memberActionSheet').classList.add('hidden');
+  document.getElementById('actionSheetBackdrop').style.display = 'none';
+}
+
+async function promoteMember(memberId, memberName) {
+  closeMemberActions();
+  if (!confirm(`Make ${memberName} an admin? They will be able to mark payments, send reminders and manage the group.`)) return;
+  showLoading('Updating...');
+  try {
+    const { error } = await db.from('group_members').update({ role: 'admin' }).eq('id', memberId);
+    if (error) throw error;
+    hideLoading();
+    showToast(memberName.split(' ')[0] + ' is now an admin');
+    openGroup(currentGroup.id);
+  } catch (e) {
+    hideLoading();
+    console.error('promoteMember:', e);
+    showToast('Failed to update. Try again.');
+  }
+}
+
+async function removeMember(memberId, memberName) {
+  closeMemberActions();
+  if (!confirm(`Remove ${memberName} from the group? They will need a new invite to rejoin.`)) return;
+  showLoading('Removing member...');
+  try {
+    const { error } = await db.from('group_members').delete().eq('id', memberId);
+    if (error) throw error;
+    const newCount = Math.max(0, (currentGroup.members_count || 1) - 1);
+    await db.from('groups').update({ members_count: newCount }).eq('id', currentGroup.id);
+    await db.from('vault_entries').insert({
+      group_id: currentGroup.id, action: 'member_removed',
+      performed_by: currentUser.id, details: { name: memberName }
+    });
+    hideLoading();
+    showToast(memberName.split(' ')[0] + ' removed from group');
+    openGroup(currentGroup.id);
+  } catch (e) {
+    hideLoading();
+    console.error('removeMember:', e);
+    showToast('Failed to remove member. Try again.');
+  }
+}
+
+async function leaveGroup() {
+  closeMemberActions();
+  const g = currentGroup;
+  const adminCount = (g.members || []).filter(m => m.role === 'admin').length;
+  if (g._myRole === 'admin' && adminCount < 2) {
+    showToast('You are the only admin. Promote another member to admin before leaving.', 5000);
+    return;
+  }
+  if (!confirm(`Leave "${g.name}"? You will need a new invite to rejoin.`)) return;
+  showLoading('Leaving group...');
+  try {
+    const { error } = await db.from('group_members').delete().eq('id', g._myMemberId);
+    if (error) throw error;
+    const newCount = Math.max(0, (g.members_count || 1) - 1);
+    await db.from('groups').update({ members_count: newCount }).eq('id', g.id);
+    await loadGroups();
+    hideLoading();
+    showToast('You have left ' + g.name);
+    goTo('home');
+    updateHomeUI();
+  } catch (e) {
+    hideLoading();
+    console.error('leaveGroup:', e);
+    showToast('Failed to leave group. Try again.');
+  }
+}
+
+async function deleteGroup() {
+  closeMemberActions();
+  const g = currentGroup;
+  if (!confirm(`DELETE "${g.name}"?\n\nThis permanently deletes the group, all members, payment history and vault logs. This CANNOT be undone.`)) return;
+  showLoading('Deleting group...');
+  try {
+    const { error } = await db.from('groups').delete().eq('id', g.id);
+    if (error) throw error;
+    await loadGroups();
+    hideLoading();
+    showToast(g.name + ' has been deleted');
+    goTo('home');
+    updateHomeUI();
+  } catch (e) {
+    hideLoading();
+    console.error('deleteGroup:', e);
+    showToast('Failed to delete group. Try again.');
+  }
 }
 
 // ============================================================
@@ -1175,12 +1348,22 @@ function copyInviteCode() {
   showToast('Invite code copied: ' + code);
 }
 
-function shareOnWhatsApp() {
+async function shareOnWhatsApp() {
   if (!currentGroup) return;
   const g = currentGroup;
-  const link = `https://stokmate.co.za/join/${g.invite_code}`;
-  const msg = `Join my stokvel *${g.name}* on Stokmate! 🎉\n\nTap the link below to join instantly — no code needed:\n\n${link}\n\nTrack contributions, get reminders and manage everything properly. No money ever held by the app. 💚`;
-  window.open('https://wa.me/?text=' + encodeURIComponent(msg));
+  showLoading('Generating invite link...');
+  try {
+    const { data: token, error } = await db.rpc('generate_invite_token', { p_group_id: g.id });
+    hideLoading();
+    if (error || !token) throw error || new Error('Could not generate link');
+    const link = `https://stokmate.co.za/join/${token}`;
+    const msg = `You've been invited to join *${g.name}* on Stokmate!\n\nTap this link to join instantly — it works for you only and expires in 7 days:\n\n${link}\n\n_Stokmate tracks group contributions. No money is ever held by the app._`;
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg));
+  } catch (e) {
+    hideLoading();
+    console.error('shareOnWhatsApp:', e);
+    showToast('Could not generate invite link. Try again.');
+  }
 }
 
 // ============================================================
