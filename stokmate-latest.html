@@ -1178,7 +1178,8 @@ function copyInviteCode() {
 function shareOnWhatsApp() {
   if (!currentGroup) return;
   const g = currentGroup;
-  const msg = `Join my stokvel *${g.name}* on Stokmate! 🎉\n\nDownload at *stokmate.co.za* and use invite code:\n\n*${g.invite_code}*\n\nTrack contributions, get reminders and manage everything properly. No money ever held by the app. 💚`;
+  const link = `https://stokmate.co.za/join/${g.invite_code}`;
+  const msg = `Join my stokvel *${g.name}* on Stokmate! 🎉\n\nTap the link below to join instantly — no code needed:\n\n${link}\n\nTrack contributions, get reminders and manage everything properly. No money ever held by the app. 💚`;
   window.open('https://wa.me/?text=' + encodeURIComponent(msg));
 }
 
@@ -1375,6 +1376,18 @@ function buildChips() {
 window.addEventListener('load', () => {
   buildChips();
   initApp();
+});
+
+// Refresh groups when user switches back to the app (e.g. after someone joins)
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && currentUser) {
+    await loadGroups();
+    updateHomeUI();
+    // If currently viewing a group, refresh it too
+    if (currentGroup && document.getElementById('group-detail')?.classList.contains('active')) {
+      openGroup(currentGroup.id);
+    }
+  }
 });
 </script>
 
