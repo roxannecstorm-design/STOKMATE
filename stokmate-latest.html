@@ -367,6 +367,7 @@ let userGroups = [];
 let currentGroup = null;
 let currentTab = 'members';
 let chatHistory = [];
+let pendingJoinCode = null;
 
 // ============================================================
 // UTILITIES
@@ -441,7 +442,9 @@ async function initApp() {
     const params = new URLSearchParams(window.location.search);
     const inviteCode = params.get('join');
     if (inviteCode) {
-      document.getElementById('joinCodeInput').value = inviteCode.toUpperCase();
+      pendingJoinCode = inviteCode.toUpperCase();
+      document.getElementById('joinCodeInput').value = pendingJoinCode;
+      document.getElementById('joinCode').value = pendingJoinCode;
     }
 
     const { data: { session } } = await db.auth.getSession();
@@ -451,13 +454,16 @@ async function initApp() {
       await loadGroups();
       goTo('home');
       updateHomeUI();
-      if (inviteCode) { openJoinModal(); }
+      if (pendingJoinCode) {
+        await joinGroup(pendingJoinCode);
+        pendingJoinCode = null;
+      }
     } else {
-      goTo('landing');
       if (inviteCode) {
-        document.getElementById('joinCode').value = inviteCode.toUpperCase();
         goTo('auth');
         showAuthTab('signup');
+      } else {
+        goTo('landing');
       }
     }
   } catch (e) {
@@ -529,6 +535,10 @@ async function signUp() {
       goTo('home');
       updateHomeUI();
       showToast('Welcome to Stokmate!');
+      if (pendingJoinCode) {
+        await joinGroup(pendingJoinCode);
+        pendingJoinCode = null;
+      }
     }
   } catch (e) {
     hideLoading();
@@ -560,6 +570,10 @@ async function signIn() {
     goTo('home');
     updateHomeUI();
     showToast('Welcome back!');
+    if (pendingJoinCode) {
+      await joinGroup(pendingJoinCode);
+      pendingJoinCode = null;
+    }
   } catch (e) {
     hideLoading();
     errorEl.textContent = e.message || 'Login failed. Please check your details.';
@@ -670,6 +684,9 @@ function updateHomeUI() {
   const countText = document.getElementById('countdownText');
   if (countEl) countEl.textContent = daysLeft;
   if (countText) countText.textContent = daysLeft === 0 ? 'December is here!' : `days until December — is your group on track?`;
+
+  const banner = document.getElementById('upgradeBanner');
+  if (banner) banner.style.display = userGroups.length > 0 ? 'flex' : 'none';
 }
 
 async function openGroup(groupId) {
@@ -1048,13 +1065,17 @@ async function joinGroup(code) {
       reliability_score: 100, months_paid: 0, months_total: 0
     });
 
+    await db.from('groups').update({ members_count: memberCount + 1 }).eq('id', group.id);
+
     await db.from('vault_entries').insert({
       group_id: group.id, action: 'member_joined', performed_by: currentUser.id,
       details: { name: currentProfile?.full_name || 'New member' }
     });
 
     await loadGroups();
+    updateHomeUI();
     hideLoading();
+    document.getElementById('joinModal').classList.remove('show');
     showToast('Joined ' + group.name + '!');
     openGroup(group.id);
   } catch (e) {
@@ -1491,7 +1512,7 @@ window.addEventListener('load', () => {
       </div>
     </div>
   </div>
-  <div class="upgrade-banner" onclick="goTo('upgrade-screen')">
+  <div class="upgrade-banner" id="upgradeBanner" onclick="goTo('upgrade-screen')" style="display:none">
     <div class="upgrade-icon">⚡</div>
     <div class="upgrade-text">
       <div class="upgrade-title">Upgrade to Pro — R49/month</div>
