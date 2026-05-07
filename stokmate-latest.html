@@ -462,8 +462,11 @@ async function initApp() {
   showLoading('Loading Stokmate...');
   try {
     // Handle invite token/code from URL
+    // Netlify rewrites /join/:code → the browser URL stays as /join/:code
+    // so we read from the pathname, NOT window.location.search
     const params = new URLSearchParams(window.location.search);
-    const inviteCode = params.get('join');
+    const pathMatch = window.location.pathname.match(/^\/join\/(.+)$/);
+    const inviteCode = pathMatch ? pathMatch[1] : params.get('join');
     if (inviteCode) {
       // Tokens are lowercase hex — don't uppercase them. Group codes are uppercase.
       pendingJoinCode = isInviteToken(inviteCode) ? inviteCode : inviteCode.toUpperCase();
@@ -767,7 +770,7 @@ function renderGroupDetail() {
   document.getElementById('healthBarFill').style.width = (g.health_score || 100) + '%';
 
   document.getElementById('inviteCodeDisplay').textContent = g.invite_code || '—';
-  document.getElementById('inviteLinkText').textContent = `stokmate.co.za/join/${g.invite_code}`;
+  document.getElementById('inviteLinkText').textContent = `https://stokmate.co.za/join/${g.invite_code}`;
 
   renderMembersList();
   renderPayoutOrder();
@@ -1348,6 +1351,22 @@ function copyInviteCode() {
   showToast('Invite code copied: ' + code);
 }
 
+async function copyInviteLink() {
+  if (!currentGroup) return;
+  showLoading('Generating link...');
+  try {
+    const { data: token, error } = await db.rpc('generate_invite_token', { p_group_id: currentGroup.id });
+    hideLoading();
+    if (error || !token) throw error || new Error('No token');
+    const link = `https://stokmate.co.za/join/${token}`;
+    await navigator.clipboard.writeText(link);
+    showToast('Link copied! Send it to one person — it expires after use.');
+  } catch (e) {
+    hideLoading();
+    showToast('Could not generate link. Try again.');
+  }
+}
+
 async function shareOnWhatsApp() {
   if (!currentGroup) return;
   const g = currentGroup;
@@ -1808,8 +1827,8 @@ document.addEventListener('visibilitychange', async () => {
       <div class="invite-code-display" id="inviteCodeDisplay">—</div>
       <div class="invite-link" id="inviteLinkText">stokmate.co.za/join/...</div>
       <div class="invite-actions">
-        <button class="invite-btn" onclick="copyInviteCode()">📋 Copy code</button>
-        <button class="invite-btn" onclick="shareOnWhatsApp()" style="background:var(--navy)">📲 Share on WhatsApp</button>
+        <button class="invite-btn" onclick="copyInviteLink()">🔗 Copy link</button>
+        <button class="invite-btn" onclick="shareOnWhatsApp()" style="background:var(--navy)">📲 WhatsApp</button>
       </div>
     </div>
   </div>
